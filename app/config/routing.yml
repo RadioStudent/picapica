@@ -1,0 +1,5 @@
+radio_student_app:
+    resource: "@RadioStudentAppBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
