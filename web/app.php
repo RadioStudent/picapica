@@ -17,7 +17,8 @@ $apcLoader->register(true);
 require_once __DIR__.'/../app/AppKernel.php';
 //require_once __DIR__.'/../app/AppCache.php';
 
-$kernel = new AppKernel('prod', false);
+$sfEnv   = getenv('APP_ENV') ?: 'prod';
+$kernel  = new AppKernel($sfEnv, true);
 $kernel->loadClassCache();
 //$kernel = new AppCache($kernel);
 
