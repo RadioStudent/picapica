@@ -11,3 +11,10 @@
 /composer.phar
 /.idea/
 .vagrant
+
+/node_modules
+/web/css
+/web/images
+/web/js
+npm-debug.log
+.sass-cache

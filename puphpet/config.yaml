@@ -66,9 +66,6 @@ server:
     packages:
         - vim
         - htop
-        - nodejs
-        - npm
-        - ruby-full
 users_groups:
     install: '1'
     groups: {  }
@@ -199,8 +196,8 @@ ruby:
         BxVfQRA96EDQ:
             version: ''
 nodejs:
-    install: '0'
-    npm_packages: {  }
+    install: '1'
+    npm_packages: { grunt, bower }
 python:
     install: '1'
     packages: {  }
