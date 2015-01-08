@@ -197,7 +197,7 @@ ruby:
             version: ''
 nodejs:
     install: '1'
-    npm_packages: { grunt, bower }
+    npm_packages: { grunt-cli, bower }
 python:
     install: '1'
     packages: {  }
