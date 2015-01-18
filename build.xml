@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="picapica" default="db">
+    <property name="env" value="dev"/>
+    <property name="dir.app" value="${project.basedir}/app" />
+    <property name="dir.web" value="${project.basedir}/web" />
+    <property name="dir.src" value="${project.basedir}/src" />
+    <property name="dir.build" value="${project.basedir}/build" />
+
+    <target name="install" depends="composer-install, db, assets" />
+
+    <target name="composer-download">
+        <exec command="curl -sS https://getcomposer.org/installer | php"
+              checkreturn="true"
+              passthru="true"/>
+        <move file="composer.phar" tofile="composer" />
+        <exec command="chmod +x composer"
+              checkreturn="true"
+              passthru="true"/>
+    </target>
+
+    <target name="composer-remove">
+        <delete file="composer" />
+    </target>
+
+    <target name="remove-cache">
+        <exec command="rm -rf ${dir.app}/cache/*" />
+    </target>
+
+    <target name="composer-install">
+        <if>
+            <available file="composer" type="file"/>
+            <then>
+                <exec
+                        command="php composer install"
+                        checkreturn="true"
+                        passthru="true"
+                        />
+            </then>
+            <else>
+                <exec
+                        command="composer install"
+                        checkreturn="true"
+                        passthru="true"
+                        />
+            </else>
+        </if>
+    </target>
+
+    <target name="db"
+            description="Creates DB and loads fixtures">
+
+        <SymfonyConsole command="doctrine:database:drop">
+            <arg name="env" value="${env}" />
+            <arg value="--force"/>
+        </SymfonyConsole>
+
+        <SymfonyConsole command="doctrine:database:create"
+                        checkreturn="true">
+            <arg name="env" value="${env}" />
+        </SymfonyConsole>
+
+        <SymfonyConsole command="doctrine:schema:create"
+                        checkreturn="true">
+            <arg name="env" value="${env}" />
+        </SymfonyConsole>
+
+        <SymfonyConsole command="fonoteka2:import"
+                        checkreturn="true">
+            <arg name="env" value="${env}" />
+            <!--<arg name="fixtures" value="src/AppBundle/DataFixtures/ORM/Fixture" />-->
+        </SymfonyConsole>
+
+        <!--<SymfonyConsole command="fos:elastica:populate">-->
+            <!--<arg name="env" value="${env}" />-->
+        <!--</SymfonyConsole>-->
+    </target>
+
+    <target name="assets" description="Install all front end assets.">
+        <exec
+                command="npm install --no-bin-links"
+                checkreturn="true"
+                passthru="true"
+                />
+        <exec
+                command="bundle install"
+                checkreturn="true"
+                passthru="true"
+                />
+        <exec
+                command="grunt"
+                checkreturn="true"
+                passthru="true"
+                />
+    </target>
+</project>

@@ -56,12 +56,12 @@ doctrine:
           password: "%database_password%"
           charset:  UTF8
         db2:
-          driver:   pdo_mysql
-          host:     localhost
-          port:     null
-          dbname:   fonoteka_old
-          user:     root
-          password: root
+          driver:   "%database_driver%"
+          host:     "%database_host%"
+          port:     "%database_port%"
+#          dbname:   fonoteka_old
+          user:     "%database_user%"
+          password: "%database_password%"
           charset:  UTF8
 
     orm:

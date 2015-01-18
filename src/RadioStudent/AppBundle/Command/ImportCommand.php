@@ -37,7 +37,11 @@ class ImportCommand extends ContainerAwareCommand
         $c = $this->getContainer()->get('doctrine.dbal.db2_connection');
 
         $this->out->write('Import old database...');
-        $p = new Process('zcat FONOTEKA.sql.gz | mysql -u root -p fonoteka_old');
+
+        $c->getSchemaManager()->dropAndCreateDatabase('fonoteka_old');
+        $c->exec("USE fonoteka_old");
+
+        $p = new Process('zcat FONOTEKA.sql.gz | mysql -u root --password=root fonoteka_old');
         $p->setTimeout(0);
         $p->run();
         $this->out->writeln('OK');
@@ -100,12 +104,14 @@ class ImportCommand extends ContainerAwareCommand
         );
         $this->out->writeln("OK");
 
+        $dbName = $this->getContainer()->getParameter('database_name');
+
         $this->out->write("Import artists (1/2)...");
-        $c->exec("INSERT IGNORE INTO fonoteka2.data_artists (NAME) SELECT DISTINCT IZVAJALEC FROM fonoteka_old.FONO_ALL");
+        $c->exec("INSERT IGNORE INTO $dbName.data_artists (NAME) SELECT DISTINCT IZVAJALEC FROM fonoteka_old.FONO_ALL");
         $this->out->writeln("OK");
 
         $this->out->write("Import artists (2/2)...");
-        $c->exec("UPDATE fonoteka_old.FONO_ALL INNER JOIN fonoteka2.data_artists ON IZVAJALEC=NAME SET IMPORT_ARTIST_ID=ID");
+        $c->exec("UPDATE fonoteka_old.FONO_ALL INNER JOIN $dbName.data_artists ON IZVAJALEC=NAME SET IMPORT_ARTIST_ID=ID");
         $this->out->writeln("OK");
 
 /*
