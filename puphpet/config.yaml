@@ -4,8 +4,8 @@ vagrantfile-local:
         box: puphpet/ubuntu1404-x64
         box_url: puphpet/ubuntu1404-x64
         hostname: ''
-        memory: '4096'
-        cpus: '4'
+        memory: '2048'
+        cpus: '1'
         chosen_provider: virtualbox
         network:
             private_network: 192.168.56.101
@@ -13,6 +13,9 @@ vagrantfile-local:
                 TDSEPXbU8OVX:
                     host: '5992'
                     guest: '22'
+                mysql:
+                    host: '3306'
+                    guest: '3306'
         post_up_message: ''
         provider:
             virtualbox:
@@ -37,7 +40,7 @@ vagrantfile-local:
                 group: vagrant
                 source: ./
                 target: /var/www/picapica
-                sync_type: default
+                sync_type: nfs
                 rsync:
                     args:
                         - '--verbose'

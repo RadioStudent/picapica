@@ -3,6 +3,7 @@
 namespace RadioStudent\AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,11 +34,36 @@ class Album
     private $name;
 
     /**
-     * @var ArrayCollection|Artist[]
+     * @var Collection|Artist[]
      *
-     * @ORM\ManyToMany(targetEntity="Artist", mappedBy="albums")
+     * @ORM\ManyToMany(targetEntity="Artist", inversedBy="albums")
+     * @ORM\JoinTable(name="rel_artist2album",
+     *      joinColumns={@ORM\JoinColumn(name="ALBUM_ID", referencedColumnName="ID")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="ARTIST_ID", referencedColumnName="ID")}
+     *  )
      */
     private $artists;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="DATE", type="datetime", nullable=true)
+     */
+    private $date;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="STR_DATE", type="string", length=255)
+     */
+    private $strDate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="FID", type="string", length=30)
+     */
+    private $fid;
 
     public function __construct()
     {
@@ -45,7 +71,7 @@ class Album
     }
 
     /**
-     * @return ArrayCollection|Artist[]
+     * @return Collection|Artist[]
      */
     public function getArtists()
     {
@@ -53,7 +79,7 @@ class Album
     }
 
     /**
-     * @param ArrayCollection|Artist[] $artists
+     * @param Collection|Artist[] $artists
      *
      * @return $this
      */
@@ -64,19 +90,6 @@ class Album
         return $this;
     }
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="DATE", type="datetime")
-     */
-    private $date;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="FID", type="string", length=30)
-     */
-    private $fid;
     /**
      * Get id
      *
@@ -154,5 +167,21 @@ class Album
     public function getFid()
     {
         return $this->fid;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStrDate()
+    {
+        return $this->strDate;
+    }
+
+    /**
+     * @param string $strDate
+     */
+    public function setStrDate($strDate)
+    {
+        $this->strDate = $strDate;
     }
 }

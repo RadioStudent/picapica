@@ -3,6 +3,7 @@
 namespace RadioStudent\AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,13 +34,9 @@ class Artist
     private $name;
 
     /**
-     * @var ArrayCollection|Album[]
+     * @var Collection|Album[]
      *
-     * @ORM\ManyToMany(targetEntity="Album", inversedBy="artists")
-     * @ORM\JoinTable(name="rel_artist2album",
-     *      joinColumns={@ORM\JoinColumn(name="ARTIST_ID", referencedColumnName="ID")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="ALBUM_ID", referencedColumnName="ID")}
-     *      )
+     * @ORM\ManyToMany(targetEntity="Album", mappedBy="artists")
      */
     private $albums;
 
@@ -49,7 +46,7 @@ class Artist
     }
 
     /**
-     * @return ArrayCollection|Album[]
+     * @return Collection|Album[]
      */
     public function getAlbums()
     {
@@ -57,7 +54,7 @@ class Artist
     }
 
     /**
-     * @param ArrayCollection|Album[] $albums
+     * @param Collection|Album[] $albums
      *
      * @return $this
      */
