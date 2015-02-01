@@ -31,6 +31,13 @@ class Track
     /**
      * @var string
      *
+     * @ORM\Column(name="OLD_FID", type="string", length=30)
+     */
+    private $oldFid;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="TRACK_NUM", type="string", length=30)
      */
     private $trackNum;
@@ -45,7 +52,7 @@ class Track
     /**
      * @var Album
      *
-     * @ORM\ManyToOne(targetEntity="Album")
+     * @ORM\ManyToOne(targetEntity="Album", inversedBy="tracks")
      * @ORM\JoinColumn(name="ALBUM_ID", referencedColumnName="ID")
      */
     private $album;
@@ -53,28 +60,35 @@ class Track
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="DATE", type="datetime")
+     * @ORM\Column(name="DATE", type="datetime", nullable=true)
      */
     private $date;
 
     /**
-     * @var \DateTime
+     * @var string
      *
-     * @ORM\Column(name="DURATION", type="time")
+     * @ORM\Column(name="STR_DATE", type="string", length=255)
+     */
+    private $strDate;
+
+    /**
+     * @var \DateInterval
+     *
+     * @ORM\Column(name="DURATION", type="time", nullable=true)
      */
     private $duration;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="GENRES", type="string", length=255)
+     * @ORM\Column(name="GENRES", type="string", length=255, nullable=true)
      */
     private $genres;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="LANGUAGES", type="string", length=255)
+     * @ORM\Column(name="LANGUAGES", type="string", length=255, nullable=true)
      */
     private $languages;
 
@@ -181,12 +195,31 @@ class Track
     }
 
     /**
+     * @return string
+     */
+    public function getStrDate()
+    {
+        return $this->strDate;
+    }
+
+    /**
+     * @param string $strDate
+     * @return $this
+     */
+    public function setStrDate($strDate)
+    {
+        $this->strDate = $strDate;
+
+        return $this;
+    }
+
+    /**
      * Set duration
      *
-     * @param \DateTime $duration
+     * @param \DateInterval $duration
      * @return Track
      */
-    public function setDuration($duration)
+    public function setDuration(\DateInterval $duration = null)
     {
         $this->duration = $duration;
 
@@ -196,7 +229,7 @@ class Track
     /**
      * Get duration
      *
-     * @return \DateTime 
+     * @return \DateInterval
      */
     public function getDuration()
     {
@@ -269,4 +302,22 @@ class Track
         return $this;
     }
 
+    /**
+     * @return string
+     */
+    public function getOldFid()
+    {
+        return $this->oldFid;
+    }
+
+    /**
+     * @param string $oldFid
+     * @return $this
+     */
+    public function setOldFid($oldFid)
+    {
+        $this->oldFid = $oldFid;
+
+        return $this;
+    }
 }

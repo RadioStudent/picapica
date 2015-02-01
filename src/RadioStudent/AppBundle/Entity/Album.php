@@ -65,6 +65,13 @@ class Album
      */
     private $fid;
 
+    /**
+     * @var Collection|Track[]
+     *
+     * @ORM\OneToMany(targetEntity="Track", mappedBy="album")
+     */
+    private $tracks;
+
     public function __construct()
     {
         $this->artists = new ArrayCollection();
@@ -83,7 +90,7 @@ class Album
      *
      * @return $this
      */
-    public function setArtists(array $artists)
+    public function setArtists(Collection $artists)
     {
         $this->artists = $artists;
 
@@ -183,5 +190,21 @@ class Album
     public function setStrDate($strDate)
     {
         $this->strDate = $strDate;
+    }
+
+    /**
+     * @return Collection|Track[]
+     */
+    public function getTracks()
+    {
+        return $this->tracks;
+    }
+
+    /**
+     * @param Collection|Track[] $tracks
+     */
+    public function setTracks(Collection $tracks)
+    {
+        $this->tracks = $tracks;
     }
 }
