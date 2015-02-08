@@ -200,7 +200,9 @@ ruby:
             version: ''
 nodejs:
     install: '1'
-    npm_packages: { grunt-cli, bower }
+    npm_packages:
+        - grunt-cli
+        - bower
 python:
     install: '1'
     packages: {  }
@@ -278,4 +280,3 @@ solr:
     settings:
         version: 4.10.2
         port: '8984'
-

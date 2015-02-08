@@ -264,5 +264,3 @@ Vagrant.configure('2') do |config|
     config.vagrant.host = data['vagrant']['host'].gsub(':', '').intern
   end
 end
-
-

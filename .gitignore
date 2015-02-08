@@ -13,6 +13,7 @@
 .vagrant
 
 /node_modules
+npm-debug.log*
 /web/css
 /web/images
 /web/js

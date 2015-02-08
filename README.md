@@ -8,9 +8,8 @@ Web app for physical music library management.
 
 Once your vagrant box is up and provisioned, run the following commands:
 ```bash
-npm install --no-bin-links
+npm install
 bundle install
 grunt
 ```
-If your host machine is not Windows based, you can drop the `--no-bin-links` on the first line.
-If the `grunt` command isn't working for you, try running `sudo npm install -g grunt-cli` first.
+If the `grunt` command isn't working for you, try provisioning your Vagrant box.
