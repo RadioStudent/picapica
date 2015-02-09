@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js">
+<html>
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,9 +9,81 @@
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
-    {% block body %}
-        {{ dump(data) }}
-    {% endblock %}
+    <nav class="navbar navbar-default">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Brand</a>
+            </div>
+            <div>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#">Link</a></li>
+                    <li><a href="#">Link</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="enter search term">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button">Search</button>
+            </span>
+        </div>
+
+        <br>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Artist</th>
+                    <th>Title</th>
+                    <th>Album</th>
+                    <th>Year</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Metallica</td>
+                    <td>Enter Sandman</td>
+                    <td>The Black Album</td>
+                    <td>1991</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Metallica</td>
+                    <td>Enter Sandman</td>
+                    <td>The Black Album</td>
+                    <td>1991</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Metallica</td>
+                    <td>Enter Sandman</td>
+                    <td>The Black Album</td>
+                    <td>1991</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Metallica</td>
+                    <td>Enter Sandman</td>
+                    <td>The Black Album</td>
+                    <td>1991</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Metallica</td>
+                    <td>Enter Sandman</td>
+                    <td>The Black Album</td>
+                    <td>1991</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
     <script src="/js/main.js"></script>
 </body>
 </html>

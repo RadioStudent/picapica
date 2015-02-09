@@ -12,6 +12,7 @@
 /.idea/
 .vagrant
 
+bower_components
 /node_modules
 npm-debug.log*
 /web/css
