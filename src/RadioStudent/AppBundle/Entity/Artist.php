@@ -40,9 +40,17 @@ class Artist
      */
     private $albums;
 
+    /**
+     * @var Collection|ArtistRelation[]
+     *
+     * @ORM\OneToMany(targetEntity="ArtistRelation", mappedBy="artist")
+     */
+    private $artistRelations;
+
     public function __construct()
     {
         $this->albums = new ArrayCollection();
+        $this->artistRelations = new ArrayCollection();
     }
 
     /**
@@ -96,5 +104,25 @@ class Artist
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return Collection|ArtistRelation[]
+     */
+    public function getArtistRelations()
+    {
+        return $this->artistRelations;
+    }
+
+    /**
+     * @param Collection|ArtistRelation[] $artistRelations
+     *
+     * @return $this
+     */
+    public function setArtistRelations($artistRelations)
+    {
+        $this->artistRelations = $artistRelations;
+
+        return $this;
     }
 }

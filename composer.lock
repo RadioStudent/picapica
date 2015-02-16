@@ -968,16 +968,16 @@
         },
         {
             "name": "phing/phing",
-            "version": "2.9.1",
+            "version": "2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "393edeffa8a85d43636ce0c9b4deb1ff9ac60a5c"
+                "reference": "4927448a7bda2e1408d5fcbf7f725dc5bdcaf76d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/393edeffa8a85d43636ce0c9b4deb1ff9ac60a5c",
-                "reference": "393edeffa8a85d43636ce0c9b4deb1ff9ac60a5c",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/4927448a7bda2e1408d5fcbf7f725dc5bdcaf76d",
+                "reference": "4927448a7bda2e1408d5fcbf7f725dc5bdcaf76d",
                 "shasum": ""
             },
             "require": {
@@ -986,7 +986,7 @@
             "require-dev": {
                 "ext-pdo_sqlite": "*",
                 "lastcraft/simpletest": "@dev",
-                "pdepend/pdepend": "1.x",
+                "pdepend/pdepend": "2.x",
                 "pear-pear.php.net/http_request2": "2.2.x",
                 "pear-pear.php.net/net_growl": "2.7.x",
                 "pear-pear.php.net/pear_packagefilemanager": "1.7.x",
@@ -997,9 +997,10 @@
                 "pear/versioncontrol_svn": "@dev",
                 "phpdocumentor/phpdocumentor": "2.x",
                 "phploc/phploc": "2.x",
+                "phpmd/phpmd": "~2.2",
                 "phpunit/phpunit": ">=3.7",
                 "sebastian/phpcpd": "2.x",
-                "squizlabs/php_codesniffer": "1.5.x"
+                "squizlabs/php_codesniffer": "~2.2"
             },
             "suggest": {
                 "pdepend/pdepend": "PHP version of JDepend",
@@ -1053,7 +1054,7 @@
                 "task",
                 "tool"
             ],
-            "time": "2014-12-03 09:18:46"
+            "time": "2015-02-09 20:05:38"
         },
         {
             "name": "psr/log",
@@ -1442,16 +1443,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.6.3",
+            "version": "v2.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "c34ef418015793a4653f2670afb69dd167ebf578"
+                "reference": "23b647f1e4eeb24a457d3c47f5f5046377d5a3bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/c34ef418015793a4653f2670afb69dd167ebf578",
-                "reference": "c34ef418015793a4653f2670afb69dd167ebf578",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/23b647f1e4eeb24a457d3c47f5f5046377d5a3bf",
+                "reference": "23b647f1e4eeb24a457d3c47f5f5046377d5a3bf",
                 "shasum": ""
             },
             "require": {
@@ -1554,7 +1555,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2015-01-07 14:47:29"
+            "time": "2015-02-02 18:02:30"
         },
         {
             "name": "twig/extensions",
@@ -1669,17 +1670,17 @@
     "packages-dev": [
         {
             "name": "sensio/generator-bundle",
-            "version": "v2.5.1",
+            "version": "v2.5.2",
             "target-dir": "Sensio/Bundle/GeneratorBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioGeneratorBundle.git",
-                "reference": "9e23fc3de265ae013690d84aab98e7a84f46edcd"
+                "reference": "4b09746520a826a7bf34a466ba31c7d8740fef7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/9e23fc3de265ae013690d84aab98e7a84f46edcd",
-                "reference": "9e23fc3de265ae013690d84aab98e7a84f46edcd",
+                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/4b09746520a826a7bf34a466ba31c7d8740fef7e",
+                "reference": "4b09746520a826a7bf34a466ba31c7d8740fef7e",
                 "shasum": ""
             },
             "require": {
@@ -1713,13 +1714,14 @@
                 }
             ],
             "description": "This bundle generates code for you",
-            "time": "2015-01-13 07:33:46"
+            "time": "2015-02-11 07:21:23"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],
     "prefer-stable": false,
+    "prefer-lowest": false,
     "platform": {
         "php": ">=5.3.3"
     },

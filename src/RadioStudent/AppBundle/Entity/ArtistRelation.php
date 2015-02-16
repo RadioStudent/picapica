@@ -12,47 +12,51 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ArtistRelation
 {
+    const TYPE_CORRECTED = "correction";
+    const TYPE_DIFFERENT = "unrelated";
+    const TYPE_BOTH_CORRECT = "alias";
+
     /**
      * @var Artist
      *
      * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Artist")
-     * @ORM\JoinColumn(name="ARTIST_ID1", referencedColumnName="ID")
+     * @ORM\ManyToOne(targetEntity="Artist", inversedBy="artistRelations")
+     * @ORM\JoinColumn(name="ARTIST_ID", referencedColumnName="ID")
      */
-    private $artist1;
+    private $artist;
 
     /**
      * @var Artist
      *
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Artist")
-     * @ORM\JoinColumn(name="ARTIST_ID2", referencedColumnName="ID")
+     * @ORM\JoinColumn(name="RELATED_ARTIST_ID", referencedColumnName="ID")
      */
-    private $artist2;
+    private $relatedArtist;
 
     /**
      * @var integer
      *
      * @ORM\Id
-     * @ORM\Column(name="TYPE", type="integer")
+     * @ORM\Column(name="RELATION_TYPE", type="string")
      */
     private $type;
 
     /**
      * @return Artist
      */
-    public function getArtist1()
+    public function getArtist()
     {
-        return $this->artist1;
+        return $this->artist;
     }
 
     /**
-     * @param Artist $artist1
+     * @param Artist $artist
      * @return $this
      */
-    public function setArtist1($artist1)
+    public function setArtist($artist)
     {
-        $this->artist1 = $artist1;
+        $this->artist = $artist;
 
         return $this;
     }
@@ -60,18 +64,18 @@ class ArtistRelation
     /**
      * @return Artist
      */
-    public function getArtist2()
+    public function getRelatedArtist()
     {
-        return $this->artist2;
+        return $this->relatedArtist;
     }
 
     /**
-     * @param Artist $artist2
+     * @param Artist $relatedArtist
      * @return $this
      */
-    public function setArtist2($artist2)
+    public function setRelatedArtist($relatedArtist)
     {
-        $this->artist2 = $artist2;
+        $this->relatedArtist = $relatedArtist;
 
         return $this;
     }
@@ -79,7 +83,7 @@ class ArtistRelation
     /**
      * Set type
      *
-     * @param integer $type
+     * @param string $type
      * @return $this
      */
     public function setType($type)
@@ -92,7 +96,7 @@ class ArtistRelation
     /**
      * Get type
      *
-     * @return integer 
+     * @return string
      */
     public function getType()
     {

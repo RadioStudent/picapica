@@ -5,6 +5,7 @@ namespace RadioStudent\AppBundle\Command;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Driver\Connection;
 use RadioStudent\AppBundle\Entity\Album;
+use RadioStudent\AppBundle\Entity\ArtistRelation;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,7 +31,8 @@ class ImportCommand extends ContainerAwareCommand
         $this
             ->setName('fonoteka2:import')
             ->setDescription('Migrate the old database')
-            ->addArgument('dumpfile', InputArgument::OPTIONAL, 'Path to the old database dump (.sql.gz)', 'FONOTEKA.sql.gz')
+            ->addArgument('dumpFile', InputArgument::OPTIONAL, 'Path to the old database dump (.sql.gz)', 'app/data/FONOTEKA.sql.gz')
+            ->addArgument('votefixFile', InputArgument::OPTIONAL, 'Path to the votefix dump (.sql)', 'app/data/fono_votefix_artists.sql')
             ->addOption('noinit', null, InputOption::VALUE_NONE, 'Don\'t init the database.')
             ->addOption('only',   null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, '')
             ->addOption('except', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, '')
@@ -46,12 +48,12 @@ class ImportCommand extends ContainerAwareCommand
         $this->c = $this->getContainer()->get('doctrine.dbal.db2_connection');
 
         if (!$input->getOption('noinit')) {
-            $this->prepareDb($input->getArgument('dumpfile'));
+            $this->prepareDb($input->getArgument('dumpFile'));
         }
 
         if (!in_array('artists', $input->getOption('except')) &&
             (in_array('artists', $input->getOption('only')) || !$input->getOption('only'))) {
-            $this->importArtists();
+            $this->importArtists($input->getArgument('votefixFile'));
         }
 
         if (!in_array('albums', $input->getOption('except')) &&
@@ -65,7 +67,7 @@ class ImportCommand extends ContainerAwareCommand
         }
     }
 
-    private function prepareDb($dumpfile)
+    private function prepareDb($dumpFile)
     {
 
         $this->out->write('Import old database...');
@@ -73,7 +75,7 @@ class ImportCommand extends ContainerAwareCommand
         $this->c->getSchemaManager()->dropAndCreateDatabase('fonoteka_old');
         $this->c->exec("USE fonoteka_old");
 
-        $p = new Process('zcat '.$dumpfile.' | mysql -u root --password=root fonoteka_old');
+        $p = new Process('zcat '.$dumpFile.' | mysql -u root --password=root fonoteka_old');
         $p->setTimeout(0);
         $p->run();
         $this->out->writeln('OK');
@@ -137,7 +139,7 @@ class ImportCommand extends ContainerAwareCommand
         $this->out->writeln("OK");
     }
 
-    private function importArtists()
+    private function importArtists($votefixFile)
     {
         $this->out->write("Import artists (1/2)...");
         $this->c->exec("INSERT IGNORE INTO $this->dbName.data_artists (NAME) SELECT DISTINCT IZVAJALEC FROM fonoteka_old.FONO_ALL");
@@ -147,18 +149,59 @@ class ImportCommand extends ContainerAwareCommand
         $this->c->exec("UPDATE fonoteka_old.FONO_ALL INNER JOIN $this->dbName.data_artists ON IZVAJALEC=NAME SET IMPORT_ARTIST_ID=ID");
         $this->out->writeln("OK");
 
-        /*
-                 query("insert ignore into rel_artist2artist (ARTIST_ID1, ARTIST_ID2, TYPE)
-                    select
-                    n1.IMPORT_ARTIST_ID, n2.IMPORT_ARTIST_ID, fix.CHOICE
-                    from
+        $this->out->write("Import artists votefix...");
+        $p = new Process('cat '.$votefixFile.' | mysql -u root --password=root fonoteka_old');
+        $p->setTimeout(0);
+        $p->run();
+        $this->out->writeln("OK");
 
-                    fono_votefix_artists as fix
-                    left join fono_all as n1 on fix.NAME1=n1.IZVAJALEC
-                    left join fono_all as n2 on fix.NAME2=n2.IZVAJALEC
-
-                     where CHOICE IS NOT NULL;")
-        ;*/
+        $this->out->write("Apply artists votefix...");
+        $this->c->exec("USE fonoteka_old");
+        $this->c->exec("INSERT INTO picapica.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
+            SELECT DISTINCT
+              n1.IMPORT_ARTIST_ID,
+              n2.IMPORT_ARTIST_ID,
+              '".ArtistRelation::TYPE_CORRECTED."'
+            FROM
+              fonoteka_old.fono_votefix_artists AS fix
+              INNER JOIN FONO_ALL AS n1 on fix.NAME1=n1.IZVAJALEC
+              INNER JOIN FONO_ALL AS n2 on fix.NAME2=n2.IZVAJALEC
+            WHERE CHOICE=1;"
+        );
+        $this->c->exec("INSERT INTO picapica.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
+            SELECT DISTINCT
+              n2.IMPORT_ARTIST_ID,
+              n1.IMPORT_ARTIST_ID,
+              '".ArtistRelation::TYPE_CORRECTED."'
+            FROM
+              fonoteka_old.fono_votefix_artists AS fix
+              INNER JOIN FONO_ALL AS n1 on fix.NAME1=n1.IZVAJALEC
+              INNER JOIN FONO_ALL AS n2 on fix.NAME2=n2.IZVAJALEC
+            WHERE CHOICE=0;"
+        );
+        $this->c->exec("INSERT INTO picapica.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
+            SELECT DISTINCT
+              n1.IMPORT_ARTIST_ID,
+              n2.IMPORT_ARTIST_ID,
+              '".ArtistRelation::TYPE_BOTH_CORRECT."'
+            FROM
+              fonoteka_old.fono_votefix_artists AS fix
+              INNER JOIN FONO_ALL AS n1 on fix.NAME1=n1.IZVAJALEC
+              INNER JOIN FONO_ALL AS n2 on fix.NAME2=n2.IZVAJALEC
+            WHERE CHOICE=3 OR LEVENSHTEIN=0"
+        );
+        $this->c->exec("INSERT INTO picapica.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
+            SELECT DISTINCT
+              n1.IMPORT_ARTIST_ID,
+              n2.IMPORT_ARTIST_ID,
+              '".ArtistRelation::TYPE_DIFFERENT."'
+            FROM
+              fonoteka_old.fono_votefix_artists AS fix
+              INNER JOIN FONO_ALL AS n1 on fix.NAME1=n1.IZVAJALEC
+              INNER JOIN FONO_ALL AS n2 on fix.NAME2=n2.IZVAJALEC
+            WHERE CHOICE=2;"
+        );
+        $this->out->writeln("OK");
     }
 
     private function importAlbums()

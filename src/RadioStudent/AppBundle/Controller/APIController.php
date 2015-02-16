@@ -15,15 +15,17 @@ class APIController extends Controller
     public function indexAction()
     {
         $artistsRepo = $this->getDoctrine()->getRepository('RadioStudentAppBundle:Artist');
-        $artists = $artistsRepo->findBy(['id' => [14214, 14215]]);
+        $artists = $artistsRepo->findBy(['id' => [46, 14215]]);
 
-        var_dump($artists);
-        die;
+        $relations = $artists[0]->getArtistRelations();
+        var_dump($relations[0]->getArtist()->getName());
+        var_dump($relations[0]->getRelatedArtist()->getName());
+        var_dump($relations[1]->getRelatedArtist()->getName());
 
         return $this->render(
             '::index.html.twig',
             [
-                'data' => $name
+                'data' => $artists
             ]
         );
     }
