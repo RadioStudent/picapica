@@ -16,6 +16,9 @@ vagrantfile-local:
                 mysql:
                     host: '3306'
                     guest: '3306'
+                elasticsearch:
+                    host: '9200'
+                    guest: '9200'
         post_up_message: ''
         provider:
             virtualbox:
