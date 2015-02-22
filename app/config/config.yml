@@ -1,6 +1,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: elastica.yml }
 
 framework:
     #esi:             ~
@@ -77,22 +78,6 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
-fos_elastica:
-    clients:
-        default: { host: localhost, port: 9200 }
-    indexes:
-        picapica:
-            types:
-                artist:
-                    mappings:
-                        name: ~
-                    persistence:
-                      # the driver can be orm, mongodb or propel
-                      # listener and finder are not supported by
-                      # propel and should be removed
-                      driver: orm
-                      model: RadioStudent\AppBundle\Entity\Artist
-                      provider: ~
-                      listener:
-                          immediate: ~
-                      finder: ~
+fos_rest:
+    routing_loader:
+        default_format: json

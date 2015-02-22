@@ -1,0 +1,100 @@
+fos_elastica:
+  clients:
+    default: { host: localhost, port: 9200 }
+
+  indexes:
+    picapica:
+      types:
+
+        artist:
+          mappings:
+            id: ~
+            name: ~
+            albums:
+              type: object
+              properties:
+                name:
+                  index_name: artist_albums
+                fid:
+                  index_name: artist_album_fid
+                id:
+                  type: integer
+                  index_name: artist_album_id
+                  index: not_analyzed
+          persistence:
+            driver: orm
+            model: RadioStudent\AppBundle\Entity\Artist
+            provider: ~
+            listener:
+              immediate: ~
+            finder: ~
+
+        album:
+          mappings:
+            id: ~
+            fid: ~
+            name: ~
+            date:
+              type: date
+              format: date_time_no_millis
+            artists:
+              type: object
+              properties:
+                name:
+                  index_name: album_artists
+            tracks:
+              type: object
+              properties:
+                trackNum:
+                  index_name: album_track_num
+                name:
+                  index_name: album_track_name
+                fid:
+                  index_name: album_track_fid
+                id:
+                  type: integer
+                  index_name: id
+                  index: not_analyzed
+          persistence:
+            driver: orm
+            model: RadioStudent\AppBundle\Entity\Album
+            provider: ~
+            listener:
+              immediate: ~
+            finder: ~
+
+        track:
+          mappings:
+            id: ~
+            fid: ~
+            trackNum: ~
+            name: ~
+            duration:
+              type: date
+              format: hour_minute_second
+            date:
+              type: date
+              format: date_time_no_millis
+            artist:
+              type: object
+              properties:
+                id:
+                  index_name: track_artist_id
+                name:
+                  index_name: track_artist_name
+            album:
+              type: object
+              properties:
+                id:
+                  index_name: track_album_id
+                fid:
+                  index_name: track_album_fid
+                name:
+                  index_name: track_album_name
+          persistence:
+            driver: orm
+            model: RadioStudent\AppBundle\Entity\Track
+            provider: ~
+            listener:
+              immediate: ~
+            finder: ~

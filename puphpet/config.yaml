@@ -39,8 +39,8 @@ vagrantfile-local:
                     - '--parser future'
         synced_folder:
             yCFLu88qOiDR:
-                owner: vagrant
-                group: vagrant
+                owner: www-data
+                group: www-data
                 source: ./
                 target: /var/www/picapica
                 sync_type: nfs
@@ -85,8 +85,8 @@ firewall:
 apache:
     install: '1'
     settings:
-        user: vagrant
-        group: vagrant
+        user: www-data
+        group: www-data
         default_vhost: true
         manage_user: false
         manage_group: false

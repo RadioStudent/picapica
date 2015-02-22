@@ -5,6 +5,7 @@ namespace RadioStudent\AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Artist
@@ -14,6 +15,8 @@ use Doctrine\ORM\Mapping as ORM;
  *  indexes={@ORM\Index(name="name", columns={"name"})}
  * )
  * @ORM\Entity
+ *
+ * A@JMS\ExclusionPolicy("all") awefawfe
  */
 class Artist
 {
@@ -23,6 +26,15 @@ class Artist
      * @ORM\Column(name="ID", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @JMS\Groups({
+     *  "albums",
+     *  "album",
+     *  "tracks",
+     *  "track",
+     *  "artists",
+     *  "artist",
+     * })
      */
     private $id;
 
@@ -30,6 +42,15 @@ class Artist
      * @var string
      *
      * @ORM\Column(name="NAME", type="string", length=255)
+     *
+     * @JMS\Groups({
+     *  "albums",
+     *  "album",
+     *  "tracks",
+     *  "track",
+     *  "artists",
+     *  "artist",
+     * })
      */
     private $name;
 
@@ -37,6 +58,11 @@ class Artist
      * @var Collection|Album[]
      *
      * @ORM\ManyToMany(targetEntity="Album", mappedBy="artists")
+     *
+     * @JMS\Groups({
+     *  "artists",
+     *  "artist",
+     * })
      */
     private $albums;
 
@@ -44,6 +70,12 @@ class Artist
      * @var Collection|ArtistRelation[]
      *
      * @ORM\OneToMany(targetEntity="ArtistRelation", mappedBy="artist")
+     *
+     * @JMS\Groups({
+     *  "artist",
+     *  "artists",
+     * })
+     * @JMS\MaxDepth(1)
      */
     private $artistRelations;
 
@@ -112,6 +144,7 @@ class Artist
     public function getArtistRelations()
     {
         return $this->artistRelations;
+//        return null;
     }
 
     /**

@@ -29,7 +29,7 @@ class ImportCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('fonoteka2:import')
+            ->setName('picapica:import')
             ->setDescription('Migrate the old database')
             ->addArgument('dumpFile', InputArgument::OPTIONAL, 'Path to the old database dump (.sql.gz)', 'app/data/FONOTEKA.sql.gz')
             ->addArgument('votefixFile', InputArgument::OPTIONAL, 'Path to the votefix dump (.sql)', 'app/data/fono_votefix_artists.sql')
@@ -246,13 +246,17 @@ class ImportCommand extends ContainerAwareCommand
     {
         $this->out->write("Import tracks (1/2)...");
 
+        $this->c->exec("ALTER TABLE $this->dbName.data_tracks ADD COLUMN OLD_FID VARCHAR(30) NOT NULL");
+        $this->c->exec("ALTER TABLE $this->dbName.data_tracks ADD INDEX IDX_TMP_OLD_FID (OLD_FID)");
+
         $this->c->exec("INSERT INTO $this->dbName.data_tracks
-        (FID, OLD_FID, TRACK_NUM, NAME, DATE, STR_DATE, DURATION, GENRES, LANGUAGES, ALBUM_ID)
+        (FID, OLD_FID, TRACK_NUM, NAME, ARTIST_ID, DATE, STR_DATE, DURATION, GENRES, LANGUAGES, ALBUM_ID)
         SELECT
         CONCAT(IMPORT_ALBUM_FID, '-', IMPORT_TRACK_NO),
         STEVILKA,
         IMPORT_TRACK_NO,
         NASLOV,
+        IMPORT_ARTIST_ID,
         IF(LETNIK REGEXP '^[0-9]{4}$', MAKEDATE(LETNIK, 1), NULL),
         LETNIK,
         IF(MINUTAZA > 0, SEC_TO_TIME(MINUTAZA/1000), NULL),
@@ -265,13 +269,12 @@ class ImportCommand extends ContainerAwareCommand
 
         $this->out->write("Import tracks (2/2)...");
 
-        $this->c->exec("ALTER TABLE $this->dbName.data_tracks ADD INDEX IDX_TMP_OLD_FID (OLD_FID)");
-
         $this->c->exec("UPDATE fonoteka_old.FONO_ALL
         LEFT JOIN $this->dbName.data_tracks ON FONO_ALL.STEVILKA=data_tracks.OLD_FID
         SET FONO_ALL.IMPORT_TRACK_ID=data_tracks.ID, FONO_ALL.IMPORT_TRACK_FID=data_tracks.FID");
 
         $this->c->exec("ALTER TABLE $this->dbName.data_tracks DROP INDEX IDX_TMP_OLD_FID");
+        $this->c->exec("ALTER TABLE $this->dbName.data_tracks DROP COLUMN OLD_FID");
 
         $this->out->writeln("OK");
 

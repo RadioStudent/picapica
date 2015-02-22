@@ -5,6 +5,7 @@ namespace RadioStudent\AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * Album
@@ -23,6 +24,15 @@ class Album
      * @ORM\Column(name="ID", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @JMS\Groups({
+     *  "albums",
+     *  "album",
+     *  "tracks",
+     *  "track",
+     *  "artists",
+     *  "artist",
+     * })
      */
     private $id;
 
@@ -30,6 +40,15 @@ class Album
      * @var string
      *
      * @ORM\Column(name="NAME", type="string", length=255)
+     *
+     * @JMS\Groups({
+     *  "albums",
+     *  "album",
+     *  "tracks",
+     *  "track",
+     *  "artists",
+     *  "artist",
+     * })
      */
     private $name;
 
@@ -41,6 +60,13 @@ class Album
      *      joinColumns={@ORM\JoinColumn(name="ALBUM_ID", referencedColumnName="ID")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="ARTIST_ID", referencedColumnName="ID")}
      *  )
+     *
+     * @JMS\Groups({
+     *  "albums",
+     *  "album",
+     *  "tracks",
+     *  "track",
+     * })
      */
     private $artists;
 
@@ -48,6 +74,12 @@ class Album
      * @var \DateTime
      *
      * @ORM\Column(name="DATE", type="datetime", nullable=true)
+     *
+     * @JMS\Groups({
+     *  "albums",
+     *  "album",
+     *  "track",
+     * })
      */
     private $date;
 
@@ -62,13 +94,21 @@ class Album
      * @var string
      *
      * @ORM\Column(name="FID", type="string", length=30)
+     *
+     * @JMS\Groups({"tracks"})
      */
     private $fid;
 
-    /**
+    /** awef
      * @var Collection|Track[]
      *
      * @ORM\OneToMany(targetEntity="Track", mappedBy="album")
+     * @ORM\OrderBy({"trackNum" = "ASC"})
+     *
+     * @JMS\Groups({
+     *  "albums",
+     *  "album",
+     * })
      */
     private $tracks;
 

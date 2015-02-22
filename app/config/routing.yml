@@ -3,3 +3,19 @@ radio_student_app:
     type:     annotation
     prefix:   /
 
+API_artists:
+    type: rest
+    resource: @RadioStudentAppBundle/Controller/API/ArtistController.php
+
+API_albums:
+    type: rest
+    resource: @RadioStudentAppBundle/Controller/API/AlbumController.php
+
+API_tracks:
+    type: rest
+    resource: @RadioStudentAppBundle/Controller/API/TrackController.php
+
+#radio_student_API:
+#  type: rest
+#  prefix: /api
+#  resource: "routing_api.yml"
