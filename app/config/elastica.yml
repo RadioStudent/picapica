@@ -4,12 +4,49 @@ fos_elastica:
 
   indexes:
     picapica:
-      types:
 
+      settings:
+        index:
+          analysis:
+
+            filter:
+              edgeNGram_filter:
+                type: "edgeNGram"
+                min_gram: 2
+                max_gram: 20
+                side: "front"
+
+            analyzer:
+              edge_NGram_analyzer:
+                type: "custom"
+                tokenizer: "edge_ngram_tokenizer"
+                filter:
+                   - lowercase
+                   - asciifolding
+                   - edgeNGram_filter
+              whitespace_analyzer:
+                type: "custom"
+                tokenizer: "whitespace"
+                filter:
+                  - lowercase
+                  - asciifolding
+
+            tokenizer:
+              edge_ngram_tokenizer:
+                  type: "edgeNGram"
+                  min_gram: "2"
+                  max_gram: "5"
+                  token_chars:
+                    - letter
+                    - digit
+
+      types:
         artist:
           mappings:
             id: ~
-            name: ~
+            name:
+              index_analyzer: edge_NGram_analyzer
+              search_analyzer: whitespace_analyzer
             albums:
               type: object
               properties:
@@ -33,7 +70,9 @@ fos_elastica:
           mappings:
             id: ~
             fid: ~
-            name: ~
+            name:
+              index_analyzer: edge_NGram_analyzer
+              search_analyzer: whitespace_analyzer
             date:
               type: date
               format: date_time_no_millis
@@ -68,7 +107,9 @@ fos_elastica:
             id: ~
             fid: ~
             trackNum: ~
-            name: ~
+            name:
+              index_analyzer: edge_NGram_analyzer
+              search_analyzer: whitespace_analyzer
             duration:
               type: date
               format: hour_minute_second

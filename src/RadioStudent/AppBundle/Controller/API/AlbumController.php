@@ -25,12 +25,17 @@ class AlbumController extends FOSRestController
      */
     public function cgetAction(Request $request)
     {
+        $search  = $request->query->get('search', null);
+        $page    = $request->query->get('page', 1);
+        $results = $request->query->get('results', 10);
+
         $repo = $this
             ->container
-            ->get('doctrine.orm.entity_manager')
-            ->getRepository('RadioStudentAppBundle:Album');
+            ->get('search.repository.album');
 
-        $data = $repo->findBy([], null, 100);
+        $data = $repo
+            ->search($search, $page, $results)
+            ->getCurrentPageResults();
 
         $view = $this
             ->view($data, 200)

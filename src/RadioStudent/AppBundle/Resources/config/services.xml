@@ -4,13 +4,16 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
-    <!--
     <services>
-        <service id="radio_student_app.example" class="RadioStudent\AppBundle\Example">
-            <argument type="service" id="service_id" />
-            <argument>plain_value</argument>
-            <argument>%parameter_name%</argument>
+        <service id="search.repository.artist" class="RadioStudent\AppBundle\Search\ArtistRepository">
+            <argument type="service" id="fos_elastica.finder.picapica.artist" />
+        </service>
+        <service id="search.repository.album" class="RadioStudent\AppBundle\Search\AlbumRepository">
+            <argument type="service" id="fos_elastica.finder.picapica.album" />
+        </service>
+        <service id="search.repository.track" class="RadioStudent\AppBundle\Search\TrackRepository">
+            <argument type="service" id="fos_elastica.finder.picapica.track" />
         </service>
     </services>
-    -->
+
 </container>
