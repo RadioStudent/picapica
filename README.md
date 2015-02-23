@@ -13,8 +13,8 @@ Web app for physical music library management.
 4. execute:
 ```
 composer install
-php app/console database:create
-php app/console schema:create
+php app/console doctrine:database:create
+php app/console doctrine:schema:create
 php app/console picapica:import
 php app/console fos:elastica:populate
 ```
