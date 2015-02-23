@@ -3,6 +3,7 @@
 /app/cache/*
 /app/config/parameters.yml
 /app/logs/*
+/app/data/*sql*
 !app/cache/.gitkeep
 !app/logs/.gitkeep
 /build/
@@ -20,3 +21,5 @@ npm-debug.log*
 /web/js
 npm-debug.log
 .sass-cache
+
+.DS_Store

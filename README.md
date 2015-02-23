@@ -11,7 +11,7 @@ Web app for physical music library management.
 2. run/provision the vagrant
 3. ssh to vagrant
 4. execute:
-```
+```bash
 composer install
 php app/console doctrine:database:create
 php app/console doctrine:schema:create
@@ -27,4 +27,9 @@ npm install
 bundle install
 grunt
 ```
-If the `grunt` command isn't working for you, try provisioning your Vagrant box.
+
+## HOSTS file
+Edit your [hosts file](http://en.wikipedia.org/wiki/Hosts_%28file%29) and add a hostname called `picapica.dev` that points to your Vagrant box IP address.
+```
+192.168.56.101  picapica.dev # the IP is just an example
+```

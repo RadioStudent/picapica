@@ -6,6 +6,21 @@ module.exports = function(grunt) {
         bowerPath: 'bower_components',
         assetsPath: 'web',
 
+        // Copy stuff that needs to be copied
+        copy: {
+            angularjs: {
+                expand: true,
+                cwd: '<%= resourcesPath %>/js',
+                src: ['**/*.js'],
+                dest: '<%= assetsPath %>/js'
+            },
+            angularhtml: {
+                expand: true,
+                cwd: '<%= resourcesPath %>/views/frontend',
+                src: ['**/*.html'],
+                dest: '<%= assetsPath %>/partials'
+            }
+        },
         // Compiles SASS to CSS
         sass: {
             dist: {
@@ -32,8 +47,11 @@ module.exports = function(grunt) {
             },
             js: {
                 files: ['<%= resourcesPath %>/js/**/*.js'],
-                //tasks: ['copy:websiteBundle']
-                tasks: ['browserify']
+                tasks: ['copy:angularjs']
+            },
+            angularTemplates: {
+                files: ['<%= resourcesPath %>/views/frontend/**/*.html'],
+                tasks: ['copy:angularhtml']
             },
             svgSprite: {
                 files: ['<%= resourcesPath %>/images/icons/*.svg'],
@@ -67,24 +85,15 @@ module.exports = function(grunt) {
                     'web/images/sprite.svg': ['<%= resourcesPath %>/images/icons/*.svg'],
                 }
             },
-        },
-        browserify: {
-            main: {
-                files: {
-                    'web/js/main.js': ['<%= resourcesPath %>/js/**/*.js'],
-                }
-            }
         }
-
-
     });
 
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-browser-sync');
     grunt.loadNpmTasks('grunt-svgstore');
-    grunt.loadNpmTasks('grunt-browserify');
 
     grunt.registerTask('live', ['browserSync', 'watch']);
-    grunt.registerTask('default', ['sass', 'svgstore', 'browserify']);
+    grunt.registerTask('default', ['sass', 'svgstore', 'copy']);
 };
