@@ -6,7 +6,14 @@ module.exports = function(grunt) {
         bowerPath: 'bower_components',
         assetsPath: 'web',
 
-        // Copy stuff that needs to be copied
+        // Cleans up folders we will later copy to
+        clean: [
+            '<%= assetsPath %>/partials',
+            '<%= assetsPath %>/css',
+            '<%= assetsPath %>/images',
+            '<%= assetsPath %>/js'
+        ],
+        // Copies stuff that needs to be copied
         copy: {
             angularjs: {
                 expand: true,
@@ -88,6 +95,7 @@ module.exports = function(grunt) {
         }
     });
 
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -95,5 +103,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-svgstore');
 
     grunt.registerTask('live', ['browserSync', 'watch']);
-    grunt.registerTask('default', ['sass', 'svgstore', 'copy']);
+    grunt.registerTask('default', ['clean', 'sass', 'svgstore', 'copy']);
 };
