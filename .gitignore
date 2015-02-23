@@ -19,6 +19,7 @@ npm-debug.log*
 /web/css
 /web/images
 /web/js
+/web/partials
 npm-debug.log
 .sass-cache
 
