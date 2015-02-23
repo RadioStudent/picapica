@@ -4,15 +4,17 @@
 
 var picapicaControllers = angular.module('picapicaControllers', []);
 
-picapicaControllers.controller('TrackSearchCtrl', ['$scope', '$http', function($scope, $http) {
+picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', function(Track, $scope) {
     $scope.tracks = [];
     $scope.searchTerm = '';
 
     $scope.performSearch = function() {
-        $http.get('api/v1/tracks?search=' + $scope.searchTerm + '&results=100').success(function(data) {
-            $scope.tracks = data;
-        });
+        Track.search(
+            { search: $scope.searchTerm },
+            function(response) {
+                $scope.tracks = response;
+            }
+        );
         $scope.searchTerm = '';
     };
-
 }]);

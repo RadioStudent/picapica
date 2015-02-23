@@ -4,7 +4,8 @@
 
 var picapicaApp = angular.module('picapicaApp', [
     'ngRoute',
-    'picapicaControllers'
+    'picapicaControllers',
+    'picapicaServices'
 ]);
 
 picapicaApp.config(['$routeProvider',
