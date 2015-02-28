@@ -247,4 +247,22 @@ class Album
     {
         $this->tracks = $tracks;
     }
+
+    public function getFlat()
+    {
+        $result = [
+            'id' => $this->id,
+            'fid' => $this->fid,
+            'name' => $this->name,
+            'year' => $this->date? $this->date->format('Y'): null,
+        ];
+
+        $result['artists'] = [];
+        foreach ($this->artists as $a) {
+            $result['artists'][] = ['id' => $a->getId(), 'name' => $a->getName()];
+        }
+
+        return $result;
+    }
+
 }

@@ -57,7 +57,11 @@ class Artist
     /**
      * @var Collection|Album[]
      *
-     * @ORM\ManyToMany(targetEntity="Album", mappedBy="artists")
+     * @ORM\ManyToMany(
+     *  targetEntity="Album",
+     *  mappedBy="artists",
+     *  fetch="LAZY"
+     * )
      *
      * @JMS\Groups({
      *  "artists",
@@ -69,7 +73,11 @@ class Artist
     /**
      * @var Collection|ArtistRelation[]
      *
-     * @ORM\OneToMany(targetEntity="ArtistRelation", mappedBy="artist")
+     * @ORM\OneToMany(
+     *  targetEntity="ArtistRelation",
+     *  mappedBy="artist",
+     *  fetch="LAZY"
+     * )
      *
      * @JMS\Groups({
      *  "artist",
@@ -158,4 +166,16 @@ class Artist
 
         return $this;
     }
+
+    public function getFlat()
+    {
+        $result = [
+            'id' => $this->id,
+            'name' => $this->name,
+        ];
+
+        return $result;
+    }
+
+
 }

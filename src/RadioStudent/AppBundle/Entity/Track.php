@@ -118,9 +118,9 @@ class Track
     private $strDate;
 
     /**
-     * @var \DateTime
+     * @var integer
      *
-     * @ORM\Column(name="DURATION", type="time", nullable=true)
+     * @ORM\Column(name="DURATION", type="integer", nullable=true)
      *
      * @JMS\Groups({
      *  "tracks",
@@ -276,10 +276,10 @@ class Track
     /**
      * Set duration
      *
-     * @param \DateInterval $duration
+     * @param integer $duration
      * @return Track
      */
-    public function setDuration(\DateInterval $duration = null)
+    public function setDuration($duration = null)
     {
         $this->duration = $duration;
 
@@ -289,16 +289,11 @@ class Track
     /**
      * Get duration
      *
-     * @return \DateInterval
+     * @return integer
      */
     public function getDuration()
     {
-        $r = null;
-        if (null !== $this->duration) {
-            $r = new \DateInterval($this->duration->format('\P\TG\Hi\Ms\S'));
-            $r = $r->format('%H:%I:%S');
-        }
-        return $r;
+        return $this->duration;
     }
 
     /**
@@ -385,5 +380,25 @@ class Track
         $this->artist = $artist;
 
         return $this;
+    }
+
+    public function getFlat()
+    {
+        $result = [
+            'id' => $this->id,
+            'fid' => $this->fid,
+            'trackNum' => $this->trackNum,
+            'name' => $this->name,
+            'year' => $this->date? $this->date->format('Y'): null,
+            'artist.name' => $this->artist->getName(),
+            'artist.id' => $this->artist->getId(),
+            'album.name' => $this->album->getName(),
+            'album.id' => $this->album->getId(),
+            'duration' => $this->duration,
+            'languages' => $this->languages,
+            'genres' => $this->genres,
+        ];
+
+        return $result;
     }
 }

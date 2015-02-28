@@ -27,11 +27,27 @@ class AutoCompleteController extends FOSRestController
      */
     public function getAction(Request $request)
     {
-        $search = $request->query->get('q', null);
+        $search = $request->query->get('search', null);
+        $size   = $request->query->get('size', 10);
 
-        $artistData = $this->container->get('search.repository.artist')->quickSearch($search, 10);
-        $albumData  = $this->container->get('search.repository.album')->quickSearch($search, 10);
-        $trackData  = $this->container->get('search.repository.track')->quickSearch($search, 10);
+        $artistData = $this->container->get('search.repository.artist')->autoComplete($search, [
+            'name',
+            'name.autocomplete'
+        ], $size);
+
+        $albumData  = $this->container->get('search.repository.album')->autoComplete($search, [
+            'name',
+            'name.autocomplete',
+            'fid.autocomplete',
+            'fid.numeric'
+        ], $size);
+
+        $trackData  = $this->container->get('search.repository.track')->autoComplete($search, [
+            'name',
+            'name.autocomplete',
+            'fid.autocomplete',
+            'fid.numeric'
+        ], $size);
 
         $data = [
             'artists' => $artistData,
@@ -42,7 +58,7 @@ class AutoCompleteController extends FOSRestController
         $view = $this
             ->view($data, 200)
             ->setSerializationContext(
-                SerializationContext::create()->setGroups(["tracks"])
+                SerializationContext::create()->setGroups(["autocomplete"])
             );
 
         return $this->handleView($view);

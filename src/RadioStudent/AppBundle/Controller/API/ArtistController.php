@@ -25,17 +25,15 @@ class ArtistController extends FOSRestController
      */
     public function cgetAction(Request $request)
     {
-        $search  = $request->query->get('search', null);
-        $page    = $request->query->get('page', 1);
-        $results = $request->query->get('results', 10);
+        $search = $request->query->get('search', null);
+        $from   = $request->query->get('from', 0);
+        $size   = $request->query->get('size', 10);
 
         $repo = $this
             ->container
             ->get('search.repository.artist');
 
-        $data = $repo
-            ->search($search, $page, $results)
-            ->getCurrentPageResults();
+        $data = $repo->search($search, $from, $size);
 
         $view = $this
             ->view($data, 200)
@@ -62,4 +60,5 @@ class ArtistController extends FOSRestController
             );
 
         return $this->handleView($view);
-    }}
+    }
+}

@@ -259,7 +259,7 @@ class ImportCommand extends ContainerAwareCommand
         IMPORT_ARTIST_ID,
         IF(LETNIK REGEXP '^[0-9]{4}$', MAKEDATE(LETNIK, 1), NULL),
         LETNIK,
-        IF(MINUTAZA > 0, SEC_TO_TIME(MINUTAZA/1000), NULL),
+        IF(MINUTAZA > 0, MINUTAZA/1000, NULL),
         IF(ZVRST <> '', ZVRST, NULL),
         IF(JEZIK <> '', JEZIK, NULL),
         IMPORT_ALBUM_ID
