@@ -82,7 +82,7 @@ class ImportCommand extends ContainerAwareCommand
 
         $this->out->write('Add import fields...');
         $this->c->exec("ALTER TABLE FONO_ALL
-            ADD COLUMN STEVILKA_FIXED VARCHAR(30) NOT NULL DEFAULT '' COLLATE AFTER STEVILKA,
+            ADD COLUMN STEVILKA_FIXED VARCHAR(30) NOT NULL DEFAULT '' AFTER STEVILKA,
             ADD COLUMN IMPORT_ALBUM_ID INT(10) NULL AFTER MEDIA,
             ADD COLUMN IMPORT_ARTIST_ID INT(10) NULL AFTER IMPORT_ALBUM_ID,
             ADD COLUMN IMPORT_TRACK_ID INT(10) NULL AFTER IMPORT_ARTIST_ID,
@@ -90,7 +90,7 @@ class ImportCommand extends ContainerAwareCommand
             ADD COLUMN IMPORT_ALBUM_FID VARCHAR(30) NULL AFTER IMPORT_LABEL_ID,
             ADD COLUMN IMPORT_TRACK_NO VARCHAR(30) NULL AFTER IMPORT_ALBUM_FID,
             ADD COLUMN IMPORT_TRACK_FID VARCHAR(30) NULL AFTER IMPORT_TRACK_NO,
-            ADD INDEX IMPORT (IMPORT_ARTIST_ID, IMPORT_ALBUM_ID, IMPORT_TRACK_ID, IMPORT_LABEL_ID, IMPORT_ALBUM_FID, IMPORT_TRACK_NO, IMPORT_TRACK_FID)
+            ADD INDEX IMPORT (IMPORT_ARTIST_ID, IMPORT_ALBUM_ID, IMPORT_TRACK_ID, IMPORT_LABEL_ID, IMPORT_ALBUM_FID, IMPORT_TRACK_NO, IMPORT_TRACK_FID),
             ADD INDEX STEVILKA_FIXED (STEVILKA_FIXED)");
         $this->out->writeln('OK');
 
@@ -116,45 +116,29 @@ class ImportCommand extends ContainerAwareCommand
         $this->c->exec("UPDATE FONO_ALL SET " . implode(',', $fix));
         $this->out->writeln('OK');
 
-        $this->out->write("Extract album FID...");
-        $this->c->exec("UPDATE FONO_ALL
-          SET IMPORT_ALBUM_FID=
-            TRIM(
-              IF(
-                LOCATE('-', STEVILKA)>0, SUBSTRING_INDEX(STEVILKA,'-',1),
-                SUBSTRING_INDEX(STEVILKA,'/',1)
-              )
-            )"
-        );
-        $this->out->writeln("OK");
-
+        $this->out->write("Fix FID...");
+        $this->c->exec(
+        "UPDATE FONO_ALL set STEVILKA_FIXED=STEVILKA;
 
         /* CDJ 000054/32 */
-        /*
         UPDATE FONO_ALL SET STEVILKA_FIXED =
         CONCAT(
             SUBSTRING(STEVILKA_FIXED, 1, LENGTH(STEVILKA_FIXED) - 3),
             '-A/',
             SUBSTRING(STEVILKA_FIXED, -2)
         )
-        WHERE LOWER(STEVILKA_FIXED) REGEXP '[0-9]{6}/[0-9]{2}$'
-        */
-
+        WHERE LOWER(STEVILKA_FIXED) REGEXP '[0-9]{6}/[0-9]{2}$';
 
         /* CDYU 000599A/06 */
-        /*
         UPDATE FONO_ALL SET STEVILKA_FIXED =
         CONCAT(
             SUBSTRING(STEVILKA_FIXED, 1, LENGTH(STEVILKA_FIXED) - 4),
             '-',
             SUBSTRING(STEVILKA_FIXED, -4)
         )
-        WHERE LOWER(STEVILKA_FIXED) REGEXP '[0-9]{6}[a-z]/[0-9]{2}$'
-        */
-
+        WHERE LOWER(STEVILKA_FIXED) REGEXP '[0-9]{6}[a-z]/[0-9]{2}$';
 
         /* CDWR000543-A/02 */
-        /*
         UPDATE FONO_ALL SET STEVILKA_FIXED =
         IF (LOWER(STEVILKA_FIXED) REGEXP '^[a-zš]{4}[0-9]*', CONCAT(MID(STEVILKA_FIXED,1,4), ' ', REPLACE(MID(STEVILKA_FIXED,5), ' ', '')),
             IF (LOWER(STEVILKA_FIXED) REGEXP '^[a-zš]{3}[0-9]*', CONCAT(MID(STEVILKA_FIXED,1,3), ' ', REPLACE(MID(STEVILKA_FIXED,4), ' ', '')),
@@ -165,57 +149,108 @@ class ImportCommand extends ContainerAwareCommand
                 )
             )
         )
-        WHERE LOWER(STEVILKA_FIXED) REGEXP '^[a-zš]*[0-9]'
-        */
-
+        WHERE LOWER(STEVILKA_FIXED) REGEXP '^[a-zš]*[0-9]';
 
         /* LP 000563A-D/02 */
-        /*
         UPDATE FONO_ALL SET STEVILKA_FIXED =
         CONCAT(
             SUBSTRING(STEVILKA_FIXED, 1, LENGTH(STEVILKA_FIXED) - 6),
             SUBSTRING(STEVILKA_FIXED, -5)
         )
-        WHERE LOWER(STEVILKA_FIXED) REGEXP '[0-9]*[a-z]-[a-z]/[0-9]*$'
-        */
-
+        WHERE LOWER(STEVILKA_FIXED) REGEXP '[0-9]*[a-z]-[a-z]/[0-9]*$';
 
         /* CD  005387-A/08 */
-        /*
-        UPDATE FONO_ALL SET STEVILKA_FIXED = REPLACE(STEVILKA_FIXED, '  ', ' ')
-        */
+        UPDATE FONO_ALL SET STEVILKA_FIXED = REPLACE(STEVILKA_FIXED, '  ', ' ');
 
         /* CDWR 001066-A/ 06 */
-        /*
         UPDATE FONO_ALL SET STEVILKA_FIXED =
         CONCAT(
             SUBSTRING(STEVILKA_FIXED, 1, POSITION(' ' IN STEVILKA_FIXED)),
             REPLACE(SUBSTRING(STEVILKA_FIXED, POSITION(' ' IN STEVILKA_FIXED)), ' ', '')
         )
-        WHERE LOWER(STEVILKA_FIXED) REGEXP '^[a-zš]+ [^ ]* '
-        */
-
+        WHERE LOWER(STEVILKA_FIXED) REGEXP '^[a-zš]+ [^ ]* ';
 
         /* CD 005857-A02 */
-        /*
         UPDATE FONO_ALL SET STEVILKA_FIXED =
         CONCAT(
             SUBSTRING(STEVILKA_FIXED, 1, LENGTH(STEVILKA_FIXED)-2),
             '/',
             SUBSTRING(STEVILKA_FIXED, -2)
         )
-        WHERE LOWER(STEVILKA_FIXED) REGEXP '[a-z][0-9]{2}$'
-        */
+        WHERE LOWER(STEVILKA_FIXED) REGEXP '[a-z][0-9]{2}$';
 
+        /* CD 5928-A/05 */
+        UPDATE FONO_ALL SET STEVILKA_FIXED =
+        CONCAT(
+            SUBSTRING(STEVILKA_FIXED, 1, POSITION(' ' IN STEVILKA_FIXED)),
+            IF (LOWER(STEVILKA_FIXED) REGEXP '[a-z]* [0-9]{5}[^0-9]', CONCAT('0', SUBSTRING(STEVILKA_FIXED, POSITION(' ' IN STEVILKA_FIXED)+1)),
+                IF (LOWER(STEVILKA_FIXED) REGEXP '[a-z]* [0-9]{4}[^0-9]', CONCAT('00', SUBSTRING(STEVILKA_FIXED, POSITION(' ' IN STEVILKA_FIXED)+1)),
+                    IF (LOWER(STEVILKA_FIXED) REGEXP '[a-z]* [0-9]{3}[^0-9]', CONCAT('000', SUBSTRING(STEVILKA_FIXED, POSITION(' ' IN STEVILKA_FIXED)+1)),
+                        IF (LOWER(STEVILKA_FIXED) REGEXP '[a-z]* [0-9]{2}[^0-9]', CONCAT('0000', SUBSTRING(STEVILKA_FIXED, POSITION(' ' IN STEVILKA_FIXED)+1)),
+                            IF (LOWER(STEVILKA_FIXED) REGEXP '[a-z]* [0-9]{7}[^0-9]', SUBSTRING(STEVILKA_FIXED, POSITION(' ' IN STEVILKA_FIXED)+2),
+                                SUBSTRING(STEVILKA_FIXED, POSITION(' ' IN STEVILKA_FIXED)+1)
+                            )
+                        )
+                    )
+                )
+            )
+        )
+        WHERE LOWER(STEVILKA_FIXED) NOT REGEXP '[a-z]* [0-9]{6}[^0-9]';
 
+        /* CD 003853-A/O1 */
+        UPDATE FONO_ALL SET STEVILKA_FIXED =
+        CONCAT(
+            SUBSTRING(STEVILKA_FIXED, 1, POSITION(' ' IN STEVILKA_FIXED)-1),
+            REPLACE(SUBSTRING(STEVILKA_FIXED, POSITION(' ' IN STEVILKA_FIXED)), 'O', '0')
+        )
+        WHERE LOWER(STEVILKA_FIXED) REGEXP '^[a-zš]+ [^o]*o';
+
+        /* CDYU 001756-/09 */
+        UPDATE FONO_ALL SET STEVILKA_FIXED =
+        REPLACE(STEVILKA_FIXED, '-/', '-A/')
+        WHERE LOWER(STEVILKA_FIXED) REGEXP '[0-9]{6}-/[0-9]';
+
+        /* CD 008895.A/01 */
+        UPDATE FONO_ALL SET STEVILKA_FIXED =
+        REPLACE(REPLACE(STEVILKA_FIXED, '.', '-'), '--', '-')
+        WHERE LOWER(STEVILKA_FIXED) REGEXP '[.]';
+
+        /*  CD 008691-A/02 */
+        UPDATE FONO_ALL SET STEVILKA_FIXED =
+        SUBSTRING(STEVILKA_FIXED, 2)
+        WHERE LOWER(STEVILKA_FIXED) REGEXP '^ ';
+
+        /* CDDE 000165-/A/02 */
+        UPDATE FONO_ALL SET STEVILKA_FIXED =
+        REPLACE(STEVILKA_FIXED, '-/', '-')
+        WHERE LOWER(STEVILKA_FIXED) REGEXP '-/[a-z]/[0-9]';
+
+        /* CD 004699-A/4 */
+        UPDATE FONO_ALL SET STEVILKA_FIXED =
+        REPLACE(STEVILKA_FIXED, '/', '/0')
+        WHERE LOWER(STEVILKA_FIXED) REGEXP '[a-z]/[0-9]$';
+        ");
+        $this->out->writeln("OK");
+
+        $this->out->write("Extract album FID...");
+        $this->c->exec("UPDATE FONO_ALL
+          SET IMPORT_ALBUM_FID=
+            TRIM(
+              IF(
+                LOCATE('-', STEVILKA_FIXED)>0, SUBSTRING_INDEX(STEVILKA_FIXED,'-',1),
+                SUBSTRING_INDEX(STEVILKA_FIXED,'/',1)
+              )
+            )"
+        );
+        $this->out->writeln("OK");
 
         $this->out->write("Extract track numbers...");
         $this->c->exec("UPDATE FONO_ALL
           SET IMPORT_TRACK_NO=
             TRIM(
               IF(
-                LOCATE('-', STEVILKA)>0, SUBSTR(STEVILKA,LOCATE('-', STEVILKA)+1),
-                CONCAT('A/', SUBSTR(STEVILKA,LOCATE('/', STEVILKA)+1))
+                LOCATE('-', STEVILKA_FIXED)>0, SUBSTR(STEVILKA_FIXED,LOCATE('-', STEVILKA_FIXED)+1),
+                CONCAT('A/', SUBSTR(STEVILKA_FIXED,LOCATE('/', STEVILKA_FIXED)+1))
               )
             )"
         );
