@@ -1,1 +1,1 @@
-echo "cd /var/www/picapica" >> /home/vagrant/.bashrc
+echo "cd /vagrant" >> /home/vagrant/.bashrc

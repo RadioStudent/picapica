@@ -31,6 +31,10 @@ abstract class BaseSearchRepository {
      */
     public function search($search = null, $from = 0, $size = 100, $sort = ['_score'])
     {
+        if (!is_array($sort)) {
+            $sort = [$sort];
+        }
+
         $boolQuery = new Query\Bool();
 
         if (is_array($search) && count($search) > 0) {
@@ -52,8 +56,11 @@ abstract class BaseSearchRepository {
 
         $query = new Query($boolQuery);
 
-        foreach ($sort as $s) {
-            $query->addSort($s);
+        foreach ($sort as $k=>$v) {
+            if (!is_numeric($k)) {
+                $v = [$k=>$v];
+            }
+            $query->addSort($v);
         }
 
         $query

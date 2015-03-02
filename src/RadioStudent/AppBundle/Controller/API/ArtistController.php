@@ -28,12 +28,13 @@ class ArtistController extends FOSRestController
         $search = $request->query->get('search', null);
         $from   = $request->query->get('from', 0);
         $size   = $request->query->get('size', 10);
+        $sort   = $request->query->get('sort', null);
 
         $repo = $this
             ->container
             ->get('search.repository.artist');
 
-        $data = $repo->search($search, $from, $size);
+        $data = $repo->search($search, $from, $size, $sort);
 
         $view = $this
             ->view($data, 200)

@@ -64,15 +64,14 @@
             <arg name="env" value="${env}" />
         </SymfonyConsole>
 
-        <SymfonyConsole command="fonoteka2:import"
+        <SymfonyConsole command="picapica:import"
                         checkreturn="true">
             <arg name="env" value="${env}" />
-            <!--<arg name="fixtures" value="src/AppBundle/DataFixtures/ORM/Fixture" />-->
         </SymfonyConsole>
 
-        <!--<SymfonyConsole command="fos:elastica:populate">-->
-            <!--<arg name="env" value="${env}" />-->
-        <!--</SymfonyConsole>-->
+        <SymfonyConsole command="fos:elastica:populate">
+            <arg name="env" value="${env}" />
+        </SymfonyConsole>
     </target>
 
     <target name="assets" description="Install all front end assets.">

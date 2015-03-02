@@ -21,7 +21,8 @@
         "friendsofsymfony/elastica-bundle": "~3.0",
         "friendsofsymfony/rest-bundle": "~1.5",
         "jms/serializer-bundle": "0.13.*",
-        "pagerfanta/pagerfanta": "~1.0"
+        "pagerfanta/pagerfanta": "~1.0",
+        "phing/phing": "~2.10"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

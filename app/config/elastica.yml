@@ -223,7 +223,7 @@ fos_elastica:
             driver: orm
             model: RadioStudent\AppBundle\Entity\Track
             provider:
-              batch_size: 10000
+              batch_size: 1000
             listener:
               immediate: ~
             finder: ~
