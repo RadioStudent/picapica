@@ -4,23 +4,65 @@
 
 var picapicaControllers = angular.module('picapicaControllers', []);
 
-picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '$q', function(Track, $scope, $http, $q) {
+picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '$q', '$sce', function(Track, $scope, $http, $q, $sce) {
     $scope.tracks = [];
+    $scope.filters = [];
     $scope.searchTerm = '';
     var acTimeout,
         acDelay = 300;
 
-    $scope.performSearch = function() {
+    $scope.addTextFilter = function() {
+        if($scope.searchTerm.length === 0) {
+            return;
+        }
+
+        $scope.filters.push({
+            'text'  : $scope.searchTerm,
+            'type'  : '_all',
+            'label' : $scope.searchTerm
+        });
+
+        $scope.searchTerm = '';
+        doSearch();
+    };
+
+    function addAcFilter(text, type, label) {
+        $scope.filters.push({
+            'text'  : text,
+            'type'  : type,
+            'label' : label
+        });
+
+        doSearch();
+    };
+
+    function doSearch() {
+        var searchParams = buildSearchParams();
         Track.search(
-            { search: $scope.searchTerm },
+            { search: searchParams },
             function(response) {
                 $scope.tracks = response;
             }
         );
-        $scope.searchTerm = '';
-    };
+    }
+
+    function buildSearchParams() {
+        var params = [];
+
+        $scope.filters.forEach(function(filter){
+            var obj = {};
+            obj[filter.type] = filter.text;
+            params.push(obj);
+        });
+
+        return JSON.stringify(params);
+    }
 
     $scope.getSuggestions = function(searchInput) {
+        if(searchInput.length === 0) {
+            return;
+        }
+
         var deferred = $q.defer();
         clearTimeout(acTimeout);
 
@@ -47,8 +89,13 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
         return deferred.promise;
     }
 
-    $scope.$on('$typeahead.select', function(value, index){
+    $scope.$on('$typeahead.select', function(event, selectedItem) {
+        addAcFilter(
+            selectedItem.id,
+            selectedItem.type.substring(0, selectedItem.type.length - 1) + '.id',
+            selectedItem.name + '(' + selectedItem.id + ')'
+        );
         $scope.searchTerm = '';
     });
-\
+
 }]);

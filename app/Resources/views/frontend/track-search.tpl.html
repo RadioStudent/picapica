@@ -14,7 +14,7 @@
 </nav>
 
 <div class="container">
-    <form ng-submit="performSearch()">
+    <form ng-submit="addTextFilter()">
         <div class="input-group">
             <input type="text"
                    class="form-control"
@@ -30,6 +30,10 @@
     </form>
 
     <br>
+
+    <div class="filters">
+        <button type="button" class="btn btn-default" ng-repeat="filter in filters">{{ filter.label }}</button>
+    </div>
 
     <table class="table table-striped">
         <thead>

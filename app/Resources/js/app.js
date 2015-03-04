@@ -4,6 +4,7 @@
 
 var picapicaApp = angular.module('picapicaApp', [
     'ngRoute',
+    'ngSanitize',
     'mgcrea.ngStrap',
     'picapicaControllers',
     'picapicaServices'
