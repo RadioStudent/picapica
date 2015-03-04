@@ -28,7 +28,7 @@ class TrackController extends FOSRestController
         $search = $request->query->get('search', null);
         $from   = $request->query->get('from', 0);
         $size   = $request->query->get('size', 10);
-        $sort   = $request->query->get('sort', null);
+        $sort   = $request->query->get('sort', ['_score']);
 
         $repo = $this
             ->container
