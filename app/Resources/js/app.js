@@ -25,8 +25,7 @@ picapicaApp
     .config(function($typeaheadProvider) {
         angular.extend($typeaheadProvider.defaults, {
             minLength: 3,
-            delay: 250,
-            trigger: 'click',
+            trigger: 'focus',
             template: 'partials/_autocomplete.tpl.html',
             limit: 30
         });

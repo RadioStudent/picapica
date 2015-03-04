@@ -5,9 +5,10 @@
 var picapicaControllers = angular.module('picapicaControllers', []);
 
 picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '$q', function(Track, $scope, $http, $q) {
-    var canceler = $q.defer();
     $scope.tracks = [];
     $scope.searchTerm = '';
+    var acTimeout,
+        acDelay = 300;
 
     $scope.performSearch = function() {
         Track.search(
@@ -20,30 +21,34 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
     };
 
     $scope.getSuggestions = function(searchInput) {
-        canceler.resolve(true);
-        canceler = $q.defer();
-        return $http({
-            method: 'GET',
-            url: 'api/v1/ac',
-            params: { search: searchInput },
-            timeout: canceler.promise
-        }).then(function(res) {
-            var results = res.data;
+        var deferred = $q.defer();
+        clearTimeout(acTimeout);
 
-            for (var key in results) {
-                if(results[key].length > 0) {
-                    results[key].forEach(function(result){
-                        result.type = key;
-                    });
+        acTimeout = setTimeout(function() {
+            $http({
+                method: 'GET',
+                url: 'api/v1/ac',
+                params: { search: searchInput }
+            }).then(function(res) {
+                var results = res.data;
+
+                for (var key in results) {
+                    if(results[key].length > 0) {
+                        results[key].forEach(function(result){
+                            result.type = key;
+                        });
+                    }
                 }
-            }
 
-            return results.artists.concat(results.albums, results.tracks);
-        });
-    };
+                deferred.resolve(results.artists.concat(results.albums, results.tracks));
+            });
+        }, acDelay);
+
+        return deferred.promise;
+    }
 
     $scope.$on('$typeahead.select', function(value, index){
         $scope.searchTerm = '';
     });
-
+\
 }]);
