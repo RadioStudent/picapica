@@ -37,9 +37,9 @@ abstract class BaseSearchRepository {
             $boolQuery->addMust(new Query\MatchAll());
 
         } else {
-            foreach ($search as $type => $value) {
+            foreach ($search as $field) {
                 $q = new Query\Match();
-                $q->setFieldQuery($type, $value);
+                $q->setField(key($field), current($field));
 
                 $boolQuery->addMust($q);
             }
@@ -90,6 +90,7 @@ abstract class BaseSearchRepository {
             ->setSort(['_score'])
             ->setSize($limit);
 
+//        $result = $this->getFlattenedHybridResults($query);
         $result = $this->getFlattenedHybridResults($query);
 
         return $result;
