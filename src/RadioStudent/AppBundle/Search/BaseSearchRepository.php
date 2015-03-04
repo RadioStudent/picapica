@@ -29,38 +29,33 @@ abstract class BaseSearchRepository {
      *
      * @return array
      */
-    public function search($search = null, $from = 0, $size = 100, $sort = ['_score'])
+    public function search($search = null, $sort = null, $from = 0, $size = 100)
     {
-        if (!is_array($sort)) {
-            $sort = [$sort];
-        }
-
         $boolQuery = new Query\Bool();
 
-        if (is_array($search) && count($search) > 0) {
+        if ($search == null) {
+            $boolQuery->addMust(new Query\MatchAll());
+
+        } else {
             foreach ($search as $type => $value) {
                 $q = new Query\Match();
                 $q->setFieldQuery($type, $value);
 
                 $boolQuery->addMust($q);
             }
-
-        } else if (strlen($search) > 0) {
-            $q = new Query\Match();
-            $q->setFieldQuery('_all', $search);
-            $boolQuery->addMust($q);
-
-        } else {
-            $boolQuery->addMust(new Query\MatchAll());
         }
 
         $query = new Query($boolQuery);
 
-        foreach ($sort as $k=>$v) {
-            if (!is_numeric($k)) {
-                $v = [$k=>$v];
+        if ($sort == null) {
+
+        } else {
+            foreach ($sort as $k => $v) {
+                if (!is_numeric($k)) {
+                    $v = [$k => $v];
+                }
+                $query->addSort($v);
             }
-            $query->addSort($v);
         }
 
         $query

@@ -26,15 +26,21 @@ class TrackController extends FOSRestController
     public function cgetAction(Request $request)
     {
         $search = $request->query->get('search', null);
+        $sort   = $request->query->get('sort', null);
         $from   = $request->query->get('from', 0);
         $size   = $request->query->get('size', 10);
-        $sort   = $request->query->get('sort', ['_score']);
+
+        $search = $search? json_decode($search): null;
+        $sort   = $sort? json_decode($sort): [
+            '_score' => 'desc',
+            'fid'    => 'asc'
+        ];
 
         $repo = $this
             ->container
             ->get('search.repository.track');
 
-        $data = $repo->search($search, $from, $size, $sort);
+        $data = $repo->search($search, $sort, $from, $size);
 
         $view = $this
             ->view($data, 200)
