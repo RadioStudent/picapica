@@ -90,7 +90,6 @@ abstract class BaseSearchRepository {
             ->setSort(['_score'])
             ->setSize($limit);
 
-//        $result = $this->getFlattenedHybridResults($query);
         $result = $this->getFlattenedHybridResults($query);
 
         return $result;

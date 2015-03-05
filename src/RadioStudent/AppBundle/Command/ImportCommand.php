@@ -275,6 +275,7 @@ class ImportCommand extends ContainerAwareCommand
 
         $this->out->write("Apply artists votefix...");
         $this->c->exec("USE fonoteka_old");
+
         $this->c->exec("INSERT INTO picapica.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
             SELECT DISTINCT
               n1.IMPORT_ARTIST_ID,
@@ -301,6 +302,39 @@ class ImportCommand extends ContainerAwareCommand
             SELECT DISTINCT
               n1.IMPORT_ARTIST_ID,
               n2.IMPORT_ARTIST_ID,
+              '".ArtistRelation::TYPE_MISTAKE."'
+            FROM
+              fonoteka_old.fono_votefix_artists AS fix
+              INNER JOIN FONO_ALL AS n1 on fix.NAME1=n1.IZVAJALEC
+              INNER JOIN FONO_ALL AS n2 on fix.NAME2=n2.IZVAJALEC
+            WHERE CHOICE=0;"
+        );
+        $this->c->exec("INSERT INTO picapica.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
+            SELECT DISTINCT
+              n2.IMPORT_ARTIST_ID,
+              n1.IMPORT_ARTIST_ID,
+              '".ArtistRelation::TYPE_MISTAKE."'
+            FROM
+              fonoteka_old.fono_votefix_artists AS fix
+              INNER JOIN FONO_ALL AS n1 on fix.NAME1=n1.IZVAJALEC
+              INNER JOIN FONO_ALL AS n2 on fix.NAME2=n2.IZVAJALEC
+            WHERE CHOICE=1;"
+        );
+        $this->c->exec("INSERT INTO picapica.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
+            SELECT DISTINCT
+              n1.IMPORT_ARTIST_ID,
+              n2.IMPORT_ARTIST_ID,
+              '".ArtistRelation::TYPE_BOTH_CORRECT."'
+            FROM
+              fonoteka_old.fono_votefix_artists AS fix
+              INNER JOIN FONO_ALL AS n1 on fix.NAME1=n1.IZVAJALEC
+              INNER JOIN FONO_ALL AS n2 on fix.NAME2=n2.IZVAJALEC
+            WHERE CHOICE=3 OR LEVENSHTEIN=0"
+        );
+        $this->c->exec("INSERT INTO picapica.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
+            SELECT DISTINCT
+              n2.IMPORT_ARTIST_ID,
+              n1.IMPORT_ARTIST_ID,
               '".ArtistRelation::TYPE_BOTH_CORRECT."'
             FROM
               fonoteka_old.fono_votefix_artists AS fix

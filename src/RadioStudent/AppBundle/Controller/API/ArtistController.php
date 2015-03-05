@@ -58,7 +58,7 @@ class ArtistController extends FOSRestController
         $artist = $repo->find($id);
 
         $view = $this
-            ->view($artist, 200)
+            ->view([$artist, $artist->getRelatedArtists()], 200)
             ->setSerializationContext(
                 SerializationContext::create()->setGroups(["artist"])
             );

@@ -152,7 +152,6 @@ class Artist
     public function getArtistRelations()
     {
         return $this->artistRelations;
-//        return null;
     }
 
     /**
@@ -165,6 +164,73 @@ class Artist
         $this->artistRelations = $artistRelations;
 
         return $this;
+    }
+
+    public function collectRelations(&$visited = [])
+    {
+        if (in_array($this->id, $visited)) return [];
+
+        $_tm = ArtistRelation::TYPE_MISTAKE;
+        $_tc = ArtistRelation::TYPE_CORRECTED;
+        $_ta = ArtistRelation::TYPE_BOTH_CORRECT;
+
+        $artists = [
+            $this->id => [
+                "artist" => $this,
+                "counts" => [
+                    $_tm => 0,
+                    $_tc => 0,
+                    $_ta => 0,
+                ]
+            ]
+        ];
+
+        $visited = array_unique(array_merge($visited, [$this->id]));
+
+        foreach ($this->artistRelations as $relation) {
+            if ($relation->getType() == $_tm) {
+                $artists[$this->id]["counts"][$_tc]++;
+                $rel = $relation->getRelatedArtist()->collectRelations($visited);
+                foreach ($rel as $id=>$obj) {
+                    $artists[$id] = $obj;
+                }
+            }
+        }
+
+        foreach ($this->artistRelations as $relation) {
+            if ($relation->getType() == $_tc) {
+                $artists[$this->id]["counts"][$_tm]++;
+                $rel = $relation->getRelatedArtist()->collectRelations($visited);
+                foreach ($rel as $id=>$obj) {
+                    $artists[$id] = $obj;
+                }
+            }
+        }
+
+        foreach ($this->artistRelations as $relation) {
+            if ($relation->getType() == $_ta) {
+                $artists[$this->id]["counts"][$_ta]++;
+                $rel = $relation->getRelatedArtist()->collectRelations($visited);
+                foreach ($rel as $id=>$obj) {
+                    $artists[$id] = $obj;
+                }
+            }
+        }
+
+        return $artists;
+
+    }
+
+    public function getRelatedArtists()
+    {
+        $artists = $this->collectRelations();
+
+        $ret = [];
+        foreach ($artists as $id=>$obj) {
+            $ret[$id] = [$obj["artist"]->getName(), $obj["counts"]];
+        }
+
+        return $ret;
     }
 
     public function getFlat()

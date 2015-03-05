@@ -14,6 +14,7 @@ use JMS\Serializer\Annotation as JMS;
 class ArtistRelation
 {
     const TYPE_CORRECTED = "correction";
+    const TYPE_MISTAKE = "mistake";
     const TYPE_DIFFERENT = "unrelated";
     const TYPE_BOTH_CORRECT = "alias";
 
@@ -41,7 +42,7 @@ class ArtistRelation
     private $relatedArtist;
 
     /**
-     * @var integer
+     * @var integer This field describes what the relatedArtist is to artist.
      *
      * @ORM\Id
      * @ORM\Column(name="RELATION_TYPE", type="string")

@@ -6,7 +6,7 @@
     <property name="dir.src" value="${project.basedir}/src" />
     <property name="dir.build" value="${project.basedir}/build" />
 
-    <target name="install" depends="composer-install, db, assets" />
+    <target name="install" depends="composer-install, db, elastica, assets" />
 
     <target name="composer-download">
         <exec command="curl -sS https://getcomposer.org/installer | php"
@@ -68,11 +68,15 @@
                         checkreturn="true">
             <arg name="env" value="${env}" />
         </SymfonyConsole>
+    </target>
 
+    <target name="elastica"
+            description="Populates elasticsearch index">
         <SymfonyConsole command="fos:elastica:populate">
             <arg name="env" value="${env}" />
         </SymfonyConsole>
     </target>
+
 
     <target name="assets" description="Install all front end assets.">
         <exec
