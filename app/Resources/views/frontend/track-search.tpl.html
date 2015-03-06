@@ -1,13 +1,13 @@
 <nav class="navbar navbar-default">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Brand</a>
+            <a class="navbar-brand" href="#">PicaPica</a>
         </div>
         <div>
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
+                <li class="active"><a href="/#/search">Search <span class="sr-only">(current)</span></a></li>
+                <li><a>Playlist</a></li>
+                <li><a>Editor</a></li>
             </ul>
         </div>
     </div>
@@ -32,7 +32,9 @@
     <br>
 
     <div class="filters">
-        <button type="button" class="btn btn-default" ng-repeat="filter in filters">{{ filter.label }}</button>
+        <button type="button" class="btn btn-default filter" ng-repeat="filter in filters">{{ filter.label }}
+            <span ng-click="filter.remove()" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
     </div>
 
     <table class="table table-striped">
@@ -48,10 +50,10 @@
         <tbody>
             <tr ng-repeat="track in tracks">
                 <td>{{ track.fid }}</td>
-                <td>{{ track.artist.name }}</td>
+                <td>{{ track['artist.name'] }}</td>
                 <td>{{ track.name }}</td>
-                <td>{{ track.album.name }}</td>
-                <td>{{ track.duration | date : 'mm:ss' }}</td>
+                <td>{{ track['album.name'] }}</td>
+                <td>{{ track.duration | secondsToTime }}</td>
             </tr>
         </tbody>
     </table>

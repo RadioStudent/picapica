@@ -11,29 +11,34 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
     var acTimeout,
         acDelay = 300;
 
-    $scope.addTextFilter = function() {
-        if($scope.searchTerm.length === 0) {
-            return;
+
+    var Filter = function(text, type, label) {
+        this.text = text;
+        this.type = type || '_all';
+        this.label = label || text;
+
+        $scope.filters.push(this);
+    };
+
+    Filter.prototype.remove = function() {
+        for(var i = 0; i < $scope.filters.length; i++) {
+            if(angular.equals(this, $scope.filters[i])) {
+                $scope.filters.splice(i, 1);
+                break;
+            }
         }
-
-        $scope.filters.push({
-            'text'  : $scope.searchTerm,
-            'type'  : '_all',
-            'label' : $scope.searchTerm
-        });
-
-        $scope.searchTerm = '';
         doSearch();
     };
 
-    function addAcFilter(text, type, label) {
-        $scope.filters.push({
-            'text'  : text,
-            'type'  : type,
-            'label' : label
-        });
 
-        doSearch();
+
+
+    $scope.addTextFilter = function() {
+        if($scope.searchTerm.length > 0) {
+            new Filter($scope.searchTerm);
+            $scope.searchTerm = '';
+            doSearch();
+        }
     };
 
     function doSearch() {
@@ -90,12 +95,13 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
     }
 
     $scope.$on('$typeahead.select', function(event, selectedItem) {
-        addAcFilter(
+        new Filter(
             selectedItem.id,
             selectedItem.type.substring(0, selectedItem.type.length - 1) + '.id',
-            selectedItem.name + '(' + selectedItem.id + ')'
+            selectedItem.name + ' (' + selectedItem.id + ')'
         );
         $scope.searchTerm = '';
+        doSearch();
     });
 
 }]);

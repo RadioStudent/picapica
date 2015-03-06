@@ -7,7 +7,8 @@ var picapicaApp = angular.module('picapicaApp', [
     'ngSanitize',
     'mgcrea.ngStrap',
     'picapicaControllers',
-    'picapicaServices'
+    'picapicaServices',
+    'picapicaFilters'
 ]);
 
 picapicaApp
