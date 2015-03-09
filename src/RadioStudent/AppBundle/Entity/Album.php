@@ -265,4 +265,18 @@ class Album
         return $result;
     }
 
+    public static function fieldsToElastic($search)
+    {
+        $map = [
+        ];
+
+        $ret = [];
+        foreach ($search as $field) {
+            $key = key($field);
+            $val = current($field);
+            $ret[] = [(isset($map[$key])? $map[$key]: $key) => $val];
+        }
+
+        return $ret;
+    }
 }

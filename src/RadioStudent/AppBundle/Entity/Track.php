@@ -390,15 +390,34 @@ class Track
             'trackNum' => $this->trackNum,
             'name' => $this->name,
             'year' => $this->date? $this->date->format('Y'): null,
-            'artist.name' => $this->artist->getName(),
-            'artist.id' => $this->artist->getId(),
-            'album.name' => $this->album->getName(),
-            'album.id' => $this->album->getId(),
+            'artistName' => $this->artist->getName(),
+            'artistId' => $this->artist->getId(),
+            'albumName' => $this->album->getName(),
+            'albumId' => $this->album->getId(),
             'duration' => $this->duration,
             'languages' => $this->languages,
             'genres' => $this->genres,
         ];
 
         return $result;
+    }
+
+    public static function fieldsToElastic($search)
+    {
+        $map = [
+            'artistName' => 'artist.name',
+            'artistId' => 'artist.id',
+            'albumName' => 'album.name',
+            'albumId' => 'album.id',
+        ];
+
+        $ret = [];
+        foreach ($search as $field) {
+            $key = key($field);
+            $val = current($field);
+            $ret[] = [(isset($map[$key])? $map[$key]: $key) => $val];
+        }
+
+        return $ret;
     }
 }

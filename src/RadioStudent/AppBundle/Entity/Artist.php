@@ -177,11 +177,7 @@ class Artist
         $artists = [
             $this->id => [
                 "artist" => $this,
-                "counts" => [
-                    $_tm => 0,
-                    $_tc => 0,
-                    $_ta => 0,
-                ]
+                "counts" => [$_tm => 0, $_tc => 0, $_ta => 0]
             ]
         ];
 
@@ -190,30 +186,21 @@ class Artist
         foreach ($this->artistRelations as $relation) {
             if ($relation->getType() == $_tm) {
                 $artists[$this->id]["counts"][$_tc]++;
-                $rel = $relation->getRelatedArtist()->collectRelations($visited);
-                foreach ($rel as $id=>$obj) {
-                    $artists[$id] = $obj;
-                }
+                $artists += $relation->getRelatedArtist()->collectRelations($visited);
             }
         }
 
         foreach ($this->artistRelations as $relation) {
             if ($relation->getType() == $_tc) {
                 $artists[$this->id]["counts"][$_tm]++;
-                $rel = $relation->getRelatedArtist()->collectRelations($visited);
-                foreach ($rel as $id=>$obj) {
-                    $artists[$id] = $obj;
-                }
+                $artists += $relation->getRelatedArtist()->collectRelations($visited);
             }
         }
 
         foreach ($this->artistRelations as $relation) {
             if ($relation->getType() == $_ta) {
                 $artists[$this->id]["counts"][$_ta]++;
-                $rel = $relation->getRelatedArtist()->collectRelations($visited);
-                foreach ($rel as $id=>$obj) {
-                    $artists[$id] = $obj;
-                }
+                $artists += $relation->getRelatedArtist()->collectRelations($visited);
             }
         }
 
@@ -243,5 +230,18 @@ class Artist
         return $result;
     }
 
+    public static function fieldsToElastic($search)
+    {
+        $map = [
+        ];
 
+        $ret = [];
+        foreach ($search as $field) {
+            $key = key($field);
+            $val = current($field);
+            $ret[] = [(isset($map[$key])? $map[$key]: $key) => $val];
+        }
+
+        return $ret;
+    }
 }
