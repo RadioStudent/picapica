@@ -11,10 +11,28 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
     var acTimeout,
         acDelay = 300;
 
+    function generateFilterTypes(type) {
+        var allFilterTypes = [
+            { name: 'Artist name', type: 'artist.name', active: false },
+            { name: 'Artist ID', type: 'artist.id', active: false },
+            { name: 'Album name', type: 'album.name', active: false },
+            { name: 'Album ID', type: 'album.id', active: false },
+        ];
+
+        if(type) {
+            allFilterTypes.forEach(function(filterType) {
+                if(filterType.type === type) {
+                    filterType.active = true;
+                }
+            });
+        }
+
+        return allFilterTypes;
+    }
 
     var Filter = function(text, type, label) {
         this.text = text;
-        this.type = type || '_all';
+        this.types = generateFilterTypes(type);
         this.label = label || text;
 
         $scope.filters.push(this);
@@ -27,37 +45,54 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
                 break;
             }
         }
-        doSearch();
+        $scope.doSearch();
     };
 
-
-
+    Filter.prototype.setType = function(type) {
+        this.type = type;
+        $scope.doSearch();
+    };
 
     $scope.addTextFilter = function() {
         if($scope.searchTerm.length > 0) {
             new Filter($scope.searchTerm);
             $scope.searchTerm = '';
-            doSearch();
+            $scope.doSearch();
         }
     };
 
-    function doSearch() {
-        var searchParams = buildSearchParams();
-        Track.search(
-            { search: searchParams },
-            function(response) {
-                $scope.tracks = response;
-            }
-        );
+    $scope.doSearch = function() {
+        if($scope.filters.length === 0) {
+            $scope.tracks = [];
+        }
+        else {
+            var searchParams = buildSearchParams();
+            Track.search(
+                { search: searchParams },
+                function(response) {
+                    $scope.tracks = response;
+                }
+            );
+        }
     }
 
     function buildSearchParams() {
         var params = [];
 
         $scope.filters.forEach(function(filter){
-            var obj = {};
-            obj[filter.type] = filter.text;
-            params.push(obj);
+            var paramsLength = params.length;
+
+            filter.types.forEach(function(filterType){
+                if(filterType.active) {
+                    var obj = {};
+                    obj[filterType.type] = filter.text;
+                    params.push(obj);
+                }
+            });
+
+            if(paramsLength === params.length) {
+                params.push({ '_all' : filter.text });
+            }
         });
 
         return JSON.stringify(params);
@@ -92,16 +127,15 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
         }, acDelay);
 
         return deferred.promise;
-    }
+    };
 
     $scope.$on('$typeahead.select', function(event, selectedItem) {
         new Filter(
             selectedItem.id,
             selectedItem.type.substring(0, selectedItem.type.length - 1) + '.id',
-            selectedItem.name + ' (' + selectedItem.id + ')'
+            selectedItem.id + ' (' + selectedItem.name + ')'
         );
         $scope.searchTerm = '';
-        doSearch();
+        $scope.doSearch();
     });
-
 }]);

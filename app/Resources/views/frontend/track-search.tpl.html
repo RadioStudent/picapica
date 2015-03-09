@@ -32,9 +32,13 @@
     <br>
 
     <div class="filters">
-        <button type="button" class="btn btn-default filter" ng-repeat="filter in filters">{{ filter.label }}
-            <span ng-click="filter.remove()" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-        </button>
+        <div class="well well-sm filter-wrapper" ng-repeat="filter in filters">
+            <h2 class="filter-label">{{ filter.label }}</h2>
+            <span ng-click="filter.remove()" class="glyphicon glyphicon-remove filter-remove-icon" aria-hidden="true"></span>
+            <label class="filter-type" ng-repeat="type in filter.types">
+                <input type="checkbox" ng-model="type.active" ng-change="doSearch()"> {{ type.name }}
+            </label>
+        </div>
     </div>
 
     <table class="table table-striped">

@@ -1,5 +1,16 @@
 // @import bootstrap
 
 .filter
-    & + &
-        margin-left: 10px
+    &-wrapper
+        position: relative
+    &-label
+        margin: 0
+        font-size: 16px
+    &-type
+        margin: 5px 10px 0 0
+        &:last-child
+            margin-left: none
+    &-remove-icon
+        position: absolute
+        right: 8px
+        top: 14px
