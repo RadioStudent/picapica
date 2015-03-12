@@ -18,7 +18,7 @@ use JMS\Serializer\Annotation as JMS;
  *
  * A@JMS\ExclusionPolicy("all") awefawfe
  */
-class Artist
+class Artist extends BaseEntity
 {
     /**
      * @var integer
@@ -214,7 +214,10 @@ class Artist
 
         $ret = [];
         foreach ($artists as $id=>$obj) {
-            $ret[$id] = [$obj["artist"]->getName(), $obj["counts"]];
+            /** @var Artist $artist */
+            $artist = $obj["artist"];
+
+            $ret[$id] = [$artist->getName(), $obj["counts"]];
         }
 
         return $ret;
@@ -230,20 +233,9 @@ class Artist
         return $result;
     }
 
-    public static function fieldsToElastic($search)
+    public static function mapFieldsToElastic()
     {
-        $map = [
+        return [
         ];
-
-        $ret = [];
-        foreach ($search as $idx=>$fields) {
-            $arr = [];
-            foreach ($fields as $key=>$val) {
-                $arr[isset($map[$key])? $map[$key]: $key] = $val;
-            }
-            $ret[] = $arr;
-        }
-
-        return $ret;
     }
 }

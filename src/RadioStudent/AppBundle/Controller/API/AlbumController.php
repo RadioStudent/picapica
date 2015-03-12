@@ -5,6 +5,7 @@ namespace RadioStudent\AppBundle\Controller\API;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
 use JMS\Serializer\SerializationContext;
+use RadioStudent\AppBundle\Entity\Album;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -30,7 +31,10 @@ class AlbumController extends FOSRestController
         $from   = $request->query->get('from', 0);
         $size   = $request->query->get('size', 10);
 
-        $search = $search? json_decode($search): null;
+        if ($search) {
+            $search = Album::fieldsToElastic(json_decode($search, 1));
+        }
+
         $sort   = $sort? json_decode($sort): null;
 
         $repo = $this

@@ -16,7 +16,7 @@ use JMS\Serializer\Annotation as JMS;
  * )
  * @ORM\Entity
  */
-class Album
+class Album extends BaseEntity
 {
     /**
      * @var integer
@@ -265,20 +265,9 @@ class Album
         return $result;
     }
 
-    public static function fieldsToElastic($search)
+    public static function mapFieldsToElastic()
     {
-        $map = [
+        return [
         ];
-
-        $ret = [];
-        foreach ($search as $idx=>$fields) {
-            $arr = [];
-            foreach ($fields as $key=>$val) {
-                $arr[isset($map[$key])? $map[$key]: $key] = $val;
-            }
-            $ret[] = $arr;
-        }
-
-        return $ret;
     }
 }

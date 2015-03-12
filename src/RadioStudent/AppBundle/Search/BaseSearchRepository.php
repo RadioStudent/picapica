@@ -5,6 +5,8 @@ namespace RadioStudent\AppBundle\Search;
 use Elastica\Query;
 use Elastica\Filter;
 use FOS\ElasticaBundle\Finder\TransformedFinder;
+use FOS\ElasticaBundle\HybridResult;
+use RadioStudent\AppBundle\Entity\BaseEntity;
 
 abstract class BaseSearchRepository {
 
@@ -33,20 +35,30 @@ abstract class BaseSearchRepository {
     {
         $boolQuery = new Query\Bool();
 
+        $highlightFields = [];
+
         if ($search == null) {
             $boolQuery->addMust(new Query\MatchAll());
 
         } else {
             foreach ($search as $fields) {
+
                 if (count($fields) == 1) {
                     $q = new Query\Match();
-                    $q->setField(key($fields), current($fields));
+
+                    $field = key($fields);
+                    $q->setField($field, current($fields));
+
+                    $highlightFields[] = $field;
+
                 } else {
                     $q = new Query\Bool();
                     foreach ($fields as $field=>$value) {
-                        $qq = new Query\Match();
-                        $qq->setField($field, $value);
-                        $q->addShould($qq);
+                        $mq = new Query\Match();
+                        $mq->setField($field, $value);
+                        $q->addShould($mq);
+
+                        $highlightFields[] = $field;
                     }
                 }
 
@@ -71,7 +83,13 @@ abstract class BaseSearchRepository {
             ->setFrom($from)
             ->setSize($size);
 
-        $result = $this->getFlattenedHybridResults($query);
+        if (($n = count($highlightFields)) > 0) {
+            $query->setHighlight([
+                'fields' => array_combine($highlightFields, array_fill(0, $n, new \stdClass()))
+            ]);
+        }
+
+        $result = $this->getFlatHybridResults($query);
 
         return $result;
     }
@@ -93,32 +111,47 @@ abstract class BaseSearchRepository {
         $query = new Query($matchQuery);
         $query
             ->setHighlight(['fields' => [
-                'name.autocomplete' => new \stdClass(),
-                'fid.autocomplete' => new \stdClass(),
+                'name.autocomplete' => ($std = new \stdClass()),
+                'fid.autocomplete'  => $std,
             ]])
             ->setSort(['_score'])
             ->setSize($limit);
 
-        $result = $this->getFlattenedHybridResults($query);
+        $result = $this->getFlatHybridResults($query);
 
         return $result;
     }
 
-    private function getFlattenedHybridResults($query)
+    /**
+     * @param Query $query
+     *
+     * @return array
+     */
+    private function getFlatHybridResults(Query $query)
     {
         $result = $this->finder->findHybrid($query);
 
-        return array_map(
-            function($e) {
-                $t = $e->getTransformed();
-                $r = $e->getResult();
-                return $t->getFlat() + [
-                    "elastica_score" => $r->getScore(),
-                    "elastica_highlights" => $r->getHighlights()
-                ];
-            },
-            $result
-        );
+        $combined = array_map([$this, 'combineFlatHybrid'], $result);
+
+        return $combined;
+    }
+
+    /**
+     * @param HybridResult $hr
+     *
+     * @return array
+     */
+    private function combineFlatHybrid(HybridResult $hr)
+    {
+        /** @var BaseEntity $t */
+        $t = $hr->getTransformed();
+
+        $r = $hr->getResult();
+
+        return $t->getFlat() + [
+            "elastica_score" => $r->getScore(),
+            "elastica_highlights" => $r->getHighlights()
+        ];
     }
 
 }

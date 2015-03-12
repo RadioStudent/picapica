@@ -11,7 +11,7 @@ use JMS\Serializer\Annotation as JMS;
  * @ORM\Table("data_tracks")
  * @ORM\Entity
  */
-class Track
+class Track extends BaseEntity
 {
     /**
      * @var integer
@@ -402,24 +402,13 @@ class Track
         return $result;
     }
 
-    public static function fieldsToElastic($search)
+    public static function mapFieldsToElastic()
     {
-        $map = [
+        return [
             'artistName' => 'artist.name',
             'artistId' => 'artist.id',
             'albumName' => 'album.name',
             'albumId' => 'album.id',
         ];
-
-        $ret = [];
-        foreach ($search as $idx=>$fields) {
-            $arr = [];
-            foreach ($fields as $key=>$val) {
-                $arr[isset($map[$key])? $map[$key]: $key] = $val;
-            }
-            $ret[] = $arr;
-        }
-
-        return $ret;
     }
 }

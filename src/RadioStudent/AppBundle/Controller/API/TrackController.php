@@ -31,8 +31,9 @@ class TrackController extends FOSRestController
         $from   = $request->query->get('from', 0);
         $size   = $request->query->get('size', 10);
 
-        $search = $search? json_decode($search, 1): null;
-        $search = Track::fieldsToElastic($search);
+        if ($search) {
+            $search = Track::fieldsToElastic(json_decode($search, 1));
+        }
 
         $sort   = $sort? json_decode($sort): [
             '_score' => 'desc',
