@@ -412,10 +412,12 @@ class Track
         ];
 
         $ret = [];
-        foreach ($search as $field) {
-            $key = key($field);
-            $val = current($field);
-            $ret[] = [(isset($map[$key])? $map[$key]: $key) => $val];
+        foreach ($search as $idx=>$fields) {
+            $arr = [];
+            foreach ($fields as $key=>$val) {
+                $arr[isset($map[$key])? $map[$key]: $key] = $val;
+            }
+            $ret[] = $arr;
         }
 
         return $ret;

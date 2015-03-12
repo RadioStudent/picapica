@@ -37,9 +37,18 @@ abstract class BaseSearchRepository {
             $boolQuery->addMust(new Query\MatchAll());
 
         } else {
-            foreach ($search as $field) {
-                $q = new Query\Match();
-                $q->setField(key($field), current($field));
+            foreach ($search as $fields) {
+                if (count($fields) == 1) {
+                    $q = new Query\Match();
+                    $q->setField(key($fields), current($fields));
+                } else {
+                    $q = new Query\Bool();
+                    foreach ($fields as $field=>$value) {
+                        $qq = new Query\Match();
+                        $qq->setField($field, $value);
+                        $q->addShould($qq);
+                    }
+                }
 
                 $boolQuery->addMust($q);
             }
