@@ -11,21 +11,39 @@ module.exports = function(grunt) {
             '<%= assetsPath %>/partials',
             '<%= assetsPath %>/css',
             '<%= assetsPath %>/images',
-            '<%= assetsPath %>/js'
+            '<%= assetsPath %>/js',
+            '<%= assetsPath %>/fonts'
         ],
         // Copies stuff that needs to be copied
         copy: {
-            angularjs: {
+            appJs: {
                 expand: true,
                 cwd: '<%= resourcesPath %>/js',
                 src: ['**/*.js'],
                 dest: '<%= assetsPath %>/js'
             },
-            angularhtml: {
+            appTemplates: {
                 expand: true,
                 cwd: '<%= resourcesPath %>/views/frontend',
                 src: ['**/*.html'],
                 dest: '<%= assetsPath %>/partials'
+            },
+            bootstrapFonts: {
+                expand: true,
+                cwd: '<%= bowerPath %>/bootstrap-sass/assets/fonts/bootstrap/',
+                src: '*',
+                dest: '<%= assetsPath %>/fonts'
+            },
+            angularStrap: {
+                expand: true,
+                cwd: '<%= bowerPath %>/angular-strap/dist',
+                src: ['angular-strap.js', 'angular-strap.tpl.js'],
+                //src: '*.min.js',
+                dest: '<%= assetsPath %>/js/lib'
+            },
+            angularMotion: {
+                src: '<%= bowerPath %>/angular-motion/dist/angular-motion.css',
+                dest: '<%= bowerPath %>/angular-motion/angular-motion.scss'
             }
         },
         // Compiles SASS to CSS
@@ -54,11 +72,11 @@ module.exports = function(grunt) {
             },
             js: {
                 files: ['<%= resourcesPath %>/js/**/*.js'],
-                tasks: ['copy:angularjs']
+                tasks: ['copy:appJs']
             },
             angularTemplates: {
                 files: ['<%= resourcesPath %>/views/frontend/**/*.html'],
-                tasks: ['copy:angularhtml']
+                tasks: ['copy:appTemplates']
             },
             svgSprite: {
                 files: ['<%= resourcesPath %>/images/icons/*.svg'],
@@ -103,5 +121,5 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-svgstore');
 
     grunt.registerTask('live', ['browserSync', 'watch']);
-    grunt.registerTask('default', ['clean', 'sass', 'svgstore', 'copy']);
+    grunt.registerTask('default', ['clean', 'copy', 'sass', 'svgstore']);
 };

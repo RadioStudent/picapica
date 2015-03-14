@@ -1,4 +1,6 @@
 'use strict';
+/* global angular: false */
+
 
 /* Controllers */
 
@@ -30,10 +32,11 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
         return allFilterTypes;
     }
 
-    var Filter = function(text, type, label) {
+    var Filter = function(text, type, label, fromAutocomplete) {
         this.text = text;
         this.types = generateFilterTypes(type);
         this.label = label || text;
+        this.fromAutocomplete = !!fromAutocomplete;
 
         $scope.filters.push(this);
     };
@@ -74,7 +77,7 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
                 }
             );
         }
-    }
+    };
 
     function buildSearchParams() {
         var params = [];
@@ -133,7 +136,8 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
         new Filter(
             selectedItem.id,
             selectedItem.type.substring(0, selectedItem.type.length - 1) + '.id',
-            selectedItem.id + ' (' + selectedItem.name + ')'
+            selectedItem.name + ' (id: ' + selectedItem.id + ')',
+            true
         );
         $scope.searchTerm = '';
         $scope.doSearch();

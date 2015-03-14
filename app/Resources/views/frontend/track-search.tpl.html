@@ -20,7 +20,7 @@
                    class="form-control"
                    placeholder="enter search term"
                    ng-model="searchTerm"
-                   ng-options="artist.name for artist in getSuggestions($viewValue)"
+                   bs-options="artist.name for artist in getSuggestions($viewValue)"
                    bs-typeahead>
 
             <span class="input-group-btn">
@@ -35,7 +35,7 @@
         <div class="well well-sm filter-wrapper" ng-repeat="filter in filters">
             <h2 class="filter-label">{{ filter.label }}</h2>
             <span ng-click="filter.remove()" class="glyphicon glyphicon-remove filter-remove-icon" aria-hidden="true"></span>
-            <label class="filter-type" ng-repeat="type in filter.types">
+            <label class="filter-type" ng-if="!filter.fromAutocomplete" ng-repeat="type in filter.types">
                 <input type="checkbox" ng-model="type.active" ng-change="doSearch()"> {{ type.name }}
             </label>
         </div>
@@ -53,11 +53,11 @@
         </thead>
         <tbody>
             <tr ng-repeat="track in tracks">
-                <td>{{ track.fid }}</td>
-                <td>{{ track.artistName }}</td>
-                <td>{{ track.name }}</td>
-                <td>{{ track.albumName }}</td>
-                <td>{{ track.duration | secondsToTime }}</td>
+                <td ng-bind="track.fid"></td>
+                <td ng-bind="track.artistName"></td>
+                <td ng-bind="track.name"></td>
+                <td ng-bind="track.albumName"></td>
+                <td ng-bind="track.duration | secondsToTime"></td>
             </tr>
         </tbody>
     </table>

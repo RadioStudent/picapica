@@ -2,6 +2,6 @@
     <li ng-repeat-start="match in $matches" ng-if="$index != 0  && $matches[$index - 1].value.type != match.value.type" role="presentation" class="divider"></li>
     <li ng-if="$index === 0 || $matches[$index - 1].value.type != match.value.type" role="presentation" class="dropdown-header">{{ match.value.type }}</li>
     <li ng-repeat-end role="presentation" ng-class="{active: $index == $activeIndex}">
-        <a role="menuitem" tabindex="-1" ng-click="$select($index, $event)">{{ match.label }}</a>
+        <a class="dropdown-suggestion-text" role="menuitem" tabindex="-1" ng-click="$select($index, $event)" ng-bind-html="match.value.elastica_highlights['name.autocomplete'][0]"></a>
     </li>
 </ul>

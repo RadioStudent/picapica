@@ -5,6 +5,7 @@
 var picapicaApp = angular.module('picapicaApp', [
     'ngRoute',
     'ngSanitize',
+    'ngAnimate',
     'mgcrea.ngStrap',
     'picapicaControllers',
     'picapicaServices',
@@ -26,9 +27,10 @@ picapicaApp
     ])
     .config(function($typeaheadProvider) {
         angular.extend($typeaheadProvider.defaults, {
+            filter: false,
+            limit: 30,
             minLength: 3,
-            trigger: 'focus',
             template: 'partials/_autocomplete.tpl.html',
-            limit: 30
+            html: true
         });
     });

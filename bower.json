@@ -13,6 +13,8 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap-sass": "~3.3.3"
+    "bootstrap-sass": "~3.3.3",
+    "angular-motion": "~0.3.4",
+    "angular-strap": "git://github.com/mzgajner/angular-strap#0294459"
   }
 }
