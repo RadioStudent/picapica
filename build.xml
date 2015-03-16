@@ -80,7 +80,7 @@
 
     <target name="assets" description="Install all front end assets.">
         <exec
-                command="npm install"
+                command="npm install --no-bin-links"
                 checkreturn="true"
                 passthru="true"
                 />
