@@ -87,6 +87,11 @@ class Artist extends BaseEntity
      */
     private $artistRelations;
 
+    /**
+     * @var Collection|Artist[]
+     */
+    private $allRelatedArtists;
+
     public function __construct()
     {
         $this->albums = new ArrayCollection();
@@ -208,9 +213,18 @@ class Artist extends BaseEntity
 
     }
 
+    private function getAllRelatedArtists()
+    {
+        if (!$this->allRelatedArtists) {
+            $this->allRelatedArtists = $this->collectRelations();
+        }
+
+        return $this->allRelatedArtists;
+    }
+
     public function getRelatedArtists()
     {
-        $artists = $this->collectRelations();
+        $artists = $this->getAllRelatedArtists();
 
         $ret = [];
         foreach ($artists as $id=>$obj) {
@@ -223,12 +237,63 @@ class Artist extends BaseEntity
         return $ret;
     }
 
-    public function getFlat()
+    public function getCorrectName()
     {
-        $result = [
-            'id' => $this->id,
-            'name' => $this->name,
-        ];
+        $artists = $this->getAllRelatedArtists();
+
+        $best = [$this, 0, 0];
+        foreach ($artists as $id=>$obj) {
+            if ($obj['counts']['correction'] > $best[1] ||
+                $obj['counts']['correction'] == $best[1] && $obj['counts']['mistake'] < $best[2]) {
+
+                $best = [$obj['artist'], $obj['counts']['correction'], $obj['counts']['mistake']];
+            }
+        }
+
+        /** @var Artist $artist */
+        $artist = $best[0];
+
+        return $artist->getName();
+    }
+
+    public function getAllRelatedAlbums()
+    {
+        $artists = $this->getAllRelatedArtists();
+
+        $albums = [];
+
+        foreach ($artists as $id=>$obj) {
+            /** @var Artist $artist */
+            $artist = $obj['artist'];
+            foreach ($artist->getAlbums() as $album) {
+                $albums[$album->getId()] = $album;
+            }
+        }
+
+        return $albums;
+    }
+
+    public function getFlat($preset = 'short')
+    {
+        $result = [];
+
+        if ($preset == 'short') {
+            $result = [
+                'id'          => $this->id,
+                'name'        => $this->name,
+                'correctName' => $this->getCorrectName(),
+            ];
+
+        } elseif ($preset == 'long') {
+            $result = [
+                'id'             => $this->id,
+                'name'           => $this->name,
+                'correctName'    => $this->getCorrectName(),
+                'relatedArtists' => $this->getRelatedArtists(),
+                'albums'         => $this->getAlbums(),
+                'allAlbums'      => $this->getAllRelatedAlbums(),
+            ];
+        }
 
         return $result;
     }

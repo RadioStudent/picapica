@@ -248,7 +248,7 @@ class Album extends BaseEntity
         $this->tracks = $tracks;
     }
 
-    public function getFlat()
+    public function getFlat($preset = 'short')
     {
         $result = [
             'id' => $this->id,

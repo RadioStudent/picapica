@@ -72,7 +72,7 @@ class Track extends BaseEntity
     private $name;
 
     /**
-     * @var Album
+     * @var Artist
      *
      * @ORM\ManyToOne(targetEntity="Artist", inversedBy="tracks")
      * @ORM\JoinColumn(name="ARTIST_ID", referencedColumnName="ID")
@@ -382,21 +382,22 @@ class Track extends BaseEntity
         return $this;
     }
 
-    public function getFlat()
+    public function getFlat($preset = 'short')
     {
         $result = [
-            'id' => $this->id,
-            'fid' => $this->fid,
-            'trackNum' => $this->trackNum,
-            'name' => $this->name,
-            'year' => $this->date? $this->date->format('Y'): null,
-            'artistName' => $this->artist->getName(),
-            'artistId' => $this->artist->getId(),
-            'albumName' => $this->album->getName(),
-            'albumId' => $this->album->getId(),
-            'duration' => $this->duration,
-            'languages' => $this->languages,
-            'genres' => $this->genres,
+            'id'                => $this->id,
+            'fid'               => $this->fid,
+            'trackNum'          => $this->trackNum,
+            'name'              => $this->name,
+            'year'              => $this->date? $this->date->format('Y'): null,
+            'artistName'        => $this->artist->getName(),
+            'artistCorrectName' => $this->artist->getCorrectName(),
+            'artistId'          => $this->artist->getId(),
+            'albumName'         => $this->album->getName(),
+            'albumId'           => $this->album->getId(),
+            'duration'          => $this->duration,
+            'languages'         => $this->languages,
+            'genres'            => $this->genres,
         ];
 
         return $result;
@@ -406,9 +407,9 @@ class Track extends BaseEntity
     {
         return [
             'artistName' => 'artist.name',
-            'artistId' => 'artist.id',
-            'albumName' => 'album.name',
-            'albumId' => 'album.id',
+            'artistId'   => 'artist.id',
+            'albumName'  => 'album.name',
+            'albumId'    => 'album.id',
         ];
     }
 }
