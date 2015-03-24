@@ -95,19 +95,19 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
         var params = [];
 
         $scope.filters.forEach(function(filter){
-            var paramsLength = params.length;
+            var obj = {};
 
             filter.types.forEach(function(filterType){
                 if(filterType.active) {
-                    var obj = {};
                     obj[filterType.type] = filter.text;
-                    params.push(obj);
                 }
             });
 
-            if(paramsLength === params.length) {
-                params.push({ '_all' : filter.text });
+            if(Object.keys(obj).length === 0) {
+                obj._all = filter.text;
             }
+
+            params.push(obj);
         });
 
         return JSON.stringify(params);
