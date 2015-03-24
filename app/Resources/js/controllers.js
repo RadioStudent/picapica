@@ -58,7 +58,8 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
         $scope.doSearch();
     };
 
-    $scope.addTextFilter = function() {
+    $scope.addTextFilter = function(event) {
+        console.log(event);
         if($scope.searchTerm.length > 0) {
             new Filter($scope.searchTerm);
             $scope.searchTerm = '';
@@ -104,7 +105,6 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
     }
 
     $scope.getSuggestions = function(searchInput) {
-        console.log(searchInput);
         if(searchInput.length === 0 || typeof searchInput === 'object') {
             return;
         }
@@ -124,11 +124,18 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
                     if(results[key].length > 0 && key !== 'query') {
                         results[key].forEach(function(result){
                             result.type = key.substring(0, key.length - 1);
-                            var prepend = '';
+                            var prepend = '',
+                                highlights;
+
                             if(result.type !== 'artist') {
                                 prepend = result.albumArtistName + ' - ';
                             }
-                            result.label = prepend + result.elastica_highlights['name.autocomplete'][0];
+
+                            if(typeof result.elastica_highlights['name.autocomplete'] !== 'undefined' && result.elastica_highlights['name.autocomplete'].length > 0) {
+                                highlights = result.elastica_highlights['name.autocomplete'];
+                            }
+
+                            result.label = prepend + (highlights || result.name);
                         });
 
                         results[key].push({

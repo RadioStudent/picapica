@@ -14,7 +14,7 @@
 </nav>
 
 <div class="container">
-    <form ng-submit="addTextFilter()">
+    <form ng-submit="addTextFilter($event)">
         <div class="input-group">
             <input type="text"
                    class="form-control"
@@ -48,6 +48,7 @@
                 <th>Artist</th>
                 <th>Title</th>
                 <th>Album</th>
+                <th>Year</th>
                 <th>Duration</th>
             </tr>
         </thead>
@@ -57,6 +58,7 @@
                 <td ng-bind="track.artistName"></td>
                 <td ng-bind="track.name"></td>
                 <td ng-bind="track.albumName"></td>
+                <td ng-bind="track.year"></td>
                 <td ng-bind="track.duration | secondsToTime"></td>
             </tr>
         </tbody>
