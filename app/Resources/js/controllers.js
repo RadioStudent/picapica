@@ -15,12 +15,12 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
 
     function generateFilterTypes(type) {
         var allFilterTypes = [
-            { name: 'Artist name', type: 'artist.name', active: false },
-            { name: 'Artist ID', type: 'artist.id', active: false },
-            { name: 'Album name', type: 'album.name', active: false },
-            { name: 'Album ID', type: 'album.id', active: false },
-            { name: 'Track name', type: 'track.name', active: false },
-            { name: 'Track ID', type: 'track.id', active: false },
+            { name: 'Artist name', type: 'artist.name', active: false, visible: true },
+            { name: 'Artist ID',   type: 'artist.id',   active: false, visible: false },
+            { name: 'Album name',  type: 'album.name',  active: false, visible: true },
+            { name: 'Album ID',    type: 'album.id',    active: false, visible: false },
+            { name: 'Track name',  type: 'track.name',  active: false, visible: true },
+            { name: 'Track ID',    type: 'track.id',    active: false, visible: false },
         ];
 
         if(type) {
@@ -58,9 +58,18 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
         $scope.doSearch();
     };
 
-    $scope.addTextFilter = function(event) {
-        console.log(event);
+    $scope.typeInInput = function(event) {
+        if(event.type === 'keyup' && event.keyCode === 13) {
+            $scope.addTextFilter(event.shiftKey ? 'add' : 'replace');
+        }
+    }
+
+    $scope.addTextFilter = function(type) {
         if($scope.searchTerm.length > 0) {
+            if(type === 'replace') {
+                $scope.filters = [];
+            }
+
             new Filter($scope.searchTerm);
             $scope.searchTerm = '';
             $scope.doSearch();
@@ -155,13 +164,14 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
     };
 
     $scope.$on('$typeahead.select', function(event, selectedItem) {
+        $scope.filters = [];
+
         if(selectedItem.searchInField === true) {
             new Filter(
                 selectedItem.name,
                 selectedItem.type + '.name'
             );
         } else {
-            console.log(selectedItem);
             new Filter(
                 selectedItem.id,
                 selectedItem.type + '.id',
