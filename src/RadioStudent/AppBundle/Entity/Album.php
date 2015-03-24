@@ -264,10 +264,11 @@ class Album extends BaseEntity
     public function getFlat($preset = 'short')
     {
         $result = [
-            'id' => $this->id,
-            'fid' => $this->fid,
-            'name' => $this->name,
-            'year' => $this->date? $this->date->format('Y'): null,
+            'id'              => $this->id,
+            'fid'             => $this->fid,
+            'name'            => $this->name,
+            'year'            => $this->date? $this->date->format('Y'): null,
+            'albumArtistName' => $this->getAlbumArtistName(),
         ];
 
         $result['artists'] = [];

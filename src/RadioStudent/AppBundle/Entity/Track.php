@@ -390,8 +390,7 @@ class Track extends BaseEntity
             'trackNum'          => $this->trackNum,
             'name'              => $this->name,
             'year'              => $this->date? $this->date->format('Y'): null,
-            'artistName'        => $this->artist->getName(),
-            'artistCorrectName' => $this->artist->getCorrectName(),
+            'artistName'        => $this->artist->getCorrectName(),
             'artistId'          => $this->artist->getId(),
             'albumName'         => $this->album->getName(),
             'albumArtistName'   => $this->album->getAlbumArtistName(),
@@ -400,6 +399,10 @@ class Track extends BaseEntity
             'languages'         => $this->languages,
             'genres'            => $this->genres,
         ];
+
+        if ($result['artistName'] != $this->artist->getName()) {
+            $result['artistMistake'] = $this->artist->getName();
+        }
 
         return $result;
     }
