@@ -394,6 +394,7 @@ class Track extends BaseEntity
             'artistCorrectName' => $this->artist->getCorrectName(),
             'artistId'          => $this->artist->getId(),
             'albumName'         => $this->album->getName(),
+            'albumArtistName'   => $this->album->getAlbumArtistName(),
             'albumId'           => $this->album->getId(),
             'duration'          => $this->duration,
             'languages'         => $this->languages,

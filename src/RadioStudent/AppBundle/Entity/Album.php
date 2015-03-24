@@ -248,6 +248,19 @@ class Album extends BaseEntity
         $this->tracks = $tracks;
     }
 
+    public function getAlbumArtistName()
+    {
+        if (count($this->artists) == 1) {
+            return $this->artists[0]->getName();
+
+        } else if (count($this->artists) == 2) {
+            return $this->artists[0]->getName() . " & " . $this->artists[1]->getName();
+
+        } else {
+            return "V/A (" . count($this->artists) . ")";
+        }
+    }
+
     public function getFlat($preset = 'short')
     {
         $result = [
