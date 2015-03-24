@@ -28,7 +28,7 @@ picapicaApp
     .config(function($typeaheadProvider) {
         angular.extend($typeaheadProvider.defaults, {
             filter: false,
-            limit: 30,
+            limit: 33,
             minLength: 3,
             template: 'partials/_autocomplete.tpl.html',
             html: true

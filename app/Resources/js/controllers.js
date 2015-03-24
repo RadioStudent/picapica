@@ -19,6 +19,8 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
             { name: 'Artist ID', type: 'artist.id', active: false },
             { name: 'Album name', type: 'album.name', active: false },
             { name: 'Album ID', type: 'album.id', active: false },
+            { name: 'Track name', type: 'track.name', active: false },
+            { name: 'Track ID', type: 'track.id', active: false },
         ];
 
         if(type) {
@@ -102,7 +104,8 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
     }
 
     $scope.getSuggestions = function(searchInput) {
-        if(searchInput.length === 0) {
+        console.log(searchInput);
+        if(searchInput.length === 0 || typeof searchInput === 'object') {
             return;
         }
 
@@ -118,9 +121,21 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
                 var results = res.data;
 
                 for (var key in results) {
-                    if(results[key].length > 0) {
+                    if(results[key].length > 0 && key !== 'query') {
                         results[key].forEach(function(result){
-                            result.type = key;
+                            result.type = key.substring(0, key.length - 1);
+                            var prepend = '';
+                            if(result.type !== 'artist') {
+                                prepend = result.albumArtistName + ' - ';
+                            }
+                            result.label = prepend + result.elastica_highlights['name.autocomplete'][0];
+                        });
+
+                        results[key].push({
+                            searchInField: true,
+                            type: key.substring(0, key.length - 1),
+                            name: results.query,
+                            label: key.substring(0, key.length - 1) + ' name matches ' + results.query
                         });
                     }
                 }
@@ -133,12 +148,21 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
     };
 
     $scope.$on('$typeahead.select', function(event, selectedItem) {
-        new Filter(
-            selectedItem.id,
-            selectedItem.type.substring(0, selectedItem.type.length - 1) + '.id',
-            selectedItem.name + ' (id: ' + selectedItem.id + ')',
-            true
-        );
+        if(selectedItem.searchInField === true) {
+            new Filter(
+                selectedItem.name,
+                selectedItem.type + '.name'
+            );
+        } else {
+            console.log(selectedItem);
+            new Filter(
+                selectedItem.id,
+                selectedItem.type + '.id',
+                selectedItem.type + ': ' + selectedItem.name,
+                true
+            );
+        }
+
         $scope.searchTerm = '';
         $scope.doSearch();
     });

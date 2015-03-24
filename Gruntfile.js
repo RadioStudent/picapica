@@ -41,6 +41,24 @@ module.exports = function(grunt) {
                 //src: '*.min.js',
                 dest: '<%= assetsPath %>/js/lib'
             },
+            jquery: {
+                expand: true,
+                cwd: '<%= bowerPath %>/jquery/dist',
+                src: ['jquery.js'],
+                dest: '<%= assetsPath %>/js/lib'
+            },
+            datatables: {
+                expand: true,
+                cwd: '<%= bowerPath %>/datatables/media/js',
+                src: ['jquery.dataTables.js'],
+                dest: '<%= assetsPath %>/js/lib'
+            },
+            angularDatatables: {
+                expand: true,
+                cwd: '<%= bowerPath %>/angular-datatables/dist/',
+                src: ['angular-datatables.js'],
+                dest: '<%= assetsPath %>/js/lib'
+            },
             angularMotion: {
                 src: '<%= bowerPath %>/angular-motion/dist/angular-motion.css',
                 dest: '<%= bowerPath %>/angular-motion/angular-motion.scss'
