@@ -50,6 +50,7 @@ class AutoCompleteController extends FOSRestController
         ], $size);
 
         $data = [
+            'query'   => $search,
             'artists' => $artistData,
             'albums'  => $albumData,
             'tracks'  => $trackData,
