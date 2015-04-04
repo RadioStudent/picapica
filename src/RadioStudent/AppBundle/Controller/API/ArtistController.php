@@ -4,7 +4,6 @@ namespace RadioStudent\AppBundle\Controller\API;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
-use JMS\Serializer\SerializationContext;
 use RadioStudent\AppBundle\Entity\Artist;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -43,11 +42,7 @@ class ArtistController extends FOSRestController
 
         $data = $repo->search($search, $sort, $from, $size);
 
-        $view = $this
-            ->view($data, 200)
-            ->setSerializationContext(
-                SerializationContext::create()->setGroups(["artists"])
-            );
+        $view = $this->view($data, 200);
 
         return $this->handleView($view);
     }
@@ -61,11 +56,7 @@ class ArtistController extends FOSRestController
 
         $artist = $repo->find($id);
 
-        $view = $this
-            ->view($artist->getFlat('long'), 200)
-            ->setSerializationContext(
-                SerializationContext::create()->setGroups(["artist"])
-            );
+        $view = $this->view($artist->getFlat('long'), 200);
 
         return $this->handleView($view);
     }

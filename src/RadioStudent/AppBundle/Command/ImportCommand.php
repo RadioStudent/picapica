@@ -379,6 +379,17 @@ class ImportCommand extends ContainerAwareCommand
             $artists = new ArrayCollection($artistRepo->findBy(['id' => explode(',', $v['ARTISTS'])]));
             $album->setArtists($artists);
 
+            if (count($artists) == 1) {
+                $albumArtist = $artists[0]->getCorrectName();
+
+            } else if (count($artists) == 2) {
+                $albumArtist = $artists[0]->getCorrectName() . ' & ' . $artists[1]->getCorrectName();
+
+            } else {
+                $albumArtist = "V/A (" . count($artists) . ")";
+            }
+            $album->setAlbumArtistName($albumArtist);
+
             $em->persist($album);
 
             $res[$i]['album'] = $album;

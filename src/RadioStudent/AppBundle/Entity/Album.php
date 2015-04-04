@@ -5,7 +5,6 @@ namespace RadioStudent\AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
 
 /**
  * Album
@@ -24,15 +23,6 @@ class Album extends BaseEntity
      * @ORM\Column(name="ID", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @JMS\Groups({
-     *  "albums",
-     *  "album",
-     *  "tracks",
-     *  "track",
-     *  "artists",
-     *  "artist",
-     * })
      */
     private $id;
 
@@ -40,15 +30,6 @@ class Album extends BaseEntity
      * @var string
      *
      * @ORM\Column(name="NAME", type="string", length=255)
-     *
-     * @JMS\Groups({
-     *  "albums",
-     *  "album",
-     *  "tracks",
-     *  "track",
-     *  "artists",
-     *  "artist",
-     * })
      */
     private $name;
 
@@ -60,13 +41,6 @@ class Album extends BaseEntity
      *      joinColumns={@ORM\JoinColumn(name="ALBUM_ID", referencedColumnName="ID")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="ARTIST_ID", referencedColumnName="ID")}
      *  )
-     *
-     * @JMS\Groups({
-     *  "albums",
-     *  "album",
-     *  "tracks",
-     *  "track",
-     * })
      */
     private $artists;
 
@@ -74,12 +48,6 @@ class Album extends BaseEntity
      * @var \DateTime
      *
      * @ORM\Column(name="DATE", type="datetime", nullable=true)
-     *
-     * @JMS\Groups({
-     *  "albums",
-     *  "album",
-     *  "track",
-     * })
      */
     private $date;
 
@@ -94,23 +62,23 @@ class Album extends BaseEntity
      * @var string
      *
      * @ORM\Column(name="FID", type="string", length=30)
-     *
-     * @JMS\Groups({"tracks"})
      */
     private $fid;
 
-    /** awef
+    /**
      * @var Collection|Track[]
      *
      * @ORM\OneToMany(targetEntity="Track", mappedBy="album")
      * @ORM\OrderBy({"trackNum" = "ASC"})
-     *
-     * @JMS\Groups({
-     *  "albums",
-     *  "album",
-     * })
      */
     private $tracks;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ALBUM_ARTIST_NAME", type="string", length=255)
+     */
+    private $albumArtistName;
 
     public function __construct()
     {
@@ -248,17 +216,24 @@ class Album extends BaseEntity
         $this->tracks = $tracks;
     }
 
+    /**
+     * @return string
+     */
     public function getAlbumArtistName()
     {
-        if (count($this->artists) == 1) {
-            return $this->artists[0]->getName();
+        return $this->albumArtistName;
+    }
 
-        } else if (count($this->artists) == 2) {
-            return $this->artists[0]->getName() . " & " . $this->artists[1]->getName();
+    /**
+     * @param string $albumArtistName
+     *
+     * @return $this
+     */
+    public function setAlbumArtistName($albumArtistName)
+    {
+        $this->albumArtistName = $albumArtistName;
 
-        } else {
-            return "V/A (" . count($this->artists) . ")";
-        }
+        return $this;
     }
 
     public function getFlat($preset = 'short')

@@ -3,7 +3,6 @@
 namespace RadioStudent\AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
 
 /**
  * Track
@@ -19,13 +18,6 @@ class Track extends BaseEntity
      * @ORM\Column(name="ID", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @JMS\Groups({
-     *  "albums",
-     *  "tracks",
-     *  "track",
-     *  "album",
-     * })
      */
     private $id;
 
@@ -33,13 +25,6 @@ class Track extends BaseEntity
      * @var string
      *
      * @ORM\Column(name="FID", type="string", length=30)
-     *
-     * @JMS\Groups({
-     *  "albums",
-     *  "tracks",
-     *  "track",
-     *  "album",
-     * })
      */
     private $fid;
 
@@ -47,13 +32,6 @@ class Track extends BaseEntity
      * @var string
      *
      * @ORM\Column(name="TRACK_NUM", type="string", length=30)
-     *
-     * @JMS\Groups({
-     *  "albums",
-     *  "tracks",
-     *  "track",
-     *  "album",
-     * })
      */
     private $trackNum;
 
@@ -61,13 +39,6 @@ class Track extends BaseEntity
      * @var string
      *
      * @ORM\Column(name="NAME", type="string", length=255)
-     *
-     * @JMS\Groups({
-     *  "albums",
-     *  "tracks",
-     *  "track",
-     *  "album",
-     * })
      */
     private $name;
 
@@ -76,12 +47,6 @@ class Track extends BaseEntity
      *
      * @ORM\ManyToOne(targetEntity="Artist", inversedBy="tracks")
      * @ORM\JoinColumn(name="ARTIST_ID", referencedColumnName="ID")
-     *
-     * @JMS\Groups({
-     *  "tracks",
-     *  "track",
-     *  "album",
-     * })
      */
     private $artist;
 
@@ -90,11 +55,6 @@ class Track extends BaseEntity
      *
      * @ORM\ManyToOne(targetEntity="Album", inversedBy="tracks")
      * @ORM\JoinColumn(name="ALBUM_ID", referencedColumnName="ID")
-     *
-     * @JMS\Groups({
-     *  "tracks",
-     *  "track"
-     * })
      */
     private $album;
 
@@ -102,11 +62,6 @@ class Track extends BaseEntity
      * @var \DateTime
      *
      * @ORM\Column(name="DATE", type="datetime", nullable=true)
-     *
-     * @JMS\Groups({
-     *  "tracks",
-     *  "track"
-     * })
      */
     private $date;
 
@@ -121,12 +76,6 @@ class Track extends BaseEntity
      * @var integer
      *
      * @ORM\Column(name="DURATION", type="integer", nullable=true)
-     *
-     * @JMS\Groups({
-     *  "tracks",
-     *  "track",
-     *  "album",
-     * })
      */
     private $duration;
 
@@ -134,10 +83,6 @@ class Track extends BaseEntity
      * @var string
      *
      * @ORM\Column(name="GENRES", type="string", length=255, nullable=true)
-     *
-     * @JMS\Groups({
-     *  "track"
-     * })
      */
     private $genres;
 
@@ -145,10 +90,6 @@ class Track extends BaseEntity
      * @var string
      *
      * @ORM\Column(name="LANGUAGES", type="string", length=255, nullable=true)
-     *
-     * @JMS\Groups({
-     *  "track"
-     * })
      */
     private $languages;
 

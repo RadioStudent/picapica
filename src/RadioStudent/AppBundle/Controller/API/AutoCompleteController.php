@@ -4,7 +4,6 @@ namespace RadioStudent\AppBundle\Controller\API;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
-use JMS\Serializer\SerializationContext;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -31,19 +30,19 @@ class AutoCompleteController extends FOSRestController
         $size   = $request->query->get('size', 10);
 
         $artistData = $this->container->get('search.repository.artist')->autoComplete($search, [
-            'name',
-            'name.autocomplete'
+//            'name',
+            'autocompleteName.autocomplete'
         ], $size);
 
         $albumData  = $this->container->get('search.repository.album')->autoComplete($search, [
-            'name',
+//            'name',
             'name.autocomplete',
             'fid.autocomplete',
             'fid.numeric'
         ], $size);
 
         $trackData  = $this->container->get('search.repository.track')->autoComplete($search, [
-            'name',
+//            'name',
             'name.autocomplete',
             'fid.autocomplete',
             'fid.numeric'
@@ -57,10 +56,7 @@ class AutoCompleteController extends FOSRestController
         ];
 
         $view = $this
-            ->view($data, 200)
-            ->setSerializationContext(
-                SerializationContext::create()->setGroups(["autocomplete"])
-            );
+            ->view($data, 200);
 
         return $this->handleView($view);
     }

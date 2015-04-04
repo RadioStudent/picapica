@@ -5,7 +5,6 @@ namespace RadioStudent\AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
 
 /**
  * Artist
@@ -15,8 +14,6 @@ use JMS\Serializer\Annotation as JMS;
  *  indexes={@ORM\Index(name="name", columns={"name"})}
  * )
  * @ORM\Entity
- *
- * A@JMS\ExclusionPolicy("all") awefawfe
  */
 class Artist extends BaseEntity
 {
@@ -26,15 +23,6 @@ class Artist extends BaseEntity
      * @ORM\Column(name="ID", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @JMS\Groups({
-     *  "albums",
-     *  "album",
-     *  "tracks",
-     *  "track",
-     *  "artists",
-     *  "artist",
-     * })
      */
     private $id;
 
@@ -42,15 +30,6 @@ class Artist extends BaseEntity
      * @var string
      *
      * @ORM\Column(name="NAME", type="string", length=255)
-     *
-     * @JMS\Groups({
-     *  "albums",
-     *  "album",
-     *  "tracks",
-     *  "track",
-     *  "artists",
-     *  "artist",
-     * })
      */
     private $name;
 
@@ -62,11 +41,6 @@ class Artist extends BaseEntity
      *  mappedBy="artists",
      *  fetch="LAZY"
      * )
-     *
-     * @JMS\Groups({
-     *  "artists",
-     *  "artist",
-     * })
      */
     private $albums;
 
@@ -78,12 +52,6 @@ class Artist extends BaseEntity
      *  mappedBy="artist",
      *  fetch="LAZY"
      * )
-     *
-     * @JMS\Groups({
-     *  "artist",
-     *  "artists",
-     * })
-     * @JMS\MaxDepth(1)
      */
     private $artistRelations;
 
@@ -121,7 +89,7 @@ class Artist extends BaseEntity
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -144,7 +112,7 @@ class Artist extends BaseEntity
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -213,7 +181,7 @@ class Artist extends BaseEntity
 
     }
 
-    private function getAllRelatedArtists()
+    public function getAllRelatedArtists()
     {
         if (!$this->allRelatedArtists) {
             $this->allRelatedArtists = $this->collectRelations();
@@ -222,7 +190,14 @@ class Artist extends BaseEntity
         return $this->allRelatedArtists;
     }
 
-    public function getRelatedArtists()
+    public function getAllRelatedArtistIds()
+    {
+        $artists = $this->getAllRelatedArtists();
+
+        return array_keys($artists);
+    }
+
+    public function getAllRelatedArtistNames()
     {
         $artists = $this->getAllRelatedArtists();
 
@@ -256,23 +231,6 @@ class Artist extends BaseEntity
         return $artist->getName();
     }
 
-    public function getAllRelatedAlbums()
-    {
-        $artists = $this->getAllRelatedArtists();
-
-        $albums = [];
-
-        foreach ($artists as $id=>$obj) {
-            /** @var Artist $artist */
-            $artist = $obj['artist'];
-            foreach ($artist->getAlbums() as $album) {
-                $albums[$album->getId()] = $album;
-            }
-        }
-
-        return $albums;
-    }
-
     public function getFlat($preset = 'short')
     {
         $result = [];
@@ -282,6 +240,7 @@ class Artist extends BaseEntity
                 'id'          => $this->id,
                 'name'        => $this->name,
                 'correctName' => $this->getCorrectName(),
+                'relatedIds'  => $this->getAllRelatedArtistIds(),
             ];
 
         } elseif ($preset == 'long') {
@@ -289,9 +248,8 @@ class Artist extends BaseEntity
                 'id'             => $this->id,
                 'name'           => $this->name,
                 'correctName'    => $this->getCorrectName(),
-                'relatedArtists' => $this->getRelatedArtists(),
+                'relatedArtists' => $this->getAllRelatedArtistNames(),
                 'albums'         => $this->getAlbums(),
-                'allAlbums'      => $this->getAllRelatedAlbums(),
             ];
         }
 

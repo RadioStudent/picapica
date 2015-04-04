@@ -3,7 +3,6 @@
 namespace RadioStudent\AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as JMS;
 
 /**
  * ArtistRelation
@@ -33,11 +32,6 @@ class ArtistRelation
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Artist")
      * @ORM\JoinColumn(name="RELATED_ARTIST_ID", referencedColumnName="ID")
-     *
-     * @JMS\Groups({
-     *  "artists",
-     *  "artist",
-     * })
      */
     private $relatedArtist;
 
@@ -46,11 +40,6 @@ class ArtistRelation
      *
      * @ORM\Id
      * @ORM\Column(name="RELATION_TYPE", type="string")
-     *
-     * @JMS\Groups({
-     *  "artists",
-     *  "artist",
-     * })
      */
     private $type;
 

@@ -82,6 +82,16 @@ fos_elastica:
                   index_analyzer: edge_NGram_analyzer
                   search_analyzer: whitespace_analyzer
 
+            autocompleteName:
+              type: string
+              include_in_all: false
+              index: not_analyzed
+              fields:
+                autocomplete:
+                  type: string
+                  index_analyzer: edge_NGram_analyzer
+                  search_analyzer: whitespace_analyzer
+
           persistence:
             driver: orm
             model: RadioStudent\AppBundle\Entity\Artist
@@ -89,6 +99,8 @@ fos_elastica:
             listener:
               immediate: ~
             finder: ~
+            model_to_elastica_transformer:
+              service: search.transformer.model.artist
 
 
 
@@ -190,10 +202,13 @@ fos_elastica:
             artist:
               type: object
               properties:
-                id:
-                  type: integer
+#                id:
+#                  type: integer
+#                  include_in_all: false
+#                  index_name: track_artist_id
+                allRelatedArtistIds:
+                  index_name: id
                   include_in_all: false
-                  index_name: track_artist_id
                 name:
                   include_in_all: true
                   index_name: track_artist_name

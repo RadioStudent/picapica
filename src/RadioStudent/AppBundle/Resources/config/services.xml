@@ -14,6 +14,7 @@
         <service id="search.repository.track" class="RadioStudent\AppBundle\Search\TrackRepository">
             <argument type="service" id="fos_elastica.finder.picapica.track" />
         </service>
+        <service id="search.transformer.model.artist" class="RadioStudent\AppBundle\Transformer\ArtistToElasticaTransformer" />
     </services>
 
 </container>

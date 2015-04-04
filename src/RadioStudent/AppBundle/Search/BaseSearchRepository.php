@@ -149,7 +149,7 @@ abstract class BaseSearchRepository {
         $r = $hr->getResult();
 
         return $t->getFlat() + [
-            "elastica_score" => $r->getScore(),
+            "elastica_score"      => $r->getScore(),
             "elastica_highlights" => $r->getHighlights()
         ];
     }

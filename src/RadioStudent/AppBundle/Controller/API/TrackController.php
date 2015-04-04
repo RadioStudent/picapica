@@ -4,7 +4,6 @@ namespace RadioStudent\AppBundle\Controller\API;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
-use JMS\Serializer\SerializationContext;
 use RadioStudent\AppBundle\Entity\Track;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -46,11 +45,7 @@ class TrackController extends FOSRestController
 
         $data = $repo->search($search, $sort, $from, $size);
 
-        $view = $this
-            ->view($data, 200)
-            ->setSerializationContext(
-                SerializationContext::create()->setGroups(["tracks"])
-            );
+        $view = $this->view($data, 200);
 
         return $this->handleView($view);
     }
@@ -62,13 +57,9 @@ class TrackController extends FOSRestController
             ->get('doctrine.orm.entity_manager')
             ->getRepository('RadioStudentAppBundle:Track');
 
-        $track = $repo->find($id);
+        $track = $repo->find($id)->getFlat('long');
 
-        $view = $this
-            ->view($track, 200)
-            ->setSerializationContext(
-                SerializationContext::create()->setGroups(["track"])
-            );
+        $view = $this->view($track, 200);
 
         return $this->handleView($view);
     }

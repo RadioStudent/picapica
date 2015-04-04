@@ -4,7 +4,6 @@ namespace RadioStudent\AppBundle\Controller\API;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
-use JMS\Serializer\SerializationContext;
 use RadioStudent\AppBundle\Entity\Album;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -43,11 +42,7 @@ class AlbumController extends FOSRestController
 
         $data = $repo->search($search, $sort, $from, $size);
 
-        $view = $this
-            ->view($data, 200)
-            ->setSerializationContext(
-                SerializationContext::create()->setGroups(["albums"])
-            );
+        $view = $this->view($data, 200);
 
         return $this->handleView($view);
     }
@@ -61,11 +56,7 @@ class AlbumController extends FOSRestController
 
         $album = $repo->find($id);
 
-        $view = $this
-            ->view($album, 200)
-            ->setSerializationContext(
-                SerializationContext::create()->setGroups(["album"])
-            );
+        $view = $this->view($album->getFlat('long'), 200);
 
         return $this->handleView($view);
     }
