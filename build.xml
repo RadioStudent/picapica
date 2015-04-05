@@ -73,7 +73,10 @@
     <target name="elastica"
             description="Populates elasticsearch index">
         <SymfonyConsole command="fos:elastica:populate">
-            <arg name="env" value="${env}" />
+            <!--<arg name="env" value="${env}" />-->
+            <arg name="env" value="prod" />
+            <arg name="batch-size" value="10000" />
+            <arg value="--no-debug" />
         </SymfonyConsole>
     </target>
 
