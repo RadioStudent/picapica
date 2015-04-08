@@ -66,21 +66,15 @@ module.exports = function(grunt) {
         },
         // Compiles SASS to CSS
         sass: {
-            dist: {
-                options: {
-                    bundleExec: true,
-                    style: 'expanded',
-                    require: ['sass-globbing'],
-                    loadPath: 'bower_components'
-                },
-                files: [{
-                    expand: true,
-                    cwd: '<%= resourcesPath %>/sass',
-                    src: ['*.sass'],
-                    dest: 'web/css',
-                    ext: '.css'
-                }],
+            options: {
+                sourceMap: true,
+                includePaths: ['bower_components']
             },
+            dist: {
+                files: {
+                    'web/css/main.css': '<%= resourcesPath %>/sass/main.sass'
+                }
+            }
         },
         // Watches for changes to SASS files and triggers compilation
         watch: {
@@ -133,7 +127,7 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-sass');
+    grunt.loadNpmTasks('grunt-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-browser-sync');
     grunt.loadNpmTasks('grunt-svgstore');

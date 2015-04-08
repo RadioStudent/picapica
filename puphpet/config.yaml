@@ -197,11 +197,6 @@ wpcli:
 drush:
     install: '0'
     version: 6.3.0
-ruby:
-    install: '1'
-    versions:
-        BxVfQRA96EDQ:
-            version: ''
 nodejs:
     install: '1'
     npm_packages:

@@ -88,11 +88,6 @@
                 passthru="true"
                 />
         <exec
-                command="bundle install"
-                checkreturn="true"
-                passthru="true"
-                />
-        <exec
                 command="grunt"
                 checkreturn="true"
                 passthru="true"
