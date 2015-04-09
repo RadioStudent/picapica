@@ -17,7 +17,7 @@
     <div class="input-group">
         <input ng-keyup="typeInInput($event)"
                type="text"
-               class="form-control"
+               class="form-control search-bar"
                placeholder="enter search term"
                ng-model="searchTerm"
                bs-options="artist.name for artist in getSuggestions($viewValue)"
@@ -41,15 +41,13 @@
         </div>
     </div>
 
-    <table class="table table-striped">
+    <table class="table table-striped table-condensed table-hover">
         <thead>
             <tr>
-                <th>#</th>
-                <th>Artist</th>
-                <th>Title</th>
-                <th>Album</th>
-                <th>Year</th>
-                <th>Duration</th>
+                <th ng-repeat="column in columns" ng-click="sortByColumn(column)">{{ column.label }}
+                    <span class="glyphicon glyphicon-triangle-top" ng-show="column.sortOrder === 'asc'"></span>
+                    <span class="glyphicon glyphicon-triangle-bottom" ng-show="column.sortOrder === 'desc'"></span>
+                </th>
             </tr>
         </thead>
         <tbody>

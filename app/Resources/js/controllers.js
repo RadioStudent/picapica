@@ -62,7 +62,7 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
         if(event.type === 'keyup' && event.keyCode === 13) {
             $scope.addTextFilter(event.shiftKey ? 'add' : 'replace');
         }
-    }
+    };
 
     $scope.addTextFilter = function(type) {
         if($scope.searchTerm.length > 0) {
@@ -82,8 +82,12 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
         }
         else {
             var searchParams = buildSearchParams();
+            var sortParams = buildSortParams();
             Track.search(
-                { search: searchParams },
+                {
+                    search: searchParams,
+                    sort: sortParams
+                },
                 function(response) {
                     $scope.tracks = response;
                 }
@@ -112,6 +116,18 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
 
         return JSON.stringify(params);
     }
+
+    function buildSortParams() {
+        var obj = {};
+
+        $scope.columns.forEach(function(column){
+            if(column.sortOrder) {
+                obj[column.name] = column.sortOrder;
+            }
+        });
+
+        return JSON.stringify(obj);
+    };
 
     $scope.getSuggestions = function(searchInput) {
         if(searchInput.length === 0 || typeof searchInput === 'object') {
@@ -151,7 +167,7 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
                             searchInField: true,
                             type: key.substring(0, key.length - 1),
                             name: results.query,
-                            label: key.substring(0, key.length - 1) + ' name matches ' + results.query
+                            label: 'All tracks with ' + key.substring(0, key.length - 1) + ' "<strong>' + results.query + '</strong>"'
                         });
                     }
                 }
@@ -183,4 +199,22 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
         $scope.searchTerm = '';
         $scope.doSearch();
     });
+
+    $scope.columns = [
+        { name: 'fid',        label: '#' },
+        { name: 'artistName', label: 'Artist' },
+        { name: 'name',       label: 'Title' },
+        { name: 'album',      label: 'Album' },
+        { name: 'date',       label: 'Year' },
+        { name: 'duration',   label: 'Duration' }
+    ];
+
+    $scope.sortByColumn = function(column) {
+        if(column.sortOrder === 'asc') {
+            column.sortOrder = 'desc';
+        } else {
+            column.sortOrder = 'asc';
+        }
+        $scope.doSearch();
+    };
 }]);
