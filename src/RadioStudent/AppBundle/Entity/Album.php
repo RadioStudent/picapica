@@ -254,7 +254,7 @@ class Album extends BaseEntity
         return $result;
     }
 
-    public static function mapFieldsToElastic()
+    public static function mapFieldsToElastic($type)
     {
         return [
         ];

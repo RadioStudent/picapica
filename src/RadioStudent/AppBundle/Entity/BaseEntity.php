@@ -4,21 +4,28 @@ namespace RadioStudent\AppBundle\Entity;
 
 abstract class BaseEntity implements BaseInterface {
 
-    public final static function fieldsToElastic($search)
+    public final static function fieldsToElastic($data, $type = 'default')
     {
-        if ($search == null) {
+        if ($data == null) {
             return null;
         }
 
-        $map = static::mapFieldsToElastic();
-
         $ret = [];
-        foreach ($search as $idx=>$fields) {
-            $arr = [];
-            foreach ($fields as $key=>$val) {
-                $arr[isset($map[$key])? $map[$key]: $key] = $val;
+        $map = static::mapFieldsToElastic($type);
+
+        if ($type == 'default') {
+            foreach ($data as $idx => $fields) {
+                $arr = [];
+                foreach ($fields as $key => $val) {
+                    $arr[isset($map[$key]) ? $map[$key] : $key] = $val;
+                }
+                $ret[] = $arr;
             }
-            $ret[] = $arr;
+
+        } elseif ($type == 'sort') {
+            foreach ($data as $field => $dir) {
+                $ret[isset($map[$field]) ? $map[$field] : $field] = $dir;
+            }
         }
 
         return $ret;

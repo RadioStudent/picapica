@@ -42,7 +42,7 @@ class Tracklist
     /**
      * @var Collection|TracklistTrack[]
      *
-     * @ORM\OneToMany(targetEntity="TracklistTrack")
+     * @ORM\OneToMany(targetEntity="TracklistTrack", mappedBy="tracklist")
      * @ORM\OrderBy({"trackNum" = "ASC"})
      */
     private $tracklistTracks;

@@ -348,13 +348,25 @@ class Track extends BaseEntity
         return $result;
     }
 
-    public static function mapFieldsToElastic()
+    public static function mapFieldsToElastic($type)
     {
-        return [
-            'artistName' => 'artist.name',
-            'artistId'   => 'artist.id',
-            'albumName'  => 'album.name',
-            'albumId'    => 'album.id',
+        $mapping = [
+            'default' => [
+                'artistName' => 'artist.name',
+                'artistId'   => 'artist.id',
+                'albumName'  => 'album.name',
+                'albumId'    => 'album.id',
+            ],
+            'sort' => [
+                'artistName' => 'artist.name.order',
+                'artistId'   => 'artist.id',
+                'albumName'  => 'album.name.order',
+                'albumId'    => 'album.id',
+                'name'       => 'name.order',
+                'album'      => 'album.name.order',
+            ],
         ];
+
+        return $mapping[$type];
     }
 }

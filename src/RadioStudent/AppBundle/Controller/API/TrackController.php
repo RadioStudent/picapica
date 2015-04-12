@@ -34,10 +34,10 @@ class TrackController extends FOSRestController
             $search = Track::fieldsToElastic(json_decode($search, 1));
         }
 
-        $sort   = $sort? json_decode($sort): [
+        $sort = Track::fieldsToElastic($sort? json_decode($sort): [
             '_score' => 'desc',
             'fid'    => 'asc'
-        ];
+        ], 'sort');
 
         $repo = $this
             ->container
