@@ -15,8 +15,7 @@
   "dependencies": {
     "bootstrap-sass": "~3.3.3",
     "angular-motion": "~0.3.4",
-    "angular-strap": "git://github.com/mzgajner/angular-strap#0294459",
-    "angular-ui-grid": "~3.0.0-rc.20",
+    "angular-strap": "2.2.1",
     "DataTables": "~1.10.5",
     "angular-datatables": "~0.4.2",
     "jquery": "~2.1.3"

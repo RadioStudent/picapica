@@ -15,6 +15,7 @@ Web app for physical music library management.
 composer install
 bin/phing install
 ```
+Note - if your dev box uses Windows, run console as admin.
 
 ## HOSTS file
 Edit your [hosts file](http://en.wikipedia.org/wiki/Hosts_%28file%29) and add a hostname called `picapica.dev` that points to your Vagrant box IP address.
