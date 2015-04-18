@@ -1,6 +1,7 @@
 'use strict';
 
 /* Services */
+var angular = require('angular');
 
 var picapicaServices = angular.module('picapicaServices', ['ngResource']);
 

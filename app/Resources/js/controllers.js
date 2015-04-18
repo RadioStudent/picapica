@@ -1,8 +1,8 @@
 'use strict';
 /* global angular: false */
 
-
 /* Controllers */
+var angular = require('angular');
 
 var picapicaControllers = angular.module('picapicaControllers', []);
 

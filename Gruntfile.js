@@ -3,7 +3,7 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         resourcesPath: 'app/Resources',
-        bowerPath: 'bower_components',
+        npmPath: 'node_modules',
         assetsPath: 'web',
 
         // Cleans up folders we will later copy to
@@ -16,12 +16,6 @@ module.exports = function(grunt) {
         ],
         // Copies stuff that needs to be copied
         copy: {
-            appJs: {
-                expand: true,
-                cwd: '<%= resourcesPath %>/js',
-                src: ['**/*.js'],
-                dest: '<%= assetsPath %>/js'
-            },
             appTemplates: {
                 expand: true,
                 cwd: '<%= resourcesPath %>/views/frontend',
@@ -30,45 +24,30 @@ module.exports = function(grunt) {
             },
             bootstrapFonts: {
                 expand: true,
-                cwd: '<%= bowerPath %>/bootstrap-sass/assets/fonts/bootstrap/',
+                cwd: '<%= npmPath %>/bootstrap-sass/assets/fonts/bootstrap/',
                 src: '*',
                 dest: '<%= assetsPath %>/fonts'
             },
-            angularStrap: {
-                expand: true,
-                cwd: '<%= bowerPath %>/angular-strap/dist',
-                src: ['angular-strap.js', 'angular-strap.tpl.js'],
-                //src: '*.min.js',
-                dest: '<%= assetsPath %>/js/lib'
-            },
-            jquery: {
-                expand: true,
-                cwd: '<%= bowerPath %>/jquery/dist',
-                src: ['jquery.js'],
-                dest: '<%= assetsPath %>/js/lib'
-            },
-            datatables: {
-                expand: true,
-                cwd: '<%= bowerPath %>/datatables/media/js',
-                src: ['jquery.dataTables.js'],
-                dest: '<%= assetsPath %>/js/lib'
-            },
-            angularDatatables: {
-                expand: true,
-                cwd: '<%= bowerPath %>/angular-datatables/dist/',
-                src: ['angular-datatables.js'],
-                dest: '<%= assetsPath %>/js/lib'
-            },
             angularMotion: {
-                src: '<%= bowerPath %>/angular-motion/dist/angular-motion.css',
-                dest: '<%= bowerPath %>/angular-motion/angular-motion.scss'
+                src: '<%= npmPath %>/angular-motion/dist/angular-motion.css',
+                dest: '<%= npmPath %>/angular-motion/angular-motion.scss'
+            }
+        },
+        browserify: {
+            main: {
+                files: {
+                    '<%= assetsPath %>/js/app.js': ['<%= resourcesPath %>/js/app.js']
+                },
+                options: {
+                    transform: ['coffeeify']
+                }
             }
         },
         // Compiles SASS to CSS
         sass: {
             options: {
                 sourceMap: true,
-                includePaths: ['bower_components']
+                includePaths: ['node_modules']
             },
             dist: {
                 files: {
@@ -84,7 +63,7 @@ module.exports = function(grunt) {
             },
             js: {
                 files: ['<%= resourcesPath %>/js/**/*.js'],
-                tasks: ['copy:appJs']
+                tasks: ['browserify']
             },
             angularTemplates: {
                 files: ['<%= resourcesPath %>/views/frontend/**/*.html'],
@@ -131,7 +110,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-browser-sync');
     grunt.loadNpmTasks('grunt-svgstore');
+    grunt.loadNpmTasks('grunt-browserify');
 
     grunt.registerTask('live', ['browserSync', 'watch']);
-    grunt.registerTask('default', ['clean', 'copy', 'sass', 'svgstore']);
+    grunt.registerTask('default', ['clean', 'copy', 'browserify', 'sass', 'svgstore']);
 };

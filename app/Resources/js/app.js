@@ -1,13 +1,20 @@
 'use strict';
 
 /* App Module */
+var angular =   require('angular'),
+    resource =  require('angular-resource'),
+    route =     require('angular-route'),
+    sanitize =  require('angular-sanitize'),
+    animate =   require('angular-animate');
+
+require('angular-strap/dist/angular-strap.js');
+require('angular-strap/dist/angular-strap.tpl.js');
 
 var picapicaApp = angular.module('picapicaApp', [
-    'ngRoute',
-    'ngSanitize',
-    'ngAnimate',
+    route,
+    sanitize,
+    animate,
     'mgcrea.ngStrap',
-    'datatables',
     'picapicaControllers',
     'picapicaServices',
     'picapicaFilters'
@@ -35,3 +42,7 @@ picapicaApp
             html: true
         });
     });
+
+require('./controllers')
+require('./services')
+require('./filters')
