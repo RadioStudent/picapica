@@ -1,6 +1,4 @@
-<ul tabindex="-1" class="typeahead dropdown-menu" ng-show="$isVisible()">
-    <li ng-repeat-start="match in $matches" ng-class="{ active: $index === $activeIndex }">
-        <a class="dropdown-suggestion-text" ng-class="{ 'precomputed-suggestion': match.value.searchInField }" ng-click="$select($index, $event)" ng-bind-html="match.value.label"></a>
-    </li>
-    <li ng-repeat-end ng-if="match.value.searchInField && !$last" class="divider"></li>
-</ul>
+<a class="dropdown-suggestion-text" ng-class="{ 'precomputed-suggestion': match.model.searchInField }">
+    <span bind-html-unsafe="match.model.label"></span>
+</a>
+</li ng-if="match.model.searchInField && !match.model.last"><li ng-if="match.model.searchInField && !match.model.last" class="divider">

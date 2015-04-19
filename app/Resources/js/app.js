@@ -4,17 +4,14 @@
 var angular =   require('angular'),
     resource =  require('angular-resource'),
     route =     require('angular-route'),
-    sanitize =  require('angular-sanitize'),
-    animate =   require('angular-animate');
+    sanitize =  require('angular-sanitize');
 
-require('angular-strap/dist/angular-strap.js');
-require('angular-strap/dist/angular-strap.tpl.js');
+require('angular-ui-bootstrap/ui-bootstrap-tpls');
 
 var picapicaApp = angular.module('picapicaApp', [
     route,
     sanitize,
-    animate,
-    'mgcrea.ngStrap',
+    'ui.bootstrap',
     'picapicaControllers',
     'picapicaServices',
     'picapicaFilters'
@@ -32,16 +29,7 @@ picapicaApp
                     redirectTo: '/search'
                 });
         }
-    ])
-    .config(function($typeaheadProvider) {
-        angular.extend($typeaheadProvider.defaults, {
-            filter: false,
-            limit: 33,
-            minLength: 3,
-            template: 'partials/_autocomplete.tpl.html',
-            html: true
-        });
-    });
+    ]);
 
 require('./controllers')
 require('./services')

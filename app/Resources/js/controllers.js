@@ -10,8 +10,6 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
     $scope.tracks = [];
     $scope.filters = [];
     $scope.searchTerm = '';
-    var acTimeout,
-        acDelay = 300;
 
     function generateFilterTypes(type) {
         var allFilterTypes = [
@@ -59,6 +57,7 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
     };
 
     $scope.typeInInput = function(event) {
+        console.log('asd');
         if(event.type === 'keyup' && event.keyCode === 13) {
             $scope.addTextFilter(event.shiftKey ? 'add' : 'replace');
         }
@@ -134,52 +133,47 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
             return;
         }
 
-        var deferred = $q.defer();
-        clearTimeout(acTimeout);
+        return $http({
+            method: 'GET',
+            url: 'api/v1/ac',
+            params: { search: searchInput }
+        }).then(function(res) {
+            var results = res.data;
 
-        acTimeout = setTimeout(function() {
-            $http({
-                method: 'GET',
-                url: 'api/v1/ac',
-                params: { search: searchInput }
-            }).then(function(res) {
-                var results = res.data;
+            for (var key in results) {
+                if(results[key].length > 0 && key !== 'query') {
+                    results[key].forEach(function(result){
+                        result.type = key.substring(0, key.length - 1);
+                        var prepend = '',
+                            highlights;
 
-                for (var key in results) {
-                    if(results[key].length > 0 && key !== 'query') {
-                        results[key].forEach(function(result){
-                            result.type = key.substring(0, key.length - 1);
-                            var prepend = '',
-                                highlights;
+                        if(result.type !== 'artist') {
+                            prepend = result.albumArtistName + ' - ';
+                        }
 
-                            if(result.type !== 'artist') {
-                                prepend = result.albumArtistName + ' - ';
-                            }
+                        if(typeof result.elastica_highlights['name.autocomplete'] !== 'undefined' && result.elastica_highlights['name.autocomplete'].length > 0) {
+                            highlights = result.elastica_highlights['name.autocomplete'];
+                        }
 
-                            if(typeof result.elastica_highlights['name.autocomplete'] !== 'undefined' && result.elastica_highlights['name.autocomplete'].length > 0) {
-                                highlights = result.elastica_highlights['name.autocomplete'];
-                            }
+                        result.label = prepend + (highlights || result.name);
+                    });
 
-                            result.label = prepend + (highlights || result.name);
-                        });
-
-                        results[key].push({
-                            searchInField: true,
-                            type: key.substring(0, key.length - 1),
-                            name: results.query,
-                            label: 'All tracks with ' + key.substring(0, key.length - 1) + ' "<strong>' + results.query + '</strong>"'
-                        });
-                    }
+                    results[key].push({
+                        searchInField: true,
+                        type: key.substring(0, key.length - 1),
+                        name: results.query,
+                        label: 'All tracks with ' + key.substring(0, key.length - 1) + ' "<strong>' + results.query + '</strong>"'
+                    });
                 }
+            }
 
-                deferred.resolve(results.artists.concat(results.albums, results.tracks));
-            });
-        }, acDelay);
+            results.tracks[results.tracks.length - 1].last = true;
 
-        return deferred.promise;
+            return results.artists.concat(results.albums, results.tracks);
+        });
     };
 
-    $scope.$on('$typeahead.select', function(event, selectedItem) {
+    $scope.selectSuggestion = function(selectedItem, model, label) {
         $scope.filters = [];
 
         if(selectedItem.searchInField === true) {
@@ -198,7 +192,7 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
 
         $scope.searchTerm = '';
         $scope.doSearch();
-    });
+    };
 
     $scope.columns = [
         { name: 'fid',        label: '#' },

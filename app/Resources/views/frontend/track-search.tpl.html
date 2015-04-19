@@ -15,13 +15,16 @@
 
 <div class="container">
     <div class="input-group">
-        <input ng-keyup="typeInInput($event)"
-               type="text"
-               class="form-control search-bar"
-               placeholder="enter search term"
+        <input type="text"
+               ng-keyup="typeInInput($event)"
                ng-model="searchTerm"
-               bs-options="artist.name for artist in getSuggestions($viewValue)"
-               bs-typeahead>
+               placeholder="enter search term"
+               typeahead="artist.name for artist in getSuggestions($viewValue)"
+               typeahead-on-select="selectSuggestion($item, $model, $label)"
+               typeahead-wait-ms="300"
+               typeahead-template-url="/partials/_autocomplete.tpl.html"
+               typeahead-focus-first="false"
+               class="form-control search-bar">
 
         <span class="input-group-btn">
             <button class="btn btn-default" ng-click="addTextFilter('replace')">Search</button>

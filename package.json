@@ -13,12 +13,10 @@
   },
   "dependencies": {
     "angular": "^1.4.0-rc.0",
-    "angular-animate": "^1.4.0-rc.0",
-    "angular-motion": "^0.3.4",
     "angular-resource": "^1.4.0-rc.0",
     "angular-route": "^1.4.0-rc.0",
     "angular-sanitize": "^1.4.0-rc.0",
-    "angular-strap": "git://github.com/mgcrea/angular-strap.git#v2.2.1",
+    "angular-ui-bootstrap": "^0.12.1",
     "bootstrap-sass": "^3.3.4",
     "coffeeify": "^1.0.0",
     "grunt": "~0.4.5",
