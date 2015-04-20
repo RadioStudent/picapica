@@ -36,10 +36,13 @@ module.exports = function(grunt) {
         browserify: {
             main: {
                 files: {
-                    '<%= assetsPath %>/js/app.js': ['<%= resourcesPath %>/js/app.js']
+                    '<%= assetsPath %>/js/app.js': ['<%= resourcesPath %>/js/**/*.js', '<%= resourcesPath %>/js/**/*.coffee']
                 },
                 options: {
-                    transform: ['coffeeify']
+                    transform: ['coffeeify'],
+                    browserifyOptions: {
+                        extensions: ['.coffee']
+                    }
                 }
             }
         },
@@ -62,7 +65,7 @@ module.exports = function(grunt) {
                 tasks: ['sass']
             },
             js: {
-                files: ['<%= resourcesPath %>/js/**/*.js'],
+                files: ['<%= resourcesPath %>/js/**/*.js', '<%= resourcesPath %>/js/**/*.coffee'],
                 tasks: ['browserify']
             },
             angularTemplates: {

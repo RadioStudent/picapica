@@ -12,7 +12,6 @@ var picapicaApp = angular.module('picapicaApp', [
     route,
     sanitize,
     'ui.bootstrap',
-    'picapicaControllers',
     'picapicaServices',
     'picapicaFilters'
 ]);
@@ -31,6 +30,6 @@ picapicaApp
         }
     ]);
 
-require('./controllers')
+require('./controller')
 require('./services')
 require('./filters')

@@ -1,15 +1,11 @@
 'use strict';
-/* global angular: false */
 
-/* Controllers */
-var angular = require('angular');
+module.exports = function(Track, $http, $q, $sce) {
+    var trackSearch = this;
 
-var picapicaControllers = angular.module('picapicaControllers', []);
-
-picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '$q', '$sce', function(Track, $scope, $http, $q, $sce) {
-    $scope.tracks = [];
-    $scope.filters = [];
-    $scope.searchTerm = '';
+    trackSearch.tracks = [];
+    trackSearch.filters = [];
+    trackSearch.searchTerm = '';
 
     function generateFilterTypes(type) {
         var allFilterTypes = [
@@ -38,46 +34,45 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
         this.label = label || text;
         this.fromAutocomplete = !!fromAutocomplete;
 
-        $scope.filters.push(this);
+        trackSearch.filters.push(this);
     };
 
     Filter.prototype.remove = function() {
-        for(var i = 0; i < $scope.filters.length; i++) {
-            if(angular.equals(this, $scope.filters[i])) {
-                $scope.filters.splice(i, 1);
+        for(var i = 0; i < trackSearch.filters.length; i++) {
+            if(angular.equals(this, trackSearch.filters[i])) {
+                trackSearch.filters.splice(i, 1);
                 break;
             }
         }
-        $scope.doSearch();
+        trackSearch.doSearch();
     };
 
     Filter.prototype.setType = function(type) {
         this.type = type;
-        $scope.doSearch();
+        trackSearch.doSearch();
     };
 
-    $scope.typeInInput = function(event) {
-        console.log('asd');
+    trackSearch.typeInInput = function(event) {
         if(event.type === 'keyup' && event.keyCode === 13) {
-            $scope.addTextFilter(event.shiftKey ? 'add' : 'replace');
+            trackSearch.addTextFilter(event.shiftKey ? 'add' : 'replace');
         }
     };
 
-    $scope.addTextFilter = function(type) {
-        if($scope.searchTerm.length > 0) {
+    trackSearch.addTextFilter = function(type) {
+        if(trackSearch.searchTerm.length > 0) {
             if(type === 'replace') {
-                $scope.filters = [];
+                trackSearch.filters = [];
             }
 
-            new Filter($scope.searchTerm);
-            $scope.searchTerm = '';
-            $scope.doSearch();
+            new Filter(trackSearch.searchTerm);
+            trackSearch.searchTerm = '';
+            trackSearch.doSearch();
         }
     };
 
-    $scope.doSearch = function() {
-        if($scope.filters.length === 0) {
-            $scope.tracks = [];
+    trackSearch.doSearch = function() {
+        if(trackSearch.filters.length === 0) {
+            trackSearch.tracks = [];
         }
         else {
             var searchParams = buildSearchParams();
@@ -88,7 +83,7 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
                     sort: sortParams
                 },
                 function(response) {
-                    $scope.tracks = response;
+                    trackSearch.tracks = response;
                 }
             );
         }
@@ -97,7 +92,7 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
     function buildSearchParams() {
         var params = [];
 
-        $scope.filters.forEach(function(filter){
+        trackSearch.filters.forEach(function(filter){
             var obj = {};
 
             filter.types.forEach(function(filterType){
@@ -119,7 +114,7 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
     function buildSortParams() {
         var obj = {};
 
-        $scope.columns.forEach(function(column){
+        trackSearch.columns.forEach(function(column){
             if(column.sortOrder) {
                 obj[column.name] = column.sortOrder;
             }
@@ -128,7 +123,7 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
         return JSON.stringify(obj);
     };
 
-    $scope.getSuggestions = function(searchInput) {
+    trackSearch.getSuggestions = function(searchInput) {
         if(searchInput.length === 0 || typeof searchInput === 'object') {
             return;
         }
@@ -173,8 +168,8 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
         });
     };
 
-    $scope.selectSuggestion = function(selectedItem, model, label) {
-        $scope.filters = [];
+    trackSearch.selectSuggestion = function(selectedItem, model, label) {
+        trackSearch.filters = [];
 
         if(selectedItem.searchInField === true) {
             new Filter(
@@ -190,11 +185,11 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
             );
         }
 
-        $scope.searchTerm = '';
-        $scope.doSearch();
+        trackSearch.searchTerm = '';
+        trackSearch.doSearch();
     };
 
-    $scope.columns = [
+    trackSearch.columns = [
         { name: 'fid',        label: '#' },
         { name: 'artistName', label: 'Artist' },
         { name: 'name',       label: 'Title' },
@@ -203,12 +198,12 @@ picapicaControllers.controller('TrackSearchCtrl', ['Track', '$scope', '$http', '
         { name: 'duration',   label: 'Duration' }
     ];
 
-    $scope.sortByColumn = function(column) {
+    trackSearch.sortByColumn = function(column) {
         if(column.sortOrder === 'asc') {
             column.sortOrder = 'desc';
         } else {
             column.sortOrder = 'asc';
         }
-        $scope.doSearch();
+        trackSearch.doSearch();
     };
-}]);
+};
