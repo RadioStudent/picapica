@@ -1,5 +1,4 @@
 module.exports = function(grunt) {
-
     // Project configuration.
     grunt.initConfig({
         resourcesPath: 'app/Resources',
@@ -36,7 +35,7 @@ module.exports = function(grunt) {
         browserify: {
             main: {
                 files: {
-                    '<%= assetsPath %>/js/app.js': ['<%= resourcesPath %>/js/**/*.js', '<%= resourcesPath %>/js/**/*.coffee']
+                    '<%= assetsPath %>/js/app.js': ['<%= resourcesPath %>/js/app.coffee']
                 },
                 options: {
                     transform: ['coffeeify'],
