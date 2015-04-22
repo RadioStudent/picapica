@@ -11,8 +11,8 @@ require "angular-ui-bootstrap/ui-bootstrap-tpls"
 picapicaApp = angular.module "picapicaApp", [
     route
     sanitize
+    resource
     "ui.bootstrap"
-    "picapicaServices"
     "picapicaFilters"
 ]
 
@@ -27,5 +27,5 @@ picapicaApp.config [
 ]
 
 require "./controller"
-require "./services"
+require "./service"
 require "./filters"

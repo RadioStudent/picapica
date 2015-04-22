@@ -1,53 +1,17 @@
 "use strict"
 
 class TrackSearchCtrl
-    constructor: (Track, Filters, $http, $q, $sce, $rootScope) ->
+    constructor: (Track, SearchFilter, $http, $q, $sce, $rootScope) ->
         trackSearch = this
 
         @tracks = []
         @searchTerm = ""
 
         $rootScope.$on "filters.update", (event) ->
-           trackSearch.filters = Filters.all
+           trackSearch.filters = SearchFilter.all
+           trackSearch.doSearch()
 
-        @filters = Filters.all
-
-        class @Filter
-            constructor: (@text, type, label, fromAutocomplete) ->
-                @types = trackSearch.Filter.generateFilterTypes(type)
-                @label = label || @text
-                @fromAutocomplete = fromAutocomplete?
-                Filters.add(@)
-
-            @filters: []
-
-            remove: () ->
-                for filter, index in Filters.all
-                    if angular.equals this, filter
-                        Filters.remove(index)
-                        break
-                trackSearch.doSearch()
-
-            setType: (type) ->
-                @type = type
-                trackSearch.doSearch()
-
-            @generateFilterTypes = (type) ->
-                allFilterTypes = [
-                    { name: "Artist name", type: "artist.name", active: false, visible: true }
-                    { name: "Artist ID",   type: "artist.id",   active: false, visible: false }
-                    { name: "Album name",  type: "album.name",  active: false, visible: true }
-                    { name: "Album ID",    type: "album.id",    active: false, visible: false }
-                    { name: "Track name",  type: "track.name",  active: false, visible: true }
-                    { name: "Track ID",    type: "track.id",    active: false, visible: false }
-                ]
-
-                if type
-                    for filterType in allFilterTypes
-                        if filterType.type is type
-                            filterType.active = true
-
-                return allFilterTypes
+        @filters = SearchFilter.all
 
         @typeInInput = (event) ->
             if event.type is "keyup" and event.keyCode is 13
@@ -56,14 +20,13 @@ class TrackSearchCtrl
         @addTextFilter = (type) ->
             if @searchTerm.length > 0
                 if type is "replace"
-                    Filters.reset()
+                    SearchFilter.reset()
 
-                new @Filter(@searchTerm)
+                SearchFilter.add(@searchTerm)
                 @searchTerm = ""
-                @doSearch()
 
         @doSearch = (sortParams) ->
-            if Filters.all.length is 0
+            if SearchFilter.all.length is 0
                 @tracks = []
             else
                 searchParams = @buildSearchParams()
@@ -76,7 +39,7 @@ class TrackSearchCtrl
         @buildSearchParams = () ->
             params = []
 
-            for filter in Filters.all
+            for filter in SearchFilter.all
                 obj = {}
 
                 for filterType in filter.types
@@ -129,19 +92,18 @@ class TrackSearchCtrl
                 return results
 
         @selectSuggestion = (selectedItem, model, label) ->
-            Filters.reset()
+            SearchFilter.reset()
 
             if selectedItem.searchInField is true
-                new @Filter selectedItem.name,
-                           selectedItem.type + ".name"
+                SearchFilter.add selectedItem.name,
+                            selectedItem.type + ".name"
             else
-                new @Filter selectedItem.id,
-                           selectedItem.type + ".id",
-                           selectedItem.type + ": " + selectedItem.name,
-                           true
+                SearchFilter.add selectedItem.id,
+                            selectedItem.type + ".id",
+                            selectedItem.type + ": " + selectedItem.name,
+                            true
 
             @searchTerm = ""
-            @doSearch()
 
         return false
 
