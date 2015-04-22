@@ -1,41 +1,30 @@
-'use strict'
+"use strict"
 
 class TrackSearchCtrl
-    constructor: (Track, $http, $q, $sce) ->
+    constructor: (Track, Filters, $http, $q, $sce, $rootScope) ->
         trackSearch = this
 
-        trackSearch.tracks = []
-        trackSearch.filters = []
-        trackSearch.searchTerm = ""
+        @tracks = []
+        @searchTerm = ""
 
-        generateFilterTypes = (type) ->
-            allFilterTypes = [
-                { name: 'Artist name', type: 'artist.name', active: false, visible: true }
-                { name: 'Artist ID',   type: 'artist.id',   active: false, visible: false }
-                { name: 'Album name',  type: 'album.name',  active: false, visible: true }
-                { name: 'Album ID',    type: 'album.id',    active: false, visible: false }
-                { name: 'Track name',  type: 'track.name',  active: false, visible: true }
-                { name: 'Track ID',    type: 'track.id',    active: false, visible: false }
-            ]
+        $rootScope.$on "filters.update", (event) ->
+           trackSearch.filters = Filters.all
 
-            if type
-                for filterType in allFilterTypes
-                    if filterType.type is type
-                        filterType.active = true
+        @filters = Filters.all
 
-            return allFilterTypes
-
-        class Filter
+        class @Filter
             constructor: (@text, type, label, fromAutocomplete) ->
-                @types = generateFilterTypes(type)
+                @types = trackSearch.Filter.generateFilterTypes(type)
                 @label = label || @text
                 @fromAutocomplete = fromAutocomplete?
-                trackSearch.filters.push @
+                Filters.add(@)
+
+            @filters: []
 
             remove: () ->
-                for filter, index in trackSearch.filters
+                for filter, index in Filters.all
                     if angular.equals this, filter
-                        trackSearch.filters.splice index, 1
+                        Filters.remove(index)
                         break
                 trackSearch.doSearch()
 
@@ -43,35 +32,51 @@ class TrackSearchCtrl
                 @type = type
                 trackSearch.doSearch()
 
-        trackSearch.typeInInput = (event) ->
-            if event.type is 'keyup' and event.keyCode is 13
-                trackSearch.addTextFilter(event.shiftKey ? 'add' : 'replace')
+            @generateFilterTypes = (type) ->
+                allFilterTypes = [
+                    { name: "Artist name", type: "artist.name", active: false, visible: true }
+                    { name: "Artist ID",   type: "artist.id",   active: false, visible: false }
+                    { name: "Album name",  type: "album.name",  active: false, visible: true }
+                    { name: "Album ID",    type: "album.id",    active: false, visible: false }
+                    { name: "Track name",  type: "track.name",  active: false, visible: true }
+                    { name: "Track ID",    type: "track.id",    active: false, visible: false }
+                ]
 
-        trackSearch.addTextFilter = (type) ->
-            if trackSearch.searchTerm.length > 0
-                if type is 'replace'
-                    trackSearch.filters = []
+                if type
+                    for filterType in allFilterTypes
+                        if filterType.type is type
+                            filterType.active = true
 
-                new Filter(trackSearch.searchTerm)
-                trackSearch.searchTerm = ''
-                trackSearch.doSearch()
+                return allFilterTypes
 
-        trackSearch.doSearch = () ->
-            if trackSearch.filters.length is 0
-                trackSearch.tracks = []
+        @typeInInput = (event) ->
+            if event.type is "keyup" and event.keyCode is 13
+                @addTextFilter(event.shiftKey ? "add" : "replace")
+
+        @addTextFilter = (type) ->
+            if @searchTerm.length > 0
+                if type is "replace"
+                    Filters.reset()
+
+                new @Filter(@searchTerm)
+                @searchTerm = ""
+                @doSearch()
+
+        @doSearch = (sortParams) ->
+            if Filters.all.length is 0
+                @tracks = []
             else
-                searchParams = buildSearchParams()
-                sortParams = buildSortParams()
+                searchParams = @buildSearchParams()
                 Track.search
                     search: searchParams
                     sort: sortParams,
                     (response) ->
                         trackSearch.tracks = response
 
-        buildSearchParams = () ->
+        @buildSearchParams = () ->
             params = []
 
-            for filter in trackSearch.filters
+            for filter in Filters.all
                 obj = {}
 
                 for filterType in filter.types
@@ -85,38 +90,29 @@ class TrackSearchCtrl
 
             return JSON.stringify(params)
 
-        buildSortParams = () ->
-            obj = {}
-
-            for column in trackSearch.columns
-                if column.sortOrder
-                    obj[column.name] = column.sortOrder
-
-            return JSON.stringify(obj)
-
-        trackSearch.getSuggestions = (searchInput) ->
-            if searchInput.length is 0 or typeof searchInput is 'object'
+        @getSuggestions = (searchInput) ->
+            if searchInput.length is 0 or typeof searchInput is "object"
                 return
 
             return $http(
-                method: 'GET'
-                url: 'api/v1/ac'
+                method: "GET"
+                url: "api/v1/ac"
                 params: { search: searchInput }
             ).then (res) ->
                 results = res.data;
 
                 for key, value of results
-                    if results[key].length > 0 and key != 'query'
+                    if results[key].length > 0 and key != "query"
                         for result in results[key]
                             result.type = key.substring(0, key.length - 1);
-                            prepend = ''
+                            prepend = ""
                             highlights
 
-                            if result.type is not 'artist'
-                                prepend = result.albumArtistName + ' - '
+                            if result.type != "artist"
+                                prepend = result.albumArtistName + " - "
 
-                            if typeof result.elastica_highlights['name.autocomplete'] is not 'undefined' and result.elastica_highlights['name.autocomplete'].length > 0
-                                highlights = result.elastica_highlights['name.autocomplete']
+                            if typeof result.elastica_highlights["name.autocomplete"] != "undefined" and result.elastica_highlights["name.autocomplete"].length > 0
+                                highlights = result.elastica_highlights["name.autocomplete"]
 
                             result.label = prepend + (highlights || result.name);
 
@@ -127,39 +123,25 @@ class TrackSearchCtrl
                             name: results.query
                             label: "All tracks with #{singularType} <strong>#{results.query}</strong>"
 
-                results.tracks[results.tracks.length - 1].last = true
-                return results.artists.concat results.albums, results.tracks
+                results = results.artists.concat results.albums, results.tracks
+                if results.length > 0
+                    results[results.length - 1].last = true
+                return results
 
-        trackSearch.selectSuggestion = (selectedItem, model, label) ->
-            trackSearch.filters = []
+        @selectSuggestion = (selectedItem, model, label) ->
+            Filters.reset()
 
             if selectedItem.searchInField is true
-                new Filter selectedItem.name,
-                           selectedItem.type + '.name'
+                new @Filter selectedItem.name,
+                           selectedItem.type + ".name"
             else
-                new Filter selectedItem.id,
-                           selectedItem.type + '.id',
-                           selectedItem.type + ': ' + selectedItem.name,
+                new @Filter selectedItem.id,
+                           selectedItem.type + ".id",
+                           selectedItem.type + ": " + selectedItem.name,
                            true
 
-            trackSearch.searchTerm = ''
-            trackSearch.doSearch()
-
-        trackSearch.columns = [
-            { name: 'fid',        label: '#' },
-            { name: 'artistName', label: 'Artist' },
-            { name: 'name',       label: 'Title' },
-            { name: 'album',      label: 'Album' },
-            { name: 'date',       label: 'Year' },
-            { name: 'duration',   label: 'Duration' }
-        ];
-
-        trackSearch.sortByColumn = (column) ->
-            if column.sortOrder is 'asc'
-                column.sortOrder = 'desc'
-            else
-                column.sortOrder = 'asc'
-            trackSearch.doSearch()
+            @searchTerm = ""
+            @doSearch()
 
         return false
 

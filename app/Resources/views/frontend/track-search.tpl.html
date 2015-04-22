@@ -13,48 +13,49 @@
     </div>
 </nav>
 
-<div class="container" ng-controller="TrackSearchCtrl as trackSearch">
+<div class="container" ng-controller="TrackSearchCtrl as ts">
     <div class="input-group">
         <input type="text"
-               ng-keyup="trackSearch.typeInInput($event)"
-               ng-model="trackSearch.searchTerm"
+               ng-keyup="ts.typeInInput($event)"
+               ng-model="ts.searchTerm"
                placeholder="enter search term"
-               typeahead="artist.name for artist in trackSearch.getSuggestions($viewValue)"
-               typeahead-on-select="trackSearch.selectSuggestion($item, $model, $label)"
+               typeahead="artist.name for artist in ts.getSuggestions($viewValue)"
+               typeahead-on-select="ts.selectSuggestion($item, $model, $label)"
                typeahead-wait-ms="300"
                typeahead-template-url="/partials/_autocomplete.tpl.html"
                typeahead-focus-first="false"
                class="form-control search-bar">
 
         <span class="input-group-btn">
-            <button class="btn btn-default" ng-click="trackSearch.addTextFilter('replace')">Search</button>
-            <button class="btn btn-default" ng-click="trackSearch.addTextFilter('add')">+</button>
+            <button class="btn btn-default" ng-click="ts.addTextFilter('replace')">Search</button>
+            <button class="btn btn-default" ng-click="ts.addTextFilter('add')">+</button>
         </span>
     </div>
 
     <br>
 
     <div class="filters">
-        <div class="well well-sm filter-wrapper" ng-repeat="filter in trackSearch.filters">
+        <div class="well well-sm filter-wrapper" ng-repeat="filter in ts.filters">
             <h2 class="filter-label">{{ filter.label }}</h2>
             <span ng-click="filter.remove()" class="glyphicon glyphicon-remove filter-remove-icon" aria-hidden="true"></span>
             <label class="filter-type" ng-if="!filter.fromAutocomplete" ng-repeat="type in filter.types" ng-show="type.visible">
-                <input type="checkbox" ng-model="type.active" ng-change="trackSearch.doSearch()"> {{ type.name }}
+                <input type="checkbox" ng-model="type.active" ng-change="ts.doSearch()"> {{ type.name }}
             </label>
         </div>
     </div>
 
-    <table class="table table-striped table-condensed table-hover">
+    <table class="table table-striped table-condensed table-hover" ng-controller="ColumnSortCtrl as cs">
+        {{ cs.columns }}
         <thead>
             <tr>
-                <th ng-repeat="column in columns" ng-click="trackSearch.sortByColumn(column)">{{ column.label }}
+                <th ng-repeat="column in cs.columns" ng-click="cs.sortByColumn(column); ts.doSearch(cs.buildSortParams())">{{ column.label }}
                     <span class="glyphicon glyphicon-triangle-top" ng-show="column.sortOrder === 'asc'"></span>
                     <span class="glyphicon glyphicon-triangle-bottom" ng-show="column.sortOrder === 'desc'"></span>
                 </th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="track in trackSearch.tracks">
+            <tr ng-repeat="track in ts.tracks">
                 <td ng-bind="track.fid"></td>
                 <td ng-bind="track.artistName"></td>
                 <td ng-bind="track.name"></td>
