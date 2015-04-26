@@ -30,7 +30,7 @@ module.exports = (grunt) ->
         browserify:
             main:
                 files:
-                    "<%= assetsPath %>/js/app.js": ["<%= resourcesPath %>/js/app.coffee"]
+                    "<%= assetsPath %>/js/app.js": ["<%= resourcesPath %>/coffee/app.coffee"]
                 options:
                     transform: ["coffeeify"]
                     browserifyOptions:
@@ -49,7 +49,7 @@ module.exports = (grunt) ->
                 files: ["<%= resourcesPath %>/sass/**/*.{sass,scss}"]
                 tasks: ["sass"]
             js:
-                files: ["<%= resourcesPath %>/js/**/*.js", "<%= resourcesPath %>/js/**/*.coffee"]
+                files: ["<%= resourcesPath %>/coffee/**/*.coffee"]
                 tasks: ["browserify"]
             angularTemplates:
                 files: ["<%= resourcesPath %>/views/frontend/**/*.html"]
@@ -66,6 +66,7 @@ module.exports = (grunt) ->
                     watchTask: true,
                     debugInfo: true,
                     proxy: "picapica.dev"
+                    open: false
         # Generates SVG sprite from single files
         svgstore:
             options:
