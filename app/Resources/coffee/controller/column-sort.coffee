@@ -2,6 +2,8 @@
 
 class ColumnSortCtrl
     constructor: () ->
+        active = -1
+
         @columns = [
             { name: "fid",        label: "#" }
             { name: "artistName", label: "Artist" }
@@ -11,7 +13,9 @@ class ColumnSortCtrl
             { name: "duration",   label: "Duration" }
         ];
 
-        @sortByColumn = (column) ->
+        @sortByColumn = (column, index) ->
+            active = index
+            
             if column.sortOrder is "asc"
                 column.sortOrder = "desc"
             else
@@ -20,9 +24,9 @@ class ColumnSortCtrl
         @buildSortParams = () ->
             obj = {}
 
-            for column in @columns
-                if column.sortOrder
-                    obj[column.name] = column.sortOrder
+            if active > -1
+                activeColumn = @columns[active]
+                obj[activeColumn.name] = activeColumn.sortOrder
 
             return JSON.stringify(obj)
 

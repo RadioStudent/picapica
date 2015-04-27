@@ -1,7 +1,7 @@
 "use strict"
 
 Track = ($resource) ->
-    $resource "api/v1/tracks", search: "@searchTerm",
+    $resource "api/v1/tracks", null,
         search:
             params:
                 size: 100

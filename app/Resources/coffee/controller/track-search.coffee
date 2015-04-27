@@ -29,29 +29,12 @@ class TrackSearchCtrl
             if SearchFilter.all.length is 0
                 @tracks = []
             else
-                searchParams = @buildSearchParams()
+                searchParams = SearchFilter.getSearchParams()
                 Track.search
                     search: searchParams
                     sort: sortParams,
                     (response) ->
                         trackSearch.tracks = response
-
-        @buildSearchParams = () ->
-            params = []
-
-            for filter in SearchFilter.all
-                obj = {}
-
-                for filterType in filter.types
-                    if filterType.active
-                        obj[filterType.type] = filter.text
-
-                if Object.keys(obj).length is 0
-                    obj._all = filter.text
-
-                params.push(obj)
-
-            return JSON.stringify(params)
 
         @getSuggestions = (searchInput) ->
             if searchInput.length is 0 or typeof searchInput is "object"

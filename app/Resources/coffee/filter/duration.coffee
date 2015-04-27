@@ -1,11 +1,6 @@
 "use strict"
 
-# Filters
-angular = require "angular"
-
-picapicaFilters = angular.module "picapicaFilters", []
-
-picapicaFilters.filter "secondsToTime", () ->
+Duration = () ->
     (seconds) ->
         if seconds
             hours = Math.floor(seconds / 3600)
@@ -28,3 +23,5 @@ picapicaFilters.filter "secondsToTime", () ->
 
         else
             return "/"
+
+module.exports = Duration

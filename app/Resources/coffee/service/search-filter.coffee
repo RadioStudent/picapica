@@ -12,7 +12,7 @@ SearchFilter = ($rootScope) ->
         remove: () ->
             for filter, index in service.all
                 if angular.equals this, filter
-                    service.remove(index)
+                    service.all.splice index, 1
                     break
             $rootScope.$broadcast("filters.update")
 
@@ -37,17 +37,30 @@ SearchFilter = ($rootScope) ->
 
             return allFilterTypes
 
+        @getSearchParams = () ->
+            params = []
+
+            for filter in service.all
+                obj = {}
+                obj[filterType.type] = filter.text for filterType in filter.types when filterType.active
+
+                if angular.equals(obj,{})
+                    obj._all = filter.text
+
+                params.push(obj)
+
+            return JSON.stringify(params)
+
     service =
         all: []
-
-        remove: (index) ->
-            service.all.splice index, 1
 
         reset: () ->
             service.all = []
 
         add: (vars...) ->
             new Filter(vars...)
+
+        getSearchParams: Filter.getSearchParams
 
     return service
 
