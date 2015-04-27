@@ -44,11 +44,10 @@
         </div>
     </div>
 
-    <table class="table table-striped table-condensed table-hover" ng-controller="ColumnSortCtrl as cs">
-        {{ cs.columns }}
+    <table class="table table-striped table-condensed table-hover">
         <thead>
             <tr>
-                <th ng-repeat="column in cs.columns" ng-click="cs.sortByColumn(column, $index); ts.doSearch(cs.buildSortParams())">{{ column.label }}
+                <th ng-repeat="column in ts.columns" ng-click="ts.sort(column, $index)">{{ column.label }}
                     <span class="glyphicon glyphicon-triangle-top" ng-show="column.sortOrder === 'asc'"></span>
                     <span class="glyphicon glyphicon-triangle-bottom" ng-show="column.sortOrder === 'desc'"></span>
                 </th>

@@ -37,7 +37,7 @@ SearchFilter = ($rootScope) ->
 
             return allFilterTypes
 
-        @getSearchParams = () ->
+        @buildParams = () ->
             params = []
 
             for filter in service.all
@@ -53,14 +53,11 @@ SearchFilter = ($rootScope) ->
 
     service =
         all: []
-
         reset: () ->
             service.all = []
-
         add: (vars...) ->
             new Filter(vars...)
-
-        getSearchParams: Filter.getSearchParams
+        buildParams: Filter.buildParams
 
     return service
 
