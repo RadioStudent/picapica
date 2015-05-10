@@ -14,10 +14,13 @@ angular.module "picapicaApp", [route, sanitize, resource, "ui.bootstrap"]
             $routeProvider
                 .when "/search",
                     templateUrl: "partials/track-search.tpl.html"
+                .when "/playlist",
+                    templateUrl: "partials/playlist.tpl.html"
                 .otherwise
                     redirectTo: "/search"
     ]
 
 require "./controller"
+require "./directive"
 require "./service"
 require "./filter"

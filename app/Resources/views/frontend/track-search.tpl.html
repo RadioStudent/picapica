@@ -1,17 +1,4 @@
-<nav class="navbar navbar-default">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">PicaPica</a>
-        </div>
-        <div>
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="/#/search">Search <span class="sr-only">(current)</span></a></li>
-                <li><a>Playlist</a></li>
-                <li><a>Editor</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<pp-navbar active-item="'search'"></pp-navbar>
 
 <div class="container" ng-controller="TrackSearchCtrl as ts">
     <div class="input-group">
@@ -51,6 +38,7 @@
                     <span class="glyphicon glyphicon-triangle-top" ng-show="column.sortOrder === 'asc'"></span>
                     <span class="glyphicon glyphicon-triangle-bottom" ng-show="column.sortOrder === 'desc'"></span>
                 </th>
+                <th>PL</th>
             </tr>
         </thead>
         <tbody>
@@ -61,6 +49,12 @@
                 <td ng-bind="track.albumName"></td>
                 <td ng-bind="track.year"></td>
                 <td ng-bind="track.duration | duration"></td>
+                <td>
+                    <button class="btn btn-default" type="submit" ng-click="ts.toggleInPlaylist(track)">
+                        <span ng-show="!ts.isTrackInPlaylist(track)" class="glyphicon glyphicon-plus-sign"></span>
+                        <span ng-show="ts.isTrackInPlaylist(track)"  class="glyphicon glyphicon-minus-sign"></span>
+                    </button>
+                </td>
             </tr>
         </tbody>
     </table>

@@ -1,0 +1,16 @@
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">PicaPica</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li ng-class="{ active : activeItem === 'search' }"><a href="/#/search">Search</a></li>
+                <li ng-class="{ active : activeItem === 'playlist' }"><a href="/#/playlist">Playlist</a></li>
+                <li ng-class="{ active : activeItem === 'editor' }"><a>Editor</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<h1>{{ url }}</h1>

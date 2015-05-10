@@ -59,6 +59,4 @@ SearchFilter = ($rootScope) ->
             new Filter(vars...)
         buildParams: Filter.buildParams
 
-    return service
-
 module.exports = SearchFilter

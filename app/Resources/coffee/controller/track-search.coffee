@@ -1,7 +1,7 @@
 "use strict"
 
 class TrackSearchCtrl
-    constructor: (Track, Suggestion, SearchFilter, SortableColumn, $http, $sce, $rootScope) ->
+    constructor: (Track, Suggestion, SearchFilter, SortableColumn, SelectedTracks, $http, $sce, $rootScope) ->
         trackSearch = this
 
         @tracks = []
@@ -9,6 +9,9 @@ class TrackSearchCtrl
         @filters = SearchFilter.all
         @columns = SortableColumn.all
         @sort = SortableColumn.sort
+
+        @isTrackInPlaylist = SelectedTracks.isActive
+        @toggleInPlaylist = SelectedTracks.toggle
 
         $rootScope.$on "filters.update", (event) ->
            trackSearch.filters = SearchFilter.all
@@ -60,6 +63,8 @@ class TrackSearchCtrl
                                  true
 
             @searchTerm = ""
+
+        if @filters.length > 0 then @doSearch()
 
         return
 
