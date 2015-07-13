@@ -1,13 +1,12 @@
 "use strict"
 
-angular =   require "angular"
-resource =  require "angular-resource"
-route =     require "angular-route"
-sanitize =  require "angular-sanitize"
+angular   = require "angular"
+resource  = require "angular-resource"
+route     = require "angular-route"
+sanitize  = require "angular-sanitize"
+bootstrap = require "angular-bootstrap-npm/dist/angular-bootstrap"
 
-require "angular-ui-bootstrap/ui-bootstrap-tpls"
-
-angular.module "picapicaApp", [route, sanitize, resource, "ui.bootstrap"]
+angular.module "picapicaApp", [route, sanitize, resource, bootstrap]
     .config [
         "$routeProvider"
         ($routeProvider) ->
@@ -19,6 +18,7 @@ angular.module "picapicaApp", [route, sanitize, resource, "ui.bootstrap"]
                 .otherwise
                     redirectTo: "/search"
     ]
+    .constant('_', require "lodash")
 
 require "./controller"
 require "./directive"

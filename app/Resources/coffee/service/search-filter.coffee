@@ -7,18 +7,18 @@ SearchFilter = ($rootScope) ->
             @label = label || @text
             @fromAutocomplete = fromAutocomplete?
             service.all.push @
-            $rootScope.$broadcast("filters.update")
+            $rootScope.$broadcast "filters.update"
 
         remove: () ->
             for filter, index in service.all
                 if angular.equals this, filter
                     service.all.splice index, 1
                     break
-            $rootScope.$broadcast("filters.update")
+            $rootScope.$broadcast "filters.update"
 
         setType: (type) ->
             @type = type
-            $rootScope.$broadcast("filters.update")
+            $rootScope.$broadcast "filters.update"
 
         @generateFilterTypes = (type) ->
             allFilterTypes = [

@@ -16,7 +16,7 @@ SortableColumn = ($rootScope) ->
             column.sortOrder = "desc"
         else
             column.sortOrder = "asc"
-        $rootScope.$broadcast("filters.update")
+        $rootScope.$broadcast "filters.update"
 
     service =
         active: -1

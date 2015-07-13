@@ -48,7 +48,7 @@
                 <td ng-bind="track.name"></td>
                 <td ng-bind="track.albumName"></td>
                 <td ng-bind="track.year"></td>
-                <td ng-bind="track.duration | duration"></td>
+                <td ng-bind="track.duration | duration" class="table-duration"></td>
                 <td>
                     <button class="btn btn-default" type="submit" ng-click="ts.toggleInPlaylist(track)">
                         <span ng-show="!ts.isTrackInPlaylist(track)" class="glyphicon glyphicon-plus-sign"></span>

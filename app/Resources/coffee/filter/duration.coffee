@@ -10,9 +10,8 @@ Duration = () ->
 
             if hours > 0
                 timeString = "#{hours}:"
-
-            if hours > 0 and minutes < 10
-                timeString += "0"
+                if minutes < 10
+                    timeString += "0"
 
             timeString += "#{minutes}:"
 

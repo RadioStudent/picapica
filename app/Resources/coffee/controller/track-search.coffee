@@ -2,7 +2,7 @@
 
 class TrackSearchCtrl
     constructor: (Track, Suggestion, SearchFilter, SortableColumn, SelectedTracks, $http, $sce, $rootScope) ->
-        trackSearch = this
+        trackSearch = @
 
         @tracks = []
         @searchTerm = ""
@@ -13,13 +13,13 @@ class TrackSearchCtrl
         @isTrackInPlaylist = SelectedTracks.isActive
         @toggleInPlaylist = SelectedTracks.toggle
 
-        $rootScope.$on "filters.update", (event) ->
-           trackSearch.filters = SearchFilter.all
-           trackSearch.doSearch()
+        $rootScope.$on "filters.update", (event) =>
+           @filters = SearchFilter.all
+           @doSearch()
 
-        $rootScope.$on "columns.update", (event) ->
-           trackSearch.columns = SortableColumn.all
-           trackSearch.doSearch()
+        $rootScope.$on "columns.update", (event) =>
+           @columns = SortableColumn.all
+           @doSearch()
 
         @typeInInput = (event) ->
             if event.type is "keyup" and event.keyCode is 13
@@ -53,7 +53,7 @@ class TrackSearchCtrl
         @selectSuggestion = (selectedItem, model, label) ->
             SearchFilter.reset()
 
-            if selectedItem.searchInField is true
+            if selectedItem.searchInField
                 SearchFilter.add selectedItem.name,
                                  selectedItem.type + ".name"
             else
