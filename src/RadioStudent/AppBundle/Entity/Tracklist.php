@@ -66,7 +66,8 @@ class Tracklist
      * Set name
      *
      * @param string $name
-     * @return Album
+     *
+     * @return $this
      */
     public function setName($name)
     {
@@ -89,7 +90,8 @@ class Tracklist
      * Set date
      *
      * @param \DateTime $date
-     * @return Album
+     *
+     * @return $this
      */
     public function setDate($date)
     {

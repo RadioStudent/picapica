@@ -39,6 +39,13 @@ class TracklistTrack
     private $trackNum;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="COMMENT", type="string", length=255)
+     */
+    private $comment;
+
+    /**
      * @return Tracklist
      */
     public function getTracklist()
@@ -51,7 +58,7 @@ class TracklistTrack
      *
      * @return $this
      */
-    public function setTracklist($tracklist)
+    public function setTracklist(Tracklist $tracklist)
     {
         $this->tracklist = $tracklist;
 
@@ -71,7 +78,7 @@ class TracklistTrack
      *
      * @return $this
      */
-    public function setTrack($track)
+    public function setTrack(Track $track)
     {
         $this->track = $track;
 
@@ -97,4 +104,25 @@ class TracklistTrack
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
+
+    /**
+     * @param string $comment
+     *
+     * return $this
+     */
+    public function setComment($comment)
+    {
+        $this->comment = $comment;
+
+        return $this;
+    }
+
 }
