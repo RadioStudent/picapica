@@ -1,21 +1,18 @@
 "use strict"
 
 SortableColumn = ($rootScope) ->
-    buildParams = () ->
+    buildParams = ->
         obj = {}
 
         if service.active > -1
             activeColumn = service.all[service.active]
             obj[activeColumn.name] = activeColumn.sortOrder
 
-        return JSON.stringify(obj)
+        JSON.stringify obj
 
     sort = (column, index) ->
         service.active = index
-        if column.sortOrder is "asc"
-            column.sortOrder = "desc"
-        else
-            column.sortOrder = "asc"
+        column.sortOrder = if column.sortOrder is "asc" then "desc" else "asc"
         $rootScope.$broadcast "filters.update"
 
     service =
@@ -30,7 +27,5 @@ SortableColumn = ($rootScope) ->
             { name: "duration",   label: "Duration" }
         ]
         buildParams: buildParams
-
-    return service
 
 module.exports = SortableColumn

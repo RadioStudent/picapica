@@ -1,62 +1,45 @@
 "use strict"
 
-SearchFilter = ($rootScope) ->
+SearchFilter = ($rootScope, _) ->
     class Filter
-        constructor: (@text, type, label, fromAutocomplete) ->
-            @types = Filter.generateFilterTypes(type)
-            @label = label || @text
-            @fromAutocomplete = fromAutocomplete?
+        constructor: (@text, type, label, @fromAutocomplete = false) ->
+            @types = Filter.generateFilterTypes type
+            @label = label or @text
             service.all.push @
             $rootScope.$broadcast "filters.update"
 
-        remove: () ->
-            for filter, index in service.all
-                if angular.equals this, filter
-                    service.all.splice index, 1
-                    break
-            $rootScope.$broadcast "filters.update"
-
-        setType: (type) ->
-            @type = type
+        remove: ->
+            service.all = service.all.filter (filter) =>
+                not angular.equals @, filter
             $rootScope.$broadcast "filters.update"
 
         @generateFilterTypes = (type) ->
             allFilterTypes = [
-                { name: "Artist name", type: "artist.name", active: false, visible: true }
-                { name: "Artist ID",   type: "artist.id",   active: false, visible: false }
-                { name: "Album name",  type: "album.name",  active: false, visible: true }
-                { name: "Album ID",    type: "album.id",    active: false, visible: false }
-                { name: "Track name",  type: "track.name",  active: false, visible: true }
-                { name: "Track ID",    type: "track.id",    active: false, visible: false }
+                { name: "Artist name", type: "artist.name", active: no, visible: yes }
+                { name: "Artist ID",   type: "artist.id",   active: no, visible: no }
+                { name: "Album name",  type: "album.name",  active: no, visible: yes }
+                { name: "Album ID",    type: "album.id",    active: no, visible: no }
+                { name: "Track name",  type: "track.name",  active: no, visible: yes }
+                { name: "Track ID",    type: "track.id",    active: no, visible: no }
             ]
 
-            if type
-                for filterType in allFilterTypes
-                    if filterType.type is type
-                        filterType.active = true
+            _.find(allFilterTypes, {type: type}).active = yes if type
 
-            return allFilterTypes
+            allFilterTypes
 
         @buildParams = () ->
-            params = []
-
-            for filter in service.all
+            params = service.all.map (filter) ->
                 obj = {}
                 obj[filterType.type] = filter.text for filterType in filter.types when filterType.active
+                obj._all = filter.text if angular.equals obj, {}
+                obj
 
-                if angular.equals(obj,{})
-                    obj._all = filter.text
-
-                params.push(obj)
-
-            return JSON.stringify(params)
+            JSON.stringify params
 
     service =
         all: []
-        reset: () ->
-            service.all = []
-        add: (vars...) ->
-            new Filter(vars...)
+        reset: () -> service.all = []
+        add: (vars...) -> new Filter vars...
         buildParams: Filter.buildParams
 
 module.exports = SearchFilter

@@ -11,7 +11,7 @@ SelectedTracks = ($rootScope) ->
             $rootScope.$broadcast 'playlist.update'
 
         isActive: (track) ->
-            return service.all.hasOwnProperty track.id
+            service.all.hasOwnProperty track.id
 
         all: {}
 

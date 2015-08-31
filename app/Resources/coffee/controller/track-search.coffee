@@ -2,8 +2,6 @@
 
 class TrackSearchCtrl
     constructor: (Track, Suggestion, SearchFilter, SortableColumn, SelectedTracks, $http, $sce, $rootScope) ->
-        trackSearch = @
-
         @tracks = []
         @searchTerm = ""
         @filters = SearchFilter.all
@@ -13,27 +11,25 @@ class TrackSearchCtrl
         @isTrackInPlaylist = SelectedTracks.isActive
         @toggleInPlaylist = SelectedTracks.toggle
 
-        $rootScope.$on "filters.update", (event) =>
+        $rootScope.$on "filters.update", =>
            @filters = SearchFilter.all
            @doSearch()
 
-        $rootScope.$on "columns.update", (event) =>
+        $rootScope.$on "columns.update", =>
            @columns = SortableColumn.all
            @doSearch()
 
         @typeInInput = (event) ->
             if event.type is "keyup" and event.keyCode is 13
-                @addTextFilter(event.shiftKey ? "add" : "replace")
+                @addTextFilter if event.shiftKey then "add" else "replace"
 
         @addTextFilter = (type) ->
             if @searchTerm.length > 0
-                if type is "replace"
-                    SearchFilter.reset()
-
-                SearchFilter.add(@searchTerm)
+                SearchFilter.reset() if type is "replace"
+                SearchFilter.add @searchTerm
                 @searchTerm = ""
 
-        @doSearch = (sortParams) ->
+        @doSearch = (sortParams) =>
             if SearchFilter.all.length is 0
                 @tracks = []
             else
@@ -41,30 +37,28 @@ class TrackSearchCtrl
                 Track.search
                     search: SearchFilter.buildParams()
                     sort:   SortableColumn.buildParams(),
-                    (response) ->
-                        trackSearch.tracks = response
+                    (response) =>
+                        @tracks = response
 
         @getSuggestions = (searchInput) ->
-            if searchInput.length is 0 or typeof searchInput is "object"
-                return
-
-            return Suggestion.query(search: searchInput).$promise
+            return if searchInput.length is 0 or typeof searchInput is "object"
+            Suggestion.query(search: searchInput).$promise
 
         @selectSuggestion = (selectedItem, model, label) ->
             SearchFilter.reset()
 
             if selectedItem.searchInField
                 SearchFilter.add selectedItem.name,
-                                 selectedItem.type + ".name"
+                                 "#{selectedItem.type}.name"
             else
                 SearchFilter.add selectedItem.id,
-                                 selectedItem.type + ".id",
-                                 selectedItem.type + ": " + selectedItem.name,
-                                 true
+                                 "#{selectedItem.type}.id",
+                                 "#{selectedItem.type}: #{selectedItem.name}",
+                                 yes
 
             @searchTerm = ""
 
-        if @filters.length > 0 then @doSearch()
+        @doSearch() if @filters.length > 0
 
         return
 
