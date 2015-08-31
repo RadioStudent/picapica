@@ -21,6 +21,7 @@ npm-debug.log*
 /web/js
 /web/partials
 /web/fonts
+/web/icons
 npm-debug.log
 .sass-cache
 

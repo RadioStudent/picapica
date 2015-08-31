@@ -26,6 +26,11 @@ module.exports = (grunt) ->
                 cwd: "<%= npmPath %>/bootstrap-sass/assets/fonts/bootstrap/"
                 src: "*"
                 dest: "<%= assetsPath %>/fonts"
+            angularMaterialIconSets:
+                expand: true
+                cwd: "<%= resourcesPath %>/icons"
+                src: ["**/*.svg"]
+                dest: "<%= assetsPath %>/images/icons"
         # Compiles JS from coffee, enables Node.js module support
         browserify:
             main:

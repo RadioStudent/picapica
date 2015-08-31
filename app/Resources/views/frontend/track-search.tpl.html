@@ -1,61 +1,92 @@
-<pp-navbar active-item="'search'"></pp-navbar>
-
-<div class="container" ng-controller="TrackSearchCtrl as ts">
-    <div class="input-group">
-        <input type="text"
-               ng-keyup="ts.typeInInput($event)"
-               ng-model="ts.searchTerm"
-               placeholder="enter search term"
-               typeahead="artist.name for artist in ts.getSuggestions($viewValue)"
-               typeahead-on-select="ts.selectSuggestion($item, $model, $label)"
-               typeahead-wait-ms="300"
-               typeahead-template-url="/partials/_autocomplete.tpl.html"
-               typeahead-focus-first="false"
-               class="form-control search-bar">
-
-        <span class="input-group-btn">
-            <button class="btn btn-default" ng-click="ts.addTextFilter('replace')">Search</button>
-            <button class="btn btn-default" ng-click="ts.addTextFilter('add')">+</button>
-        </span>
-    </div>
-
-    <br>
-
-    <div class="filters">
-        <div class="well well-sm filter-wrapper" ng-repeat="filter in ts.filters">
-            <h2 class="filter-label">{{ filter.label }}</h2>
-            <span ng-click="filter.remove()" class="glyphicon glyphicon-remove filter-remove-icon" aria-hidden="true"></span>
-            <label class="filter-type" ng-if="!filter.fromAutocomplete" ng-repeat="type in filter.types" ng-show="type.visible">
-                <input type="checkbox" ng-model="type.active" ng-change="ts.doSearch()"> {{ type.name }}
-            </label>
+<md-content style="height: 100%;" ng-controller="AppCtrl as ac">
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <md-button class="md-icon-button" aria-label="Settings" ng-click="ac.toggleLeft()">
+                <md-icon md-svg-icon="navigation:menu"></md-icon>
+            </md-button>
+            <h2>
+                <span>Toolbar with Icon Buttons</span>
+            </h2>
         </div>
-    </div>
+    </md-toolbar>
+    <section layout="row" flex class="main-content">
+        <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
+            <md-toolbar class="md-theme-indigo">
+                <h1 class="md-toolbar-tools">Sidenav Left</h1>
+            </md-toolbar>
+            <md-content layout-padding>
+                <md-button class="md-primary" hide-gt-md>
+                    Close Sidenav Left
+                </md-button>
+                <p hide-md show-gt-md>
+                    This sidenav is locked open on your device. To go back to the default behavior,
+                    narrow your display.
+                </p>
+            </md-content>
+        </md-sidenav>
+        <md-content flex layout-padding>
+            <pp-navbar active-item="'search'"></pp-navbar>
 
-    <table class="table table-striped table-condensed table-hover">
-        <thead>
-            <tr>
-                <th ng-repeat="column in ts.columns" ng-click="ts.sort(column, $index)">{{ column.label }}
-                    <span class="glyphicon glyphicon-triangle-top" ng-show="column.sortOrder === 'asc'"></span>
-                    <span class="glyphicon glyphicon-triangle-bottom" ng-show="column.sortOrder === 'desc'"></span>
-                </th>
-                <th>PL</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr ng-repeat="track in ts.tracks">
-                <td ng-bind="track.fid"></td>
-                <td ng-bind="track.artistName"></td>
-                <td ng-bind="track.name"></td>
-                <td ng-bind="track.albumName"></td>
-                <td ng-bind="track.year"></td>
-                <td ng-bind="track.duration | duration" class="table-duration"></td>
-                <td>
-                    <button class="btn btn-default" type="submit" ng-click="ts.toggleInPlaylist(track)">
-                        <span ng-show="!ts.isTrackInPlaylist(track)" class="glyphicon glyphicon-plus-sign"></span>
-                        <span ng-show="ts.isTrackInPlaylist(track)"  class="glyphicon glyphicon-minus-sign"></span>
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+            <div class="container" ng-controller="TrackSearchCtrl as ts">
+                <div class="input-group">
+                    <input type="text"
+                           ng-keyup="ts.typeInInput($event)"
+                           ng-model="ts.searchTerm"
+                           placeholder="enter search term"
+                           typeahead="artist.name for artist in ts.getSuggestions($viewValue)"
+                           typeahead-on-select="ts.selectSuggestion($item, $model, $label)"
+                           typeahead-wait-ms="300"
+                           typeahead-template-url="/partials/_autocomplete.tpl.html"
+                           typeahead-focus-first="false"
+                           class="form-control search-bar">
+
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" ng-click="ts.addTextFilter('replace')">Search</button>
+                        <button class="btn btn-default" ng-click="ts.addTextFilter('add')">+</button>
+                    </span>
+                </div>
+
+                <br>
+
+                <div class="filters">
+                    <div class="well well-sm filter-wrapper" ng-repeat="filter in ts.filters">
+                        <h2 class="filter-label">{{ filter.label }}</h2>
+                        <span ng-click="filter.remove()" class="glyphicon glyphicon-remove filter-remove-icon" aria-hidden="true"></span>
+                        <label class="filter-type" ng-if="!filter.fromAutocomplete" ng-repeat="type in filter.types" ng-show="type.visible">
+                            <input type="checkbox" ng-model="type.active" ng-change="ts.doSearch()"> {{ type.name }}
+                        </label>
+                    </div>
+                </div>
+
+                <table class="table table-striped table-condensed table-hover">
+                    <thead>
+                        <tr>
+                            <th ng-repeat="column in ts.columns" ng-click="ts.sort(column, $index)">{{ column.label }}
+                                <span class="glyphicon glyphicon-triangle-top" ng-show="column.sortOrder === 'asc'"></span>
+                                <span class="glyphicon glyphicon-triangle-bottom" ng-show="column.sortOrder === 'desc'"></span>
+                            </th>
+                            <th>PL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="track in ts.tracks">
+                            <td ng-bind="track.fid"></td>
+                            <td ng-bind="track.artistName"></td>
+                            <td ng-bind="track.name"></td>
+                            <td ng-bind="track.albumName"></td>
+                            <td ng-bind="track.year"></td>
+                            <td ng-bind="track.duration | duration" class="table-duration"></td>
+                            <td>
+                                <button class="btn btn-default" type="submit" ng-click="ts.toggleInPlaylist(track)">
+                                    <span ng-show="!ts.isTrackInPlaylist(track)" class="glyphicon glyphicon-plus-sign"></span>
+                                    <span ng-show="ts.isTrackInPlaylist(track)"  class="glyphicon glyphicon-minus-sign"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </md-content>
+    </section>
+
+</md-content>
