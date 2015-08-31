@@ -23,11 +23,11 @@
 
     <div class="filters">
         <div class="well well-sm filter-wrapper" ng-repeat="filter in ts.filters">
-            <h2 class="filter-label">{{ filter.label }}</h2>
-            <span ng-click="filter.remove()" class="glyphicon glyphicon-remove filter-remove-icon" aria-hidden="true"></span>
             <label class="filter-type" ng-if="!filter.fromAutocomplete" ng-repeat="type in filter.types" ng-show="type.visible">
                 <input type="checkbox" ng-model="type.active" ng-change="ts.doSearch()"> {{ type.name }}
             </label>
+            <span ng-click="filter.remove()" class="glyphicon glyphicon-remove filter-remove-icon" aria-hidden="true"></span>
+            <h2 class="filter-label">{{ filter.label }}</h2>
         </div>
     </div>
 
@@ -43,17 +43,15 @@
         </thead>
         <tbody>
             <tr ng-repeat="track in ts.tracks">
-                <td ng-bind="track.fid"></td>
+                <td ng-bind="track.fid" class="fonoteka-id"></td>
                 <td ng-bind="track.artistName"></td>
                 <td ng-bind="track.name"></td>
                 <td ng-bind="track.albumName"></td>
                 <td ng-bind="track.year"></td>
                 <td ng-bind="track.duration | duration" class="table-duration"></td>
                 <td>
-                    <button class="btn btn-default" type="submit" ng-click="ts.toggleInPlaylist(track)">
-                        <span ng-show="!ts.isTrackInPlaylist(track)" class="glyphicon glyphicon-plus-sign"></span>
-                        <span ng-show="ts.isTrackInPlaylist(track)"  class="glyphicon glyphicon-minus-sign"></span>
-                    </button>
+                    <span ng-click="ts.toggleInPlaylist(track)" ng-show="!ts.isTrackInPlaylist(track)" class="glyphicon glyphicon-plus-sign"></span>
+                    <span ng-click="ts.toggleInPlaylist(track)" ng-show="ts.isTrackInPlaylist(track)"  class="glyphicon glyphicon-minus-sign"></span>
                 </td>
             </tr>
         </tbody>

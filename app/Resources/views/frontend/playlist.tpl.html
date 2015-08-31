@@ -11,9 +11,7 @@
                 <td ng-bind="track.year"></td>
                 <td ng-bind="track.duration | duration"></td>
                 <td>
-                    <button class="btn btn-default" type="submit" ng-click="pl.toggleInPlaylist(track)">
-                        <span class="glyphicon glyphicon-minus-sign"></span>
-                    </button>
+                    <span ng-click="pl.toggleInPlaylist(track)" class="glyphicon glyphicon-minus-sign"></span>
                 </td>
             </tr>
         </tbody>
