@@ -1,3 +1,6 @@
+fos_user:
+    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
 radio_student_app:
     resource: "@RadioStudentAppBundle/Controller/"
     type:     annotation

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="picapica" default="db">
-    <property name="env" value="dev"/>
+<project name="picapica" default="remove-cache">
+    <property name="env" value="assets"/>
     <property name="dir.app" value="${project.basedir}/app" />
     <property name="dir.web" value="${project.basedir}/web" />
     <property name="dir.src" value="${project.basedir}/src" />

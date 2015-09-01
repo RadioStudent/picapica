@@ -31,6 +31,13 @@ class Author
     private $name;
 
     /**
+     * @var User
+     *
+     * @ORM\OneToOne(targetEntity="User")
+     */
+    private $user;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -63,4 +70,25 @@ class Author
     {
         return $this->name;
     }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User User $user
+     *
+     * @return $this
+     */
+    public function setUser(User $user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
 }
