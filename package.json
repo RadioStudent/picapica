@@ -17,6 +17,7 @@
     "angular-resource": "^1.4.5",
     "angular-route": "^1.4.5",
     "angular-sanitize": "^1.4.5",
+    "angular-ui-sortable": "^0.13.4",
     "bootstrap-sass": "^3.3.5",
     "coffeeify": "^1.1.0",
     "grunt": "~0.4.5",

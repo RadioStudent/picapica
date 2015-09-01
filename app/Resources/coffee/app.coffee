@@ -5,8 +5,9 @@ resource  = require "angular-resource"
 route     = require "angular-route"
 sanitize  = require "angular-sanitize"
 bootstrap = require "angular-bootstrap-npm/dist/angular-bootstrap"
+require "angular-ui-sortable"
 
-angular.module "picapicaApp", [route, sanitize, resource, bootstrap]
+angular.module "picapicaApp", [route, sanitize, resource, bootstrap, 'ui.sortable']
     .config [
         "$routeProvider"
         ($routeProvider) ->

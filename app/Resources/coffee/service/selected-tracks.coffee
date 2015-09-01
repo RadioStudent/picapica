@@ -1,18 +1,18 @@
 "use strict"
 
-SelectedTracks = ($rootScope) ->
+SelectedTracks = ($rootScope, _) ->
     service =
         toggle: (track) ->
             if service.isActive track
-                delete service.all[track.id]
+                _.remove service.all, 'fid', track.fid
             else
-                service.all[track.id] = angular.copy track
+                service.all.push angular.copy(track)
 
             $rootScope.$broadcast 'playlist.update'
 
         isActive: (track) ->
-            service.all.hasOwnProperty track.id
+            _.some service.all, 'fid', track.fid
 
-        all: {}
+        all: []
 
 module.exports = SelectedTracks
