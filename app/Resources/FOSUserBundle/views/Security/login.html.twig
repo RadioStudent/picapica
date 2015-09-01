@@ -5,7 +5,6 @@
 {% block fos_user_content %}
 
 <div class="col-sm-6 col-sm-offset-3">
-    <img src="images/magpie-large.svg" style="height: 250px; width: 100%; margin: 50px auto;"/>
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
@@ -15,13 +14,13 @@
             <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
             <fieldset>
                 <div class="form-group">
-                    <label for="username" class="col-lg-2 control-label">Username</label>
+                    <label for="username" class="col-lg-2 control-label">Username:</label>
                     <div class="col-lg-10">
                         <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}" required="required" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="password" class="col-lg-2 control-label">Password</label>
+                    <label for="password" class="col-lg-2 control-label">Password:</label>
                     <div class="col-lg-10">
                         <input type="password" class="form-control" id="password" name="_password" required="required" />
                         <div class="checkbox">
@@ -33,7 +32,7 @@
                 </div>
                 <div class="form-group">
                     <div class="col-lg-10 col-lg-offset-2">
-                        <input type="submit" id="_submit" name="_submit" value="Submit" class="btn btn-primary" />
+                        <input type="submit" id="_submit" name="_submit" value="Login" class="btn btn-primary" />
                     </div>
                 </div>
             </fieldset>
