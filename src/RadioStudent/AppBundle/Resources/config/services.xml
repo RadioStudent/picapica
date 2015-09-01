@@ -15,6 +15,11 @@
             <argument type="service" id="fos_elastica.finder.picapica.track" />
         </service>
         <service id="search.transformer.model.artist" class="RadioStudent\AppBundle\Transformer\ArtistToElasticaTransformer" />
+
+        <service id="listener.author.creator" class="RadioStudent\AppBundle\EventListener\AuthorCreator">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+            <tag name="kernel.event_subscriber" />
+        </service>
     </services>
 
 </container>
