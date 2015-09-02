@@ -20,10 +20,11 @@ class PlaylistCtrl
 
         @terms = Term.query()
         @trackList = TrackList.get {id: 1}, =>
-            TrackList.update {id: 1}, @trackList
-
             SelectedTracks.all = @trackList.tracks
             $rootScope.$broadcast "playlist.update"
+
+        @save = =>
+            TrackList.update {id: @trackList.id}, @trackList
 
         return
 
