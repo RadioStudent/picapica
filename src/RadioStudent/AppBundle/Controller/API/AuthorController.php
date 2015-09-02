@@ -24,13 +24,18 @@ class AuthorController extends FOSRestController
      */
     public function cgetAction(Request $request)
     {
-        //TODO: serve authors
         $repo = $this
             ->container
             ->get('doctrine.orm.entity_manager')
             ->getRepository('RadioStudentAppBundle:Author');
 
-        $data = $repo->findAll();
+        //TODO: access control?
+        $authors = $repo->findAll();
+
+        $data = [];
+        foreach ($authors as $author) {
+            $data[] = $author->getFlat();
+        }
 
         $view = $this->view($data, 200);
 
@@ -49,5 +54,15 @@ class AuthorController extends FOSRestController
         $view = $this->view($term->getFlat('long'), 200);
 
         return $this->handleView($view);
+    }
+
+    public function postAction(Request $request)
+    {
+
+    }
+
+    public function putAction($id, Request $request)
+    {
+
     }
 }

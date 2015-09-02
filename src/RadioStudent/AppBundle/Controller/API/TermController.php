@@ -24,13 +24,17 @@ class TermController extends FOSRestController
      */
     public function cgetAction(Request $request)
     {
-        //TODO: serve terms
         $repo = $this
             ->container
             ->get('doctrine.orm.entity_manager')
             ->getRepository('RadioStudentAppBundle:Term');
 
-        $data = $repo->findAll();
+        $terms = $repo->findAll();
+
+        $data = [];
+        foreach ($terms as $term) {
+            $data[] = $term->getFlat();
+        }
 
         $view = $this->view($data, 200);
 
