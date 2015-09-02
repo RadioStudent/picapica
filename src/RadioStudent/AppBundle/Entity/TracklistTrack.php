@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TracklistTrack
 {
+    //TODO: primary key
     /**
      * @var Tracklist
      *
@@ -43,7 +44,7 @@ class TracklistTrack
      *
      * @ORM\Column(name="COMMENT", type="string", length=255)
      */
-    private $comment;
+    private $comment = "";
 
     /**
      * @return Tracklist
@@ -116,7 +117,7 @@ class TracklistTrack
     /**
      * @param string $comment
      *
-     * return $this
+     * @return $this
      */
     public function setComment($comment)
     {

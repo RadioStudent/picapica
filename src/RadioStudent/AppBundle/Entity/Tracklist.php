@@ -9,9 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Tracklist
  *
- * @ORM\Table(
- *  name="tracklists"
- * )
+ * @ORM\Table("tracklists")
  * @ORM\Entity
  */
 class Tracklist
@@ -46,6 +44,22 @@ class Tracklist
      * @ORM\OrderBy({"trackNum" = "ASC"})
      */
     private $tracklistTracks;
+
+    /**
+     * @var Author
+     *
+     * @ORM\OneToOne(targetEntity="Author")
+     * @ORM\JoinColumn(name="AUTHOR_ID", referencedColumnName="ID")
+     */
+    private $author;
+
+    /**
+     * @var Term
+     *
+     * @ORM\OneToOne(targetEntity="Term")
+     * @ORM\JoinColumn(name="TERM_ID", referencedColumnName="ID")
+     */
+    private $term;
 
     public function __construct()
     {
@@ -126,6 +140,46 @@ class Tracklist
     public function setTracklistTracks($tracklistTracks)
     {
         $this->tracklistTracks = $tracklistTracks;
+
+        return $this;
+    }
+
+    /**
+     * @return Author
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+    /**
+     * @param Author $author
+     *
+     * @return $this
+     */
+    public function setAuthor(Author $author)
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * @return Term
+     */
+    public function getTerm()
+    {
+        return $this->term;
+    }
+
+    /**
+     * @param Term $term
+     *
+     * @return $this
+     */
+    public function setTerm(Term $term)
+    {
+        $this->term = $term;
 
         return $this;
     }

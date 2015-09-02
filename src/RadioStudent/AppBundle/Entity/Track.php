@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table("data_tracks")
  * @ORM\Entity
+ *
+ * @ORM\Entity(repositoryClass="RadioStudent\AppBundle\Entity\Repository\TrackRepository")
  */
 class Track extends BaseEntity
 {

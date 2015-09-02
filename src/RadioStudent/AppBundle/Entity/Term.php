@@ -5,12 +5,12 @@ namespace RadioStudent\AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Author
+ * Term
  *
- * @ORM\Table("authors")
+ * @ORM\Table("terms")
  * @ORM\Entity
  */
-class Author
+class Term
 {
     /**
      * @var integer
@@ -29,12 +29,11 @@ class Author
     private $name;
 
     /**
-     * @var User
+     * @var \DateTime
      *
-     * @ORM\OneToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="USER_ID", referencedColumnName="ID")
+     * @ORM\Column(name="TIME", type="time")
      */
-    private $user;
+    private $time;
 
     /**
      * Get id
@@ -71,21 +70,21 @@ class Author
     }
 
     /**
-     * @return User
+     * @return \DateTime
      */
-    public function getUser()
+    public function getTime()
     {
-        return $this->user;
+        return $this->time;
     }
 
     /**
-     * @param User User $user
+     * @param \DateTime $time
      *
      * @return $this
      */
-    public function setUser(User $user)
+    public function setTime(\DateTime $time)
     {
-        $this->user = $user;
+        $this->time = $time;
 
         return $this;
     }

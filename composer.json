@@ -23,7 +23,8 @@
         "jms/serializer-bundle": "0.13.*",
         "pagerfanta/pagerfanta": "~1.0",
         "phing/phing": "~2.10",
-        "friendsofsymfony/user-bundle": "~2.0@dev"
+        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "doctrine/doctrine-fixtures-bundle": "^2.2"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
