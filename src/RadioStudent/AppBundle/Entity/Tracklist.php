@@ -187,12 +187,18 @@ class Tracklist
     public function getFlat($preset = 'short')
     {
         $result = [
-            'id'              => $this->id,
-            'name'            => $this->name,
-            'date'            => $this->date->format("Y-m-d"),
-            'term_id'         => $this->term->getId(),
-            'author_id'       => $this->author->getId(),
+            'id'             => $this->id,
+            'name'           => $this->name,
+            'date'           => $this->date->format("Y-m-d"),
+            'termId'         => $this->term->getId(),
+            'authorId'       => $this->author->getId(),
         ];
+
+        if ($preset == 'short') {
+            $result['numTracks'] = count($this->tracklistTracks);
+
+            return $result;
+        }
 
         $result['tracks'] = [];
         foreach ($this->tracklistTracks as $t) {
