@@ -12,11 +12,18 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class TracklistTrack
 {
-    //TODO: primary key
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ID", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
     /**
      * @var Tracklist
      *
-     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Tracklist", inversedBy="tracklistTracks")
      * @ORM\JoinColumn(name="TRACKLIST_ID", referencedColumnName="ID")
      */
@@ -25,7 +32,6 @@ class TracklistTrack
     /**
      * @var Track
      *
-     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Track")
      * @ORM\JoinColumn(name="TRACK_ID", referencedColumnName="ID")
      */
@@ -34,7 +40,6 @@ class TracklistTrack
     /**
      * @var integer
      *
-     * @ORM\Id
      * @ORM\Column(name="TRACK_NUM", type="integer")
      */
     private $trackNum;
@@ -45,6 +50,14 @@ class TracklistTrack
      * @ORM\Column(name="COMMENT", type="string", length=255)
      */
     private $comment = "";
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * @return Tracklist
@@ -125,5 +138,4 @@ class TracklistTrack
 
         return $this;
     }
-
 }

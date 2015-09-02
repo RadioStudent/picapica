@@ -48,7 +48,7 @@ class Tracklist
     /**
      * @var Author
      *
-     * @ORM\OneToOne(targetEntity="Author")
+     * @ORM\ManyToOne(targetEntity="Author")
      * @ORM\JoinColumn(name="AUTHOR_ID", referencedColumnName="ID")
      */
     private $author;
@@ -56,7 +56,7 @@ class Tracklist
     /**
      * @var Term
      *
-     * @ORM\OneToOne(targetEntity="Term")
+     * @ORM\ManyToOne(targetEntity="Term")
      * @ORM\JoinColumn(name="TERM_ID", referencedColumnName="ID")
      */
     private $term;
@@ -204,6 +204,7 @@ class Tracklist
         foreach ($this->tracklistTracks as $t) {
             $track = $t->getTrack();
             $result['tracks'][] = [
+                'tracklistTrackId'  => $t->getId(),
                 'id'                => $track->getId(),
                 'fid'               => $track->getFid(),
                 'trackNum'          => $track->getTrackNum(),

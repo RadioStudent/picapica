@@ -26,7 +26,7 @@ class LoadUserData implements FixtureInterface {
         $tracklist->setName("Oprema 1");
         $tracklist->setTerm($manager->getRepository("RadioStudentAppBundle:Term")->find(1));
         $tracklist->setDate(new \DateTime("2015-09-02 07:00:00"));
-        $tracklist->setAuthor($manager->getRepository("RadioStudentAppBundle:Author")->find(2));
+        $tracklist->setAuthor($manager->getRepository("RadioStudentAppBundle:Author")->find(1));
 
         for ($i = 0; $i < 20; $i++) {
             $track = $manager->getRepository("RadioStudentAppBundle:Track")->findRandom();
