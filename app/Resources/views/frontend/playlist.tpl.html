@@ -8,7 +8,7 @@
                 <input id="playlist-date"
                        type="text"
                        class="form-control"
-                       ng-model="pl.selectedDate"
+                       ng-model="pl.trackList.date"
                        ng-required="true"
                        ng-focus="pl.datepicker.open()"
                        is-open="pl.datepicker.opened"
@@ -19,15 +19,23 @@
         </div>
         <div class="col-sm-4">
             <div class="form-group">
-                <label class="control-label" for="playlist-time">Time</label>
-                <select id="playlist-time"
+                <label class="control-label" for="playlist-term">Time</label>
+                <select id="playlist-term"
                         class="form-control"
-                        ng-model="pl.selectedTime"
-                        ng-options="time as time.label group by time.group for time in pl.times">
+                        ng-model="pl.trackList.termId"
+                        ng-options="term.id as (term.name + ' - ' + term.time) group by term.group for term in pl.terms">
                 </select>
             </div>
         </div>
         <div class="col-sm-4">
+            <div class="form-group playlist-name">
+                <label class="control-label" for="playlist-name">Name</label>
+                <input id="playlist-name"
+                       type="text"
+                       class="form-control"
+                       ng-model="pl.trackList.name"
+                       ng-required="true" />
+            </div>
         </div>
     </div>
 
@@ -47,6 +55,14 @@
             </tr>
         </tbody>
     </table>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="btn btn-primary">
+                Save
+            </div>
+        </div>
+    </div>
 
     <progressbar max="3600 * 4" value="pl.totalDuration">{{pl.totalDuration | duration}}</progressbar>
 </div>
