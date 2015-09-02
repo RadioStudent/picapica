@@ -18,6 +18,10 @@ API_tracks:
     type: rest
     resource: @RadioStudentAppBundle/Controller/API/TrackController.php
 
+API_tracklists:
+    type: rest
+    resource: @RadioStudentAppBundle/Controller/API/TracklistController.php
+
 API_autocomplete:
     type: rest
     resource: @RadioStudentAppBundle/Controller/API/AutoCompleteController.php

@@ -184,4 +184,36 @@ class Tracklist
         return $this;
     }
 
+    public function getFlat($preset = 'short')
+    {
+        $result = [
+            'id'              => $this->id,
+            'name'            => $this->name,
+            'date'            => $this->date->format("Y-m-d"),
+            'term_id'         => $this->term->getId(),
+            'author_id'       => $this->author->getId(),
+        ];
+
+        $result['tracks'] = [];
+        foreach ($this->tracklistTracks as $t) {
+            $track = $t->getTrack();
+            $result['tracks'][] = [
+                'id'                => $track->getId(),
+                'fid'               => $track->getFid(),
+                'trackNum'          => $track->getTrackNum(),
+                'name'              => $track->getName(),
+                'year'              => $track->getDate()? $track->getDate()->format('Y'): null,
+                'artistName'        => $track->getArtist()->getCorrectName(),
+                'artistId'          => $track->getArtist()->getId(),
+                'albumName'         => $track->getAlbum()->getName(),
+                'albumArtistName'   => $track->getAlbum()->getAlbumArtistName(),
+                'albumId'           => $track->getAlbum()->getId(),
+                'duration'          => $track->getDuration(),
+                'languages'         => $track->getLanguages(),
+                'genres'            => $track->getGenres(),
+            ];
+        }
+
+        return $result;
+    }
 }
