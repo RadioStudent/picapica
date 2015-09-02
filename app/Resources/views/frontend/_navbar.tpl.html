@@ -6,14 +6,13 @@
             </svg>
             <a class="navbar-brand" href="#">PicaPica</a>
         </div>
-        <div>
-            <ul class="nav navbar-nav">
-                <li ng-class="{ active : activeItem === 'search' }"><a href="/#/search">Search</a></li>
-                <li ng-class="{ active : activeItem === 'playlist' }"><a href="/#/playlist">Playlist</a></li>
-                <li ng-class="{ active : activeItem === 'editor' }"><a>Editor</a></li>
-            </ul>
-        </div>
+        <ul class="nav navbar-nav">
+            <li ng-class="{ active : activeItem === 'search' }"><a href="/#/search">Search</a></li>
+            <li ng-class="{ active : activeItem === 'playlist' }"><a href="/#/playlist">Playlist</a></li>
+            <li ng-class="{ active : activeItem === 'editor' }"><a>Editor</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/login">{{ username }}</a></li>
+        </ul>
     </div>
 </nav>
-
-<h1>{{ url }}</h1>
