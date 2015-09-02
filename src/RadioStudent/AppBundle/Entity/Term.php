@@ -38,7 +38,7 @@ class Term
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -62,7 +62,7 @@ class Term
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -89,4 +89,15 @@ class Term
         return $this;
     }
 
+    public function getFlat($preset = 'short')
+    {
+        $result = [
+            'id'        => $this->id,
+            'name'      => $this->name,
+            'time'      => $this->time->format("H:i:s"),
+            'group'     => "Weekday", //TODO: term groups!
+        ];
+
+        return $result;
+    }
 }

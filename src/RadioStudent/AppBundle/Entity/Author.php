@@ -90,4 +90,13 @@ class Author
         return $this;
     }
 
+    public function getFlat($preset = 'short')
+    {
+        $result = [
+            'id'        => $this->id,
+            'name'      => $this->name,
+        ];
+
+        return $result;
+    }
 }

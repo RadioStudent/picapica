@@ -22,6 +22,14 @@ API_tracklists:
     type: rest
     resource: @RadioStudentAppBundle/Controller/API/TracklistController.php
 
+API_terms:
+    type: rest
+    resource: @RadioStudentAppBundle/Controller/API/TermController.php
+
+API_authors:
+    type: rest
+    resource: @RadioStudentAppBundle/Controller/API/AuthorController.php
+
 API_autocomplete:
     type: rest
     resource: @RadioStudentAppBundle/Controller/API/AutoCompleteController.php
