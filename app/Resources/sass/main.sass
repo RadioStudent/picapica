@@ -1,3 +1,10 @@
+.form-control:focus
+    border-color: #e7e7e7
+    box-shadow: inset 0 2px 0 #e7e7e7, 0 0 3px #fff200
+
+*:focus
+    outline: none
+
 .dropdown
     &-suggestion-text em
         font-style: normal
@@ -37,9 +44,6 @@
 
 .form-control.search-bar
     height: 36.5px
-    &:focus
-        border-color: #e7e7e7
-        box-shadow: inset 0 2px 0 #e7e7e7, 0 0 3px #fff200
 
 .search-bar
     text-transform: uppercase
@@ -55,3 +59,7 @@
 .results
     th, .fonoteka-id
         white-space: nowrap
+
+.playlist
+    .playlist-date *:focus
+        outline: none

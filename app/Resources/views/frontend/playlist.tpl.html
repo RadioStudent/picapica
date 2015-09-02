@@ -1,6 +1,37 @@
 <pp-navbar active-item="'playlist'"></pp-navbar>
 
-<div class="container" ng-controller="PlaylistCtrl as pl">
+<div class="container playlist" ng-controller="PlaylistCtrl as pl">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group playlist-date">
+                <label class="control-label" for="playlist-date">Date</label>
+                <input id="playlist-date"
+                       type="text"
+                       class="form-control"
+                       ng-model="pl.selectedDate"
+                       ng-required="true"
+                       ng-focus="pl.datepicker.open()"
+                       is-open="pl.datepicker.opened"
+                       datepicker-popup="{{pl.datepicker.format}}"
+                       datepicker-options="pl.datepicker.options"
+                       close-text="Close" />
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label" for="playlist-time">Time</label>
+                <select id="playlist-time"
+                        class="form-control"
+                        ng-model="pl.selectedTime"
+                        ng-options="time as time.label group by time.group for time in pl.times">
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+        </div>
+    </div>
+
+
     <table class="table table-striped table-condensed table-hover">
         <tbody ui-sortable ng-model="pl.tracks">
             <tr ng-repeat="track in pl.tracks">
