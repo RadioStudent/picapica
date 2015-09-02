@@ -9,7 +9,7 @@ module.exports = (grunt) ->
         clean: [
             "<%= assetsPath %>/partials"
             "<%= assetsPath %>/css"
-            "<%= assetsPath %>/images"
+            "<%= assetsPath %>/images/sprite.svg"
             "<%= assetsPath %>/js"
             "<%= assetsPath %>/fonts"
         ]
