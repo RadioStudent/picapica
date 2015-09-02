@@ -1,3 +1,4 @@
+// General
 .form-control:focus
     border-color: #e7e7e7
     box-shadow: inset 0 2px 0 #e7e7e7, 0 0 3px #fff200
@@ -5,33 +6,7 @@
 *:focus
     outline: none
 
-.dropdown
-    &-suggestion-text em
-        font-style: normal
-        font-weight: bold
-
-.filter
-    &-wrapper
-        position: relative
-    &-label
-        font-size: 16px
-        margin: 0 0 0 20px
-    &-type
-        float: right
-        cursor: pointer
-        font-weight: normal
-        margin: 0 10px 0 0
-        &:first-child
-            margin-right: 0
-        input
-            cursor: inherit
-    &-remove-icon
-        cursor: pointer
-        margin-top: -7px
-        position: absolute
-        left: 6px
-        top: 50%
-
+// Top navigation
 .navbar-default
     background: #fff200
     border-color: #eee100
@@ -42,24 +17,51 @@
         height: 32px
         margin: 15px 5px 0 0
 
-.form-control.search-bar
-    height: 36.5px
+// Search page
+.search
+    .dropdown-suggestion-text em
+        font-style: normal
+        font-weight: bold
 
-.search-bar
-    text-transform: uppercase
+    .precomputed-suggestion
+        text-decoration: underline
+        strong
+            text-transform: uppercase
 
-.precomputed-suggestion
-    text-decoration: underline
-    strong
+    .filter
+        &-wrapper
+            position: relative
+        &-label
+            font-size: 16px
+            margin: 0 0 0 20px
+        &-type
+            float: right
+            cursor: pointer
+            font-weight: normal
+            margin: 0 10px 0 0
+            &:first-child
+                margin-right: 0
+            input
+                cursor: inherit
+        &-remove-icon
+            cursor: pointer
+            margin-top: -7px
+            position: absolute
+            left: 6px
+            top: 50%
+
+    .form-control.search-bar
+        height: 36.5px
         text-transform: uppercase
 
-.table-duration
-    text-align: right
+    .table-duration
+        text-align: right
 
-.results
-    th, .fonoteka-id
-        white-space: nowrap
+    .results
+        th, .fonoteka-id
+            white-space: nowrap
 
+// Playlist page
 .playlist
     .playlist-date *:focus
         outline: none

@@ -1,4 +1,4 @@
 <a class="dropdown-suggestion-text" ng-class="{ 'precomputed-suggestion': match.model.searchInField }">
-    <span ng-bind-html="match.model.label"></span>
+    <span bind-html-unsafe="match.model.label"></span>
 </a>
 </li ng-if="match.model.searchInField && !match.model.last"><li ng-if="match.model.searchInField && !match.model.last" class="divider">
