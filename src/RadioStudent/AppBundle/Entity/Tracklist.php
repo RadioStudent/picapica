@@ -10,7 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * Tracklist
  *
  * @ORM\Table("tracklists")
- * @ORM\Entity
+ *
+ * @ORM\Entity(repositoryClass="RadioStudent\AppBundle\Entity\Repository\TracklistRepository")
  */
 class Tracklist
 {
@@ -40,7 +41,12 @@ class Tracklist
     /**
      * @var Collection|TracklistTrack[]
      *
-     * @ORM\OneToMany(targetEntity="TracklistTrack", mappedBy="tracklist")
+     * @ORM\OneToMany(
+     *  targetEntity="TracklistTrack",
+     *  mappedBy="tracklist",
+     *  cascade={"persist", "remove"},
+     *  orphanRemoval=true
+     * )
      * @ORM\OrderBy({"trackNum" = "ASC"})
      */
     private $tracklistTracks;
@@ -61,9 +67,24 @@ class Tracklist
      */
     private $term;
 
-    public function __construct()
+    /**
+     * @param                        $name
+     * @param                        $date
+     * @param Term                   $term
+     * @param Author                 $author
+     * @param array|TracklistTrack[] $tracklistTracks
+     */
+    public function __construct($name, $date, Term $term, Author $author, $tracklistTracks = null)
     {
-        $this->tracks = new ArrayCollection();
+        $this->name = $name;
+        $this->date = $date;
+        $this->term = $term;
+        $this->author = $author;
+
+        if (is_null($tracklistTracks)) {
+            $tracklistTracks = new ArrayCollection();
+        }
+        $this->tracklistTracks = $tracklistTracks;
     }
 
     /**
@@ -137,11 +158,9 @@ class Tracklist
      *
      * @return $this
      */
-    public function setTracklistTracks($tracklistTracks)
+    public function setTracklistTracks(Collection $tracklistTracks)
     {
         $this->tracklistTracks = $tracklistTracks;
-
-        return $this;
     }
 
     /**
@@ -184,6 +203,21 @@ class Tracklist
         return $this;
     }
 
+    /**
+     * @param array|Track[] $tracks
+     */
+    public function setTracks($tracks)
+    {
+        foreach ($tracks as $tracknum => $track) {
+            $tracklistTrack = new TracklistTrack();
+            $tracklistTrack->setTrack($track);
+            $tracklistTrack->setTrackNum($tracknum);
+            $tracklistTrack->setTracklist($this);
+
+            $this->tracklistTracks[] = $tracklistTrack;
+        }
+    }
+
     public function getFlat($preset = 'short')
     {
         $result = [
@@ -205,6 +239,7 @@ class Tracklist
             $track = $t->getTrack();
             $result['tracks'][] = [
                 'tracklistTrackId'  => $t->getId(),
+                'comment'           => $t->getComment(),
                 'id'                => $track->getId(),
                 'fid'               => $track->getFid(),
                 'trackNum'          => $track->getTrackNum(),

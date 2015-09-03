@@ -2,10 +2,11 @@
 
 namespace RadioStudent\AppBundle\Controller\API;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
 use RadioStudent\AppBundle\Entity\Tracklist;
-use RadioStudent\AppBundle\Entity\TracklistTrack;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -20,21 +21,23 @@ use Symfony\Component\HttpFoundation\Request;
 class TracklistController extends FOSRestController
 {
     /**
-     * @param Request $request
-     *
+     * @var EntityManager
+     */
+    var $em;
+
+    /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function cgetAction(Request $request)
+    public function cgetAction()
     {
-        //TODO: serve tracklists
-        $repo = $this
-            ->container
-            ->get('doctrine.orm.entity_manager')
-            ->getRepository('RadioStudentAppBundle:Tracklist');
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine.orm.entity_manager');
 
-        $tracklists = $repo->findAll();
+        $author = $em->getRepository("RadioStudentAppBundle:Author")->findOneBy(["user" => $this->getUser()]);
+        $tracklists = $em->getRepository('RadioStudentAppBundle:Tracklist')->findBy(["author" => $author]);
 
         $data = [];
+        /** @var Tracklist $tracklist */
         foreach ($tracklists as $tracklist) {
             $data[] = $tracklist->getFlat("short");
         }
@@ -51,10 +54,11 @@ class TracklistController extends FOSRestController
      */
     public function getAction($id)
     {
-        $repo = $this
-            ->container
-            ->get('doctrine.orm.entity_manager')
-            ->getRepository('RadioStudentAppBundle:Tracklist');
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine.orm.entity_manager');
+
+        /** @var EntityRepository $repo */
+        $repo = $em->getRepository('RadioStudentAppBundle:Tracklist');
 
         $tracklist = $repo->find($id);
 
@@ -70,50 +74,30 @@ class TracklistController extends FOSRestController
      */
     public function postAction(Request $request)
     {
-        $params = $request->request;
-
+        /** @var EntityManager $em */
         $em = $this->container->get('doctrine.orm.entity_manager');
 
-        $tracklist = new Tracklist();
-        $tracklist->setName($params->get("name"));
-        $tracklist->setAuthor($em->getRepository('RadioStudentAppBundle:Author')->find($params->get("authorId")));
-        $tracklist->setTerm($em->getRepository('RadioStudentAppBundle:Term')->find($params->get("termId")));
-        $tracklist->setDate(new \DateTime($params->get("date")));
+        $author = $em->getRepository("RadioStudentAppBundle:Author")->findOneBy(["user" => $this->getUser()]);
+        $em->getRepository("RadioStudentAppBundle:Tracklist")->create($author, $request->request);
 
-        $trackIds = [];
-        foreach ($params->get("tracks") as $track) {
-            $trackIds[] = $track["id"];
-        }
-
-        $tracks = $em->getRepository('RadioStudentAppBundle:Track')->findBy(["id" => $trackIds]);
-
-        foreach ($tracks as $i=>$track) {
-            $tracklistTrack = new TracklistTrack();
-            $tracklistTrack->setTrack($track);
-            $tracklistTrack->setTrackNum($i);
-            $tracklistTrack->setTracklist($tracklist);
-
-            $em->persist($tracklistTrack); //TODO: cascade persist
-        }
-
-        $view = $this->view($em->persist($tracklist), 200);
-        $em->flush();
-
+        $view = $this->view(true);
         return $this->handleView($view);
     }
 
     /**
-     * @param $id
-     * @param Request $request
+     * @param Tracklist $tracklist
+     * @param Request   $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function putAction($id, Request $request)
+    public function putAction(Tracklist $tracklist, Request $request)
     {
-        $params = $request->request;
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine.orm.entity_manager');
 
-        $view = $this->view([$id, $params]);
+        $em->getRepository("RadioStudentAppBundle:Tracklist")->update($tracklist, $request->request);
 
+        $view = $this->view(true);
         return $this->handleView($view);
     }
 }
