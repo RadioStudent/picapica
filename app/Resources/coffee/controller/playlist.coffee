@@ -10,10 +10,9 @@ emptyPlaylist =
 class PlaylistCtrl
     constructor: (SelectedTracks, TrackList, Term, $rootScope, $q, _) ->
         @toggleInPlaylist = SelectedTracks.toggle
-
-        $rootScope.$on "playlist.update", =>
-            @totalDuration = _.pluck(@trackList.tracks, 'duration').filter(Number).reduce ((a, b) -> a + b), 0
-
+        @terms = Term.query()
+        @trackLists = TrackList.query()
+        @currentTrackListId = null
         @datepicker =
             options:
                 formatYear: 'yy'
@@ -22,11 +21,10 @@ class PlaylistCtrl
             opened: no
             open: => @datepicker.opened = yes
 
-        @terms = Term.query()
-        @trackLists = TrackList.query()
-        @currentTrackListId = -1
+        $rootScope.$on "playlist.update", =>
+            @totalDuration = _.pluck(@trackList.tracks, 'duration').filter(Number).reduce ((a, b) -> a + b), 0
 
-        @selectTrackList = () ->
+        @selectTrackList = ->
             if @currentTrackListId is '-1'
                 @trackList = _.clone emptyPlaylist
                 deferred = $q.defer()
@@ -41,7 +39,15 @@ class PlaylistCtrl
                 $rootScope.$broadcast "playlist.update"
 
         @save = =>
-            TrackList.update {id: @trackList.id}, @trackList
+            if @trackList.id
+                TrackList.update {id: @trackList.id}, @trackList
+            else
+                TrackList.save @trackList
+
+        @addComment = (track) ->
+            track.comment = ''
+        @removeComment = (track) ->
+            delete track.comment
 
         return
 

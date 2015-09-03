@@ -65,3 +65,35 @@
 .playlist
     .playlist-date *:focus
         outline: none
+
+    .has-comment
+        padding-bottom: 30px
+        position: relative
+        .fake-comment-row
+            display: block
+
+    .fake-comment-row
+        position: absolute
+        display: none
+        left: 0
+        right: 0
+        bottom: 0
+        height: 36px
+        input
+            width: 100%
+
+    .table
+        .column-fid
+            width: 125px
+        .column-year
+            width: 45px
+        .column-duration
+            width: 45px
+        .column-buttons
+            width: 45px
+            text-align: right
+        .column-artist, .column-track, .column-album
+            flex: 1
+
+        tr
+            display: flex
