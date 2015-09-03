@@ -2,6 +2,20 @@
 
 <div class="container playlist" ng-controller="PlaylistCtrl as pl">
     <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label class="control-label" for="playlist">Playlist</label>
+                <select id="playlist"
+                        class="form-control"
+                        ng-model="pl.currentTrackListId"
+                        ng-change="pl.selectTrackList()">
+                    <option value="-1" ng-bind="'(Create new)'"></option>
+                    <option ng-repeat="trackList in pl.trackLists" value="{{trackList.id}}" ng-bind="trackList.date + ' - ' + trackList.name"></option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm-4">
             <div class="form-group playlist-date">
                 <label class="control-label" for="playlist-date">Date</label>
@@ -41,8 +55,8 @@
 
 
     <table class="table table-striped table-condensed table-hover">
-        <tbody ui-sortable ng-model="pl.tracks">
-            <tr ng-repeat="track in pl.tracks">
+        <tbody ui-sortable ng-model="pl.trackList.tracks">
+            <tr ng-repeat="track in pl.trackList.tracks">
                 <td ng-bind="track.fid"></td>
                 <td ng-bind="track.artistName"></td>
                 <td ng-bind="track.name"></td>

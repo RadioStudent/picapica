@@ -1,13 +1,18 @@
 "use strict"
 
+emptyPlaylist =
+    authorId: 1
+    date: ""
+    name: ""
+    termId: null
+    tracks: []
+
 class PlaylistCtrl
-    constructor: (SelectedTracks, TrackList, Term, $rootScope, _) ->
-        @tracks = null
+    constructor: (SelectedTracks, TrackList, Term, $rootScope, $q, _) ->
         @toggleInPlaylist = SelectedTracks.toggle
 
         $rootScope.$on "playlist.update", =>
-            @tracks = SelectedTracks.all
-            @totalDuration = _.pluck(@tracks, 'duration').filter(Number).reduce((a, b) -> a + b) or 0
+            @totalDuration = _.pluck(@trackList.tracks, 'duration').filter(Number).reduce ((a, b) -> a + b), 0
 
         @datepicker =
             options:
@@ -17,11 +22,23 @@ class PlaylistCtrl
             opened: no
             open: => @datepicker.opened = yes
 
-
         @terms = Term.query()
-        @trackList = TrackList.get {id: 1}, =>
-            SelectedTracks.all = @trackList.tracks
-            $rootScope.$broadcast "playlist.update"
+        @trackLists = TrackList.query()
+        @currentTrackListId = -1
+
+        @selectTrackList = () ->
+            if @currentTrackListId is '-1'
+                @trackList = _.clone emptyPlaylist
+                deferred = $q.defer()
+                deferred.resolve()
+                promise = deferred.promise
+            else
+                @trackList = TrackList.get {id: @currentTrackListId}
+                promise = @trackList.$promise
+
+            promise.then =>
+                SelectedTracks.all = @trackList.tracks
+                $rootScope.$broadcast "playlist.update"
 
         @save = =>
             TrackList.update {id: @trackList.id}, @trackList
