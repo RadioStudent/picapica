@@ -21,6 +21,7 @@ class LoadUserData implements FixtureInterface {
         $testUser->setUsername("testuser");
         $testUser->setPlainPassword("password");
         $testUser->setEmail("testuser@test.com");
+        $testUser->setEnabled(true);
         $manager->persist($testUser);
 
         $testAuthor = new Author();
