@@ -9,7 +9,7 @@
                         class="form-control"
                         ng-model="pl.trackList.list.id"
                         ng-change="pl.selectTrackList()">
-                    <option value="-1" ng-bind="'(Create new)'"></option>
+                    <option value="-1" ng-bind="'(Create new)'" ng-selected="-1 === pl.trackList.list.id"></option>
                     <option ng-repeat="trackList in pl.trackLists"
                             value="{{trackList.id}}"
                             ng-bind="trackList.date + ' - ' + trackList.name"

@@ -27,10 +27,10 @@ class PlaylistCtrl
                     $rootScope.$broadcast "tracklist.update"
 
         @save = =>
-            if @trackList.id
-                TrackList.update {id: @trackList.id}, @trackList
+            if @trackList.list.id is '-1'
+                TrackList.save {}, @trackList.list
             else
-                TrackList.save @trackList
+                TrackList.update {id: @trackList.list.id}, @trackList.list
 
         @addComment = (track) ->
             track.comment = ''

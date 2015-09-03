@@ -11,16 +11,18 @@ class TrackSearchCtrl
         @isTrackInTrackList = CurrentTrackList.hasTrack
         @toggleTrackInTrackList = CurrentTrackList.toggleTrack
 
-        $rootScope.$on "tracklist.update", =>
-           @digest()
+        if CurrentTrackList.list is null
+            CurrentTrackList.reset()
+
+        # $rootScope.$on "tracklist.update", => @digest()
 
         $rootScope.$on "filters.update", =>
-           @filters = SearchFilter.all
-           @doSearch()
+            @filters = SearchFilter.all
+            @doSearch()
 
         $rootScope.$on "columns.update", =>
-           @columns = SortableColumn.all
-           @doSearch()
+            @columns = SortableColumn.all
+            @doSearch()
 
         @typeInInput = (event) ->
             if event.type is "keyup" and event.keyCode is 13

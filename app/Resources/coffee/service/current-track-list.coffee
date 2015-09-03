@@ -1,6 +1,7 @@
 "use strict"
 
 emptyTrackList =
+    id: '-1'
     date: ""
     name: ""
     termId: null
