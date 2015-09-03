@@ -1,18 +1,12 @@
 "use strict"
 
-emptyPlaylist =
-    authorId: 1
-    date: ""
-    name: ""
-    termId: null
-    tracks: []
-
 class PlaylistCtrl
-    constructor: (SelectedTracks, TrackList, Term, $rootScope, $q, _) ->
-        @toggleInPlaylist = SelectedTracks.toggle
-        @terms = Term.query()
+    constructor: (CurrentTrackList, TrackList, Term, $rootScope, $q, _) ->
+        @trackList = CurrentTrackList
         @trackLists = TrackList.query()
-        @currentTrackListId = null
+        @toggleTrackInPlaylist = @trackList.toggleTrack
+        @terms = Term.query()
+
         @datepicker =
             options:
                 formatYear: 'yy'
@@ -21,22 +15,16 @@ class PlaylistCtrl
             opened: no
             open: => @datepicker.opened = yes
 
-        $rootScope.$on "playlist.update", =>
+        $rootScope.$on "tracklist.update", =>
             @totalDuration = _.pluck(@trackList.tracks, 'duration').filter(Number).reduce ((a, b) -> a + b), 0
 
         @selectTrackList = ->
-            if @currentTrackListId is '-1'
-                @trackList = _.clone emptyPlaylist
-                deferred = $q.defer()
-                deferred.resolve()
-                promise = deferred.promise
+            if @trackList.list.id is '-1'
+                @trackList.reset()
+                $rootScope.$broadcast "tracklist.update"
             else
-                @trackList = TrackList.get {id: @currentTrackListId}
-                promise = @trackList.$promise
-
-            promise.then =>
-                SelectedTracks.all = @trackList.tracks
-                $rootScope.$broadcast "playlist.update"
+                @trackList.list = TrackList.get {id: @trackList.list.id}, ->
+                    $rootScope.$broadcast "tracklist.update"
 
         @save = =>
             if @trackList.id

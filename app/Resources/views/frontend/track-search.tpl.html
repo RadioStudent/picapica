@@ -50,8 +50,8 @@
                 <td ng-bind="track.year"></td>
                 <td ng-bind="track.duration | duration" class="table-duration"></td>
                 <td>
-                    <span ng-click="ts.toggleInPlaylist(track)" ng-show="!ts.isTrackInPlaylist(track)" class="glyphicon glyphicon-plus-sign"></span>
-                    <span ng-click="ts.toggleInPlaylist(track)" ng-show="ts.isTrackInPlaylist(track)"  class="glyphicon glyphicon-minus-sign"></span>
+                    <span ng-click="ts.toggleTrackInTrackList(track)" ng-show="!ts.isTrackInTrackList(track)" class="glyphicon glyphicon-plus-sign"></span>
+                    <span ng-click="ts.toggleTrackInTrackList(track)" ng-show="ts.isTrackInTrackList(track)"  class="glyphicon glyphicon-minus-sign"></span>
                 </td>
             </tr>
         </tbody>
