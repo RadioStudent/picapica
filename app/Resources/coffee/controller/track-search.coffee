@@ -1,15 +1,18 @@
 "use strict"
 
 class TrackSearchCtrl
-    constructor: (Track, Suggestion, SearchFilter, SortableColumn, SelectedTracks, $http, $sce, $rootScope) ->
+    constructor: (Track, Suggestion, SearchFilter, SortableColumn, CurrentTrackList, $http, $sce, $rootScope) ->
         @tracks = []
         @searchTerm = ""
         @filters = SearchFilter.all
         @columns = SortableColumn.all
         @sort = SortableColumn.sort
 
-        @isTrackInPlaylist = SelectedTracks.isActive
-        @toggleInPlaylist = SelectedTracks.toggle
+        @isTrackInTrackList = CurrentTrackList.hasTrack
+        @toggleTrackInTrackList = CurrentTrackList.toggleTrack
+
+        $rootScope.$on "tracklist.update", =>
+           @digest()
 
         $rootScope.$on "filters.update", =>
            @filters = SearchFilter.all
