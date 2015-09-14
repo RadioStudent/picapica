@@ -188,7 +188,7 @@ fos_elastica:
 
             name:
               include_in_all: true
-              index_analyzer: whitespace_analyzer
+              index_analyzer: edge_NGram_analyzer
               search_analyzer: whitespace_analyzer
               fields:
                 autocomplete:
@@ -227,7 +227,7 @@ fos_elastica:
                 name:
                   include_in_all: true
                   index_name: track_artist_name
-                  index_analyzer: whitespace_analyzer
+                  index_analyzer: edge_NGram_analyzer
                   search_analyzer: whitespace_analyzer
                   fields:
                     order:
@@ -248,7 +248,7 @@ fos_elastica:
                 name:
                   index_name: track_album_name
                   include_in_all: true
-                  index_analyzer: whitespace_analyzer
+                  index_analyzer: edge_NGram_analyzer
                   search_analyzer: whitespace_analyzer
                   fields:
                     order:

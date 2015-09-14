@@ -27,7 +27,7 @@ class AutoCompleteController extends FOSRestController
     public function getAction(Request $request)
     {
         $search = $request->query->get('search', null);
-        $size   = $request->query->get('size', 10);
+        $size   = $request->query->get('size', 5);
 
         $artistData = $this->container->get('search.repository.artist')->autoComplete($search, [
 //            'name',
