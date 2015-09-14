@@ -36,6 +36,13 @@ class Term
     private $time;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="DURATION", type="integer", nullable=true)
+     */
+    private $duration;
+
+    /**
      * Get id
      *
      * @return integer
@@ -96,6 +103,7 @@ class Term
             'name'      => $this->name,
             'time'      => $this->time->format("H:i:s"),
             'group'     => "Weekday", //TODO: term groups!
+            'duration'  => $this->duration
         ];
 
         return $result;
