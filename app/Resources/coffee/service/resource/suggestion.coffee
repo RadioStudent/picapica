@@ -1,6 +1,6 @@
 "use strict"
 
-transform = (data) ->
+transform = (data, IconGenerator) ->
     results = angular.fromJson data
     for key, value of results
         if results[key].length > 0 and key != "query"
@@ -12,22 +12,22 @@ transform = (data) ->
                 if result.elastica_highlights["name.autocomplete"]?.length > 0
                     highlights = result.elastica_highlights["name.autocomplete"]
 
-                result.label = prepend + (highlights or result.name)
+                result.label = "#{IconGenerator.forType(result.type)}<span>#{prepend}#{highlights or result.name}</span>"
 
             results[key].push
                 searchInField: yes
                 type: type
                 name: results.query
-                label: "All tracks with #{type} <strong>#{results.query}</strong>"
+                label: "All tracks with #{type} “<strong>#{results.query}</strong>”"
 
     results = results.artists.concat results.albums, results.tracks
     results[results.length - 1]?.last = yes
     results
 
-Suggestion = ($resource) ->
+Suggestion = ($resource, IconGenerator) ->
     $resource "api/v1/ac", null,
         query:
             isArray: true
-            transformResponse: transform
+            transformResponse: (data) -> transform(data, IconGenerator)
 
 module.exports = Suggestion

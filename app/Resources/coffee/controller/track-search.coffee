@@ -1,12 +1,13 @@
 "use strict"
 
 class TrackSearchCtrl
-    constructor: (Track, Suggestion, SearchFilter, SortableColumn, CurrentTrackList, $http, $sce, $rootScope) ->
+    constructor: (Track, Suggestion, SearchFilter, SortableColumn, CurrentTrackList, IconGenerator, $http, $sce, $rootScope) ->
         @tracks = []
         @searchTerm = ""
         @filters = SearchFilter.all
         @columns = SortableColumn.all
         @sort = SortableColumn.sort
+        @generateIcon = IconGenerator.forType
 
         @isTrackInTrackList = CurrentTrackList.hasTrack
         @toggleTrackInTrackList = CurrentTrackList.toggleTrack
@@ -56,7 +57,7 @@ class TrackSearchCtrl
             else
                 SearchFilter.add selectedItem.id,
                                  "#{selectedItem.type}.id",
-                                 "#{selectedItem.type}: #{selectedItem.name}",
+                                 "#{selectedItem.name}",
                                  yes
 
             @searchTerm = ""

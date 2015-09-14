@@ -37,12 +37,17 @@
 
 // Search page
 .search
-    .dropdown-suggestion-text em
-        font-style: normal
-        font-weight: bold
+    .dropdown-suggestion-text
+        .glyphicon
+            padding-right: 5px
+        span span
+            vertical-align: middle
+        em
+            font-style: normal
+            font-weight: bold
 
     .precomputed-suggestion
-        text-decoration: underline
+        background-color: #eee
         strong
             text-transform: uppercase
 
@@ -52,6 +57,9 @@
         &-label
             font-size: 16px
             margin: 0 0 0 20px
+            text-transform: uppercase
+            .glyphicon
+                padding-right: 5px
         &-type
             float: right
             cursor: pointer

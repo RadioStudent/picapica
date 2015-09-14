@@ -27,7 +27,8 @@
                 <input type="checkbox" ng-model="type.active" ng-change="ts.doSearch()"> {{ type.name }}
             </label>
             <span ng-click="filter.remove()" class="glyphicon glyphicon-remove filter-remove-icon" aria-hidden="true"></span>
-            <h2 class="filter-label">{{ filter.label }}</h2>
+            <h2 class="filter-label" ng-if="!filter.fromAutocomplete" ng-bind-html="ts.generateIcon('search') + '“' + filter.label + '”'"></h2>
+            <h2 class="filter-label" ng-if="filter.fromAutocomplete" ng-bind-html="ts.generateIcon(filter.getType()) + filter.label"></h2>
         </div>
     </div>
 

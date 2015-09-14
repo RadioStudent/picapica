@@ -13,6 +13,10 @@ SearchFilter = ($rootScope, _) ->
                 not angular.equals @, filter
             $rootScope.$broadcast "filters.update"
 
+        getType: ->
+            console.log @
+            _.findWhere(@types, {active: yes}).type
+
         @generateFilterTypes = (type) ->
             allFilterTypes = [
                 { name: "Artist",    type: "artist.name", active: no, visible: yes }
