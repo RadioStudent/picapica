@@ -15,12 +15,12 @@ SearchFilter = ($rootScope, _) ->
 
         @generateFilterTypes = (type) ->
             allFilterTypes = [
-                { name: "Artist name", type: "artist.name", active: no, visible: yes }
-                { name: "Artist ID",   type: "artist.id",   active: no, visible: no }
-                { name: "Album name",  type: "album.name",  active: no, visible: yes }
-                { name: "Album ID",    type: "album.id",    active: no, visible: no }
-                { name: "Track name",  type: "track.name",  active: no, visible: yes }
-                { name: "Track ID",    type: "track.id",    active: no, visible: no }
+                { name: "Artist",    type: "artist.name", active: no, visible: yes }
+                { name: "Artist ID", type: "artist.id",   active: no, visible: no }
+                { name: "Album",     type: "album.name",  active: no, visible: yes }
+                { name: "Album ID",  type: "album.id",    active: no, visible: no }
+                { name: "Title",     type: "track.name",  active: no, visible: yes }
+                { name: "Track ID",  type: "track.id",    active: no, visible: no }
             ]
 
             _.find(allFilterTypes, {type: type}).active = yes if type

@@ -17,6 +17,24 @@
         height: 32px
         margin: 15px 5px 0 0
 
+// Table on search and playlist page
+.table
+    .column-fid
+        white-space: nowrap
+        width: 125px
+    .column-year, .column-length, .column-buttons
+        width: 45px
+    .column-length, .column-buttons
+        text-align: right
+    .column-artist, .column-title, .column-album
+        flex: 1
+
+    th
+        white-space: nowrap
+
+    tr
+        display: flex
+
 // Search page
 .search
     .dropdown-suggestion-text em
@@ -54,12 +72,6 @@
         height: 36.5px
         text-transform: uppercase
 
-    .table-duration
-        text-align: right
-
-    .results
-        th, .fonoteka-id
-            white-space: nowrap
 
 // Playlist page
 .playlist
@@ -81,19 +93,3 @@
         height: 36px
         input
             width: 100%
-
-    .table
-        .column-fid
-            width: 125px
-        .column-year
-            width: 45px
-        .column-duration
-            width: 45px
-        .column-buttons
-            width: 45px
-            text-align: right
-        .column-artist, .column-track, .column-album
-            flex: 1
-
-        tr
-            display: flex

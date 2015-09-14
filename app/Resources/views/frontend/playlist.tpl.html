@@ -58,14 +58,25 @@
 
 
     <table class="table table-striped table-condensed table-hover">
+        <thead>
+            <tr>
+                <th class="column-fid">FID</td>
+                <th class="column-artist">Artist</th>
+                <th class="column-title">Title</th>
+                <th class="column-album">Album</th>
+                <th class="column-year">Year</th>
+                <th class="column-length">Length</th>
+                <th class="column-buttons">PL</th>
+            </tr>
+        </thead>
         <tbody ui-sortable ng-model="pl.trackList.list.tracks">
             <tr ng-repeat="track in pl.trackList.list.tracks" ng-class="{ 'has-comment' : (track|hasComment) }">
                 <td ng-bind="track.fid" class="column-fid"></td>
                 <td ng-bind="track.artistName" class="column-artist"></td>
-                <td ng-bind="track.name" class="column-track"></td>
+                <td ng-bind="track.name" class="column-title"></td>
                 <td ng-bind="track.albumName" class="column-album"></td>
                 <td ng-bind="track.year" class="column-year"></td>
-                <td ng-bind="track.duration | duration" class="column-duration"></td>
+                <td ng-bind="track.duration | duration" class="column-length"></td>
                 <td class="column-buttons">
                     <span ng-show="!(track|hasComment)" ng-click="pl.addComment(track)" class="glyphicon glyphicon-pencil"></span>
                     <span ng-show="track|hasComment" ng-click="pl.removeComment(track)" class="glyphicon glyphicon-trash"></span>

@@ -14,8 +14,6 @@ class TrackSearchCtrl
         if CurrentTrackList.list is null
             CurrentTrackList.reset()
 
-        # $rootScope.$on "tracklist.update", => @digest()
-
         $rootScope.$on "filters.update", =>
             @filters = SearchFilter.all
             @doSearch()

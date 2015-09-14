@@ -19,12 +19,12 @@ SortableColumn = ($rootScope) ->
         active: -1
         sort: sort
         all: [
-            { name: "fid",        label: "#" }
+            { name: "fid",        label: "FID" }
             { name: "artistName", label: "Artist" }
             { name: "name",       label: "Title" }
             { name: "album",      label: "Album" }
             { name: "date",       label: "Year" }
-            { name: "duration",   label: "Duration" }
+            { name: "duration",   label: "Length" }
         ]
         buildParams: buildParams
 

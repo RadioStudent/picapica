@@ -16,7 +16,7 @@ class PlaylistCtrl
             open: => @datepicker.opened = yes
 
         $rootScope.$on "tracklist.update", =>
-            @totalDuration = _.pluck(@trackList.tracks, 'duration').filter(Number).reduce ((a, b) -> a + b), 0
+            @totalDuration = _.pluck(@trackList.list.tracks, 'duration').filter(Number).reduce ((a, b) -> a + b), 0
 
         @selectTrackList = ->
             if @trackList.list.id is '-1'
