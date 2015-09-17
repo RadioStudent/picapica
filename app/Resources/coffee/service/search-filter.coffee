@@ -14,7 +14,6 @@ SearchFilter = ($rootScope, _) ->
             $rootScope.$broadcast "filters.update"
 
         getType: ->
-            console.log @
             _.findWhere(@types, {active: yes}).type
 
         @generateFilterTypes = (type) ->
