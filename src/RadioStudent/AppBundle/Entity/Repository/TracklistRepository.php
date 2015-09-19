@@ -29,6 +29,8 @@ class TracklistRepository extends EntityRepository
         $em->persist($tracklist);
 
         $this->updateTracklistTracks($tracklist, $tracklistData->get("tracks"));
+
+        return $tracklist;
     }
 
     /**

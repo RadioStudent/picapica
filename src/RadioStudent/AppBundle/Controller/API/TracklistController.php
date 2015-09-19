@@ -78,9 +78,10 @@ class TracklistController extends FOSRestController
         $em = $this->container->get('doctrine.orm.entity_manager');
 
         $author = $em->getRepository("RadioStudentAppBundle:Author")->findOneBy(["user" => $this->getUser()]);
-        $em->getRepository("RadioStudentAppBundle:Tracklist")->create($author, $request->request);
+        $tracklist = $em->getRepository("RadioStudentAppBundle:Tracklist")->create($author, $request->request);
 
-        $view = $this->view(true);
+        $view = $this->view($tracklist->getFlat('long'));
+
         return $this->handleView($view);
     }
 

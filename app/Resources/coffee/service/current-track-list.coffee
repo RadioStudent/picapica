@@ -2,10 +2,10 @@
 
 emptyTrackList =
     id: '-1'
-    date: ""
-    name: ""
-    termId: null
-    comment: ""
+    date: new Date().toISOString()
+    name: 'New playlist'
+    termId: 1
+    comment: ''
     tracks: []
 
 CurrentTrackList = ($rootScope, _) ->
@@ -24,7 +24,7 @@ CurrentTrackList = ($rootScope, _) ->
         reset: ->
             service.list = _.clone emptyTrackList
 
-        list: null
+        list: _.clone emptyTrackList
 
         all: []
 

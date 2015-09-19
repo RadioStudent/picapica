@@ -1,11 +1,11 @@
 "use strict"
 
 class PlaylistCtrl
-    constructor: (CurrentTrackList, TrackList, Term, $rootScope, $q, _) ->
+    constructor: (CurrentTrackList, TrackList, Terms, $rootScope, $q, _) ->
         @trackList = CurrentTrackList
         @trackLists = TrackList.query()
         @toggleTrackInPlaylist = @trackList.toggleTrack
-        @terms = Term.query()
+        @terms = Terms
         @loaders =
             save: off
 
@@ -30,17 +30,20 @@ class PlaylistCtrl
 
         @save = =>
             @loaders.save = on
-            if @trackList.list.id is '-1'
-                TrackList.save({}, @trackList.list).$promise.then =>
-                    @loaders.save = off
-            else
-                TrackList.update({id: @trackList.list.id}, @trackList.list).$promise.then =>
-                    @loaders.save = off
 
-        @addComment = (track) ->
-            track.comment = ''
-        @removeComment = (track) ->
-            delete track.comment
+            if @trackList.list.id is '-1'
+                TrackList.save {}, @trackList.list, (response) =>
+                    @trackLists = TrackList.query =>
+                        @trackList.list = TrackList.get {id: response.id}, =>
+                            @loaders.save = off
+                            $rootScope.$broadcast "tracklist.update"
+            else
+                TrackList.update {id: @trackList.list.id}, @trackList.list, =>
+                    @trackLists = TrackList.query =>
+                        @loaders.save = off
+
+        @addComment = (track) -> track.comment = ''
+        @removeComment = (track) -> delete track.comment
 
         return
 
