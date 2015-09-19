@@ -1,6 +1,6 @@
 picapica
 ========
-![pica pica](https://upload.wikimedia.org/wikipedia/commons/b/b6/Pica_pica_-_Compans_Caffarelli_-_2012-03-16.jpg)
+![pica pica](https://cloud.githubusercontent.com/assets/1853648/9977827/145a868c-5f15-11e5-9146-0d2adbb05118.png)
 
 Web app for physical music library management.
 
