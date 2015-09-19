@@ -6,6 +6,8 @@ class PlaylistCtrl
         @trackLists = TrackList.query()
         @toggleTrackInPlaylist = @trackList.toggleTrack
         @terms = Term.query()
+        @loaders =
+            save: off
 
         @datepicker =
             options:
@@ -27,10 +29,13 @@ class PlaylistCtrl
                     $rootScope.$broadcast "tracklist.update"
 
         @save = =>
+            @loaders.save = on
             if @trackList.list.id is '-1'
-                TrackList.save {}, @trackList.list
+                TrackList.save({}, @trackList.list).$promise.then =>
+                    @loaders.save = off
             else
-                TrackList.update {id: @trackList.list.id}, @trackList.list
+                TrackList.update({id: @trackList.list.id}, @trackList.list).$promise.then =>
+                    @loaders.save = off
 
         @addComment = (track) ->
             track.comment = ''

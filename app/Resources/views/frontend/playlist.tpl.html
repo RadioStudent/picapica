@@ -90,12 +90,12 @@
     </table>
 
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-12 action-buttons">
             <div class="save-button btn btn-success btn-lg"
                  ng-click="pl.save()">
-                 <span class="glyphicon glyphicon-floppy-disk"></span>
                  Save
              </div>
+             <span ng-show="pl.loaders.save" class="glyphicon glyphicon-refresh loader"></span>
         </div>
     </div>
 

@@ -104,5 +104,16 @@
         input
             width: 100%
 
-    .save-button
-        margin-bottom: 20px
+    .action-buttons
+        padding-bottom: 20px
+
+    .loader
+        animation: spin 1s infinite linear
+        margin-left: 10px
+        vertical-align: middle
+
+@keyframes spin
+    from
+        transform: rotate(0deg)
+    to
+        transform: rotate(360deg)
