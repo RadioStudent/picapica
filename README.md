@@ -1,6 +1,6 @@
 picapica
 ========
-![pica pica](https://cloud.githubusercontent.com/assets/1853648/9977827/145a868c-5f15-11e5-9146-0d2adbb05118.png)
+![pica pica](https://cloud.githubusercontent.com/assets/1853648/9977848/fd3e30f6-5f15-11e5-9bef-e4276942e4ca.png)
 
 Web app for physical music library management.
 
