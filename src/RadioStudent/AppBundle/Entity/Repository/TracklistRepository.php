@@ -14,6 +14,8 @@ class TracklistRepository extends EntityRepository
     /**
      * @param Author       $author
      * @param ParameterBag $tracklistData
+     *
+     * @return Tracklist
      */
     public function create($author, $tracklistData)
     {
