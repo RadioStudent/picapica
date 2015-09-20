@@ -18,9 +18,17 @@ class ArtistRelation
     const TYPE_BOTH_CORRECT = "alias";
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="ID", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
      * @var Artist
      *
-     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Artist", inversedBy="artistRelations")
      * @ORM\JoinColumn(name="ARTIST_ID", referencedColumnName="ID")
      */
@@ -29,7 +37,6 @@ class ArtistRelation
     /**
      * @var Artist
      *
-     * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Artist")
      * @ORM\JoinColumn(name="RELATED_ARTIST_ID", referencedColumnName="ID")
      */
@@ -37,11 +44,25 @@ class ArtistRelation
 
     /**
      * @var integer This field describes what the relatedArtist is to artist.
-     *
-     * @ORM\Id
      * @ORM\Column(name="RELATION_TYPE", type="string")
      */
     private $type;
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
     /**
      * @return Artist
