@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="picapica" default="remove-cache">
-    <property name="env" value="assets"/>
+    <property name="env" value="dev"/>
     <property name="dir.app" value="${project.basedir}/app" />
     <property name="dir.web" value="${project.basedir}/web" />
     <property name="dir.src" value="${project.basedir}/src" />
     <property name="dir.build" value="${project.basedir}/build" />
 
-    <target name="install" depends="composer-install, db, elastica, assets" />
+    <target name="install" depends="composer-install, db-install, elastica-install, assets" />
 
     <target name="composer-download">
         <exec command="curl -sS https://getcomposer.org/installer | php"
@@ -46,8 +46,8 @@
         </if>
     </target>
 
-    <target name="db"
-            description="Creates DB and loads fixtures">
+    <target name="db-install"
+            description="Creates DB and imports from old structure database">
 
         <SymfonyConsole command="doctrine:database:drop">
             <arg name="env" value="${env}" />
@@ -70,7 +70,18 @@
         </SymfonyConsole>
     </target>
 
-    <target name="elastica"
+    <target name="seed"
+            description="Loads seed fixtures">
+
+        <SymfonyConsole command="doctrine:fixtures:load">
+            <arg name="env" value="${env}" />
+            <arg value="--fixtures"/>
+            <arg value="src/RadioStudent/AppBundle/DataFixtures/ORM/Seeds"/>
+            <arg value="--append"/>
+        </SymfonyConsole>
+    </target>
+
+    <target name="elastica-install"
             description="Populates elasticsearch index">
         <SymfonyConsole command="fos:elastica:populate">
             <!--<arg name="env" value="${env}" />-->
