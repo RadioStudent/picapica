@@ -19,8 +19,7 @@ class Version20150920211134 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('ALTER TABLE rel_artist2artist DROP PRIMARY KEY');
-        $this->addSql('ALTER TABLE rel_artist2artist ADD ID INT AUTO_INCREMENT NOT NULL, CHANGE ARTIST_ID ARTIST_ID INT DEFAULT NULL, CHANGE RELATED_ARTIST_ID RELATED_ARTIST_ID INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE rel_artist2artist ADD PRIMARY KEY (ID)');
+        $this->addSql('ALTER TABLE rel_artist2artist ADD ID INT AUTO_INCREMENT NOT NULL FIRST, ADD PRIMARY KEY (ID)');
     }
 
     /**
@@ -31,8 +30,6 @@ class Version20150920211134 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE rel_artist2artist DROP PRIMARY KEY');
-        $this->addSql('ALTER TABLE rel_artist2artist DROP ID, CHANGE ARTIST_ID ARTIST_ID INT NOT NULL, CHANGE RELATED_ARTIST_ID RELATED_ARTIST_ID INT NOT NULL');
-        $this->addSql('ALTER TABLE rel_artist2artist ADD PRIMARY KEY (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)');
+        $this->addSql('ALTER TABLE rel_artist2artist DROP COLUMN ID, DROP PRIMARY KEY, ADD PRIMARY KEY (RELATED_ARTIST_ID, ARTIST_ID, RELATION_TYPE)');
     }
 }

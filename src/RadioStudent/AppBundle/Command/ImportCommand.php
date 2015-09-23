@@ -260,7 +260,7 @@ class ImportCommand extends ContainerAwareCommand
     private function importArtists($votefixFile)
     {
         $this->out->write("Import artists (1/2)...");
-        $this->c->exec("INSERT IGNORE INTO $this->dbName.data_artists (NAME) SELECT DISTINCT IZVAJALEC FROM fonoteka_old.FONO_ALL");
+        $this->c->exec("INSERT IGNORE INTO $this->dbName.data_artists (NAME) SELECT DISTINCT IZVAJALEC collate utf8_bin FROM fonoteka_old.FONO_ALL");
         $this->out->writeln("OK");
 
         $this->out->write("Import artists (2/2)...");
@@ -276,7 +276,7 @@ class ImportCommand extends ContainerAwareCommand
         $this->out->write("Apply artists votefix...");
         $this->c->exec("USE fonoteka_old");
 
-        $this->c->exec("INSERT INTO picapica.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
+        $this->c->exec("INSERT INTO $this->dbName.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
             SELECT DISTINCT
               n1.IMPORT_ARTIST_ID,
               n2.IMPORT_ARTIST_ID,
@@ -287,7 +287,7 @@ class ImportCommand extends ContainerAwareCommand
               INNER JOIN FONO_ALL AS n2 on fix.NAME2=n2.IZVAJALEC
             WHERE CHOICE=1;"
         );
-        $this->c->exec("INSERT INTO picapica.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
+        $this->c->exec("INSERT INTO $this->dbName.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
             SELECT DISTINCT
               n2.IMPORT_ARTIST_ID,
               n1.IMPORT_ARTIST_ID,
@@ -298,7 +298,7 @@ class ImportCommand extends ContainerAwareCommand
               INNER JOIN FONO_ALL AS n2 on fix.NAME2=n2.IZVAJALEC
             WHERE CHOICE=0;"
         );
-        $this->c->exec("INSERT INTO picapica.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
+        $this->c->exec("INSERT INTO $this->dbName.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
             SELECT DISTINCT
               n1.IMPORT_ARTIST_ID,
               n2.IMPORT_ARTIST_ID,
@@ -309,7 +309,7 @@ class ImportCommand extends ContainerAwareCommand
               INNER JOIN FONO_ALL AS n2 on fix.NAME2=n2.IZVAJALEC
             WHERE CHOICE=0;"
         );
-        $this->c->exec("INSERT INTO picapica.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
+        $this->c->exec("INSERT INTO $this->dbName.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
             SELECT DISTINCT
               n2.IMPORT_ARTIST_ID,
               n1.IMPORT_ARTIST_ID,
@@ -320,7 +320,7 @@ class ImportCommand extends ContainerAwareCommand
               INNER JOIN FONO_ALL AS n2 on fix.NAME2=n2.IZVAJALEC
             WHERE CHOICE=1;"
         );
-        $this->c->exec("INSERT INTO picapica.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
+        $this->c->exec("INSERT INTO $this->dbName.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
             SELECT DISTINCT
               n1.IMPORT_ARTIST_ID,
               n2.IMPORT_ARTIST_ID,
@@ -331,7 +331,7 @@ class ImportCommand extends ContainerAwareCommand
               INNER JOIN FONO_ALL AS n2 on fix.NAME2=n2.IZVAJALEC
             WHERE CHOICE=3 OR LEVENSHTEIN=0"
         );
-        $this->c->exec("INSERT INTO picapica.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
+        $this->c->exec("INSERT INTO $this->dbName.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
             SELECT DISTINCT
               n2.IMPORT_ARTIST_ID,
               n1.IMPORT_ARTIST_ID,
@@ -342,7 +342,7 @@ class ImportCommand extends ContainerAwareCommand
               INNER JOIN FONO_ALL AS n2 on fix.NAME2=n2.IZVAJALEC
             WHERE CHOICE=3 OR LEVENSHTEIN=0"
         );
-        $this->c->exec("INSERT INTO picapica.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
+/*        $this->c->exec("INSERT INTO picapica.rel_artist2artist (ARTIST_ID, RELATED_ARTIST_ID, RELATION_TYPE)
             SELECT DISTINCT
               n1.IMPORT_ARTIST_ID,
               n2.IMPORT_ARTIST_ID,
@@ -352,7 +352,22 @@ class ImportCommand extends ContainerAwareCommand
               INNER JOIN FONO_ALL AS n1 on fix.NAME1=n1.IZVAJALEC
               INNER JOIN FONO_ALL AS n2 on fix.NAME2=n2.IZVAJALEC
             WHERE CHOICE=2;"
-        );
+        );*/
+        $this->out->writeln("OK");
+
+        $this->out->write("Add UTF artist aliases...");
+        $q = $this->c->query("SELECT da.ID AS ID1, db.ID AS ID2 FROM $this->dbName.data_artists da INNER JOIN $this->dbName.data_artists db ON da.NAME = db.NAME AND da.ID <> db.ID");
+        $res = $q->fetchAll();
+        $added = [];
+        foreach ($res as $i => $v) {
+            if (!in_array($v["ID1"], $added) || !in_array($v["ID2"], $added)) {
+                $added[] = $id1 = $v["ID1"];
+                $added[] = $id2 = $v["ID2"];
+
+                $this->c->exec("INSERT INTO $this->dbName.rel_artist2artist (RELATION_TYPE, ARTIST_ID, RELATED_ARTIST_ID) VALUES ('" . ArtistRelation::TYPE_BOTH_CORRECT . "', $id1, $id2)");
+            }
+        }
+
         $this->out->writeln("OK");
     }
 
@@ -364,15 +379,32 @@ class ImportCommand extends ContainerAwareCommand
         $this->out->write("Import albums (1/2)...");
         $this->c->exec("SET SESSION group_concat_max_len = 1000000");
 
-        //TODO: album date needs more love
-        $q = $this->c->query("SELECT COALESCE(NULLIF(ALBUM, ''), IMPORT_ALBUM_FID) AS NAME, IF(LETNIK REGEXP '^[0-9]{4}$', MAKEDATE(LETNIK, 1), NULL) AS DATE, LETNIK AS STR_DATE, IMPORT_ALBUM_FID AS FID, GROUP_CONCAT(STEVILKA SEPARATOR '\',\'') AS TRACKS, GROUP_CONCAT(DISTINCT IMPORT_ARTIST_ID) AS ARTISTS FROM fonoteka_old.FONO_ALL GROUP BY COALESCE(NULLIF(ALBUM, ''), IMPORT_ALBUM_FID), IMPORT_ALBUM_FID");
+        $q = $this->c->query("
+          SELECT
+            COALESCE(NULLIF(ALBUM, ''), IMPORT_ALBUM_FID) AS NAME,
+            LETNIK AS DATE,
+            LETNIK AS STR_DATE,
+            IMPORT_ALBUM_FID AS FID,
+            GROUP_CONCAT(STEVILKA SEPARATOR '\',\'') AS TRACKS,
+            GROUP_CONCAT(DISTINCT IMPORT_ARTIST_ID) AS ARTISTS
+          FROM
+            fonoteka_old.FONO_ALL
+          GROUP BY
+            COALESCE(NULLIF(ALBUM, ''), IMPORT_ALBUM_FID), IMPORT_ALBUM_FID");
 
         $res = $q->fetchAll();
 
         foreach ($res as $i=>$v) {
+            preg_match_all("/\d{4}/", str_replace("O", 0, $v['DATE']), $matches);
+            if (count($matches[0]) > 0) {
+                $date = min($matches[0]);
+            } else {
+                $date = null;
+            }
+
             $album = new Album();
             $album->setName($v['NAME']);
-            $album->setDate($v['DATE'] == null?null:new \DateTime($v['DATE']));
+            $album->setDate($date == null?null:new \DateTime($date));
             $album->setStrDate($v['STR_DATE']);
             $album->setFid($v['FID']);
 
