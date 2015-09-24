@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f056bf7c8aabc2e58349192a5ac58681",
+    "hash": "1b83ec605e67efe3658569ec62cf718f",
+    "content-hash": "ff2dcc443b47b15bfd4e06cd32a6b697",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -1183,7 +1184,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/757fc8f1b1362970328568114e8fca35cdbe1df2",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/d5b28c367d393f9d9fbc48c4138b2a74d51c0c83",
                 "reference": "757fc8f1b1362970328568114e8fca35cdbe1df2",
                 "shasum": ""
             },
@@ -1788,6 +1789,53 @@
                 "paging"
             ],
             "time": "2014-10-06 10:57:25"
+        },
+        {
+            "name": "phansys/getid3",
+            "version": "2.1.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phansys/GetId3.git",
+                "reference": "6d3f04b2781bb3d545fabfc4d1636c9bf5ac03f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phansys/GetId3/zipball/6d3f04b2781bb3d545fabfc4d1636c9bf5ac03f9",
+                "reference": "6d3f04b2781bb3d545fabfc4d1636c9bf5ac03f9",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~5.3"
+            },
+            "suggest": {
+                "ext-exif": "EXIF extension is required for graphic modules.",
+                "ext-rar": "RAR extension is required for RAR archive module."
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GetId3\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL"
+            ],
+            "authors": [
+                {
+                    "name": "James Heinrich",
+                    "email": "info@getid3.org",
+                    "homepage": "http://www.getid3.org"
+                }
+            ],
+            "description": "This fork of GetId3 library updates to PSR-2 / PSR-4 CS, adds namespaces and makes it installable by composer.",
+            "homepage": "http://www.getid3.org",
+            "keywords": [
+                "getid3",
+                "metadata",
+                "tags"
+            ],
+            "time": "2015-06-28 12:06:17"
         },
         {
             "name": "phing/phing",
@@ -2784,7 +2832,7 @@
             ],
             "authors": [
                 {
-                    "name": "William DURAND",
+                    "name": "William Durand",
                     "email": "william.durand1@gmail.com"
                 }
             ],
@@ -2853,7 +2901,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "friendsofsymfony/user-bundle": 20
+        "friendsofsymfony/user-bundle": 20,
+        "phansys/getid3": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

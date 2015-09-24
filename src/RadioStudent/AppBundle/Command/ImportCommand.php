@@ -13,6 +13,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
+use \GetId3\GetId3Core as GetId3;
+
 class ImportCommand extends ContainerAwareCommand
 {
 
@@ -64,6 +66,11 @@ class ImportCommand extends ContainerAwareCommand
         if (!in_array('tracks', $input->getOption('except')) &&
             (in_array('tracks', $input->getOption('only')) || !$input->getOption('only'))) {
             $this->importTracks();
+        }
+
+        if (!in_array('mp3s', $input->getOption('except')) &&
+            (in_array('mp3s', $input->getOption('only')) || !$input->getOption('only'))) {
+            $this->importMp3s();
         }
     }
 
@@ -473,5 +480,166 @@ class ImportCommand extends ContainerAwareCommand
 
         $this->out->writeln("OK");
 
+    }
+
+    private function importMp3s()
+    {
+        $path = "app/data/mp3s";
+        $path = "app/data/mp3s/! YUGO !/Ana Never - Small Years (Fluttery Records, 2012)/music";
+        $path = "app/data/mp3s/! TUJINA !";
+
+        $files = $this->dir_crawl($path);
+
+        $id3 = new GetId3();
+//        $t = $id3->analyze($path."/".$dir[2]);
+//        dump($t["tags"]["id3v2"]);
+
+/*        $extensions = [];
+        foreach ($files as $file) {
+            $e = new \SplFileInfo($file);
+            $ext = $e->getExtension();
+            if (!isset($extensions[$ext])) {
+                $extensions[$ext] = 0;
+            }
+            $extensions[$ext]++;
+        }
+        print_r($extensions);*/
+
+        $infos = [];
+        foreach ($files as $file) {
+            $allowed_extensions = ["mp3", "flac"];
+            $e = new \SplFileInfo($file);
+            $ext = $e->getExtension();
+            if (!in_array(strtolower($ext), $allowed_extensions)) {
+                continue;
+            }
+            $info = $this->extract_track_info($file, $id3);
+            $info["path"] = [$file];
+
+            $infos[] = $info;
+        }
+
+
+        foreach ($infos as $info) {
+            $this->c->exec("INSERT INTO digiteka.import
+                (artist, album, title, label, year, track, file)
+                VALUES (
+                  '".addslashes(join("@@@", $info["artist"]))."',
+                  '".addslashes(join("@@@", $info["album"]))."',
+                  '".addslashes(join("@@@", $info["title"]))."',
+                  '".addslashes(join("@@@", $info["label"]))."',
+                  '".addslashes(join("@@@", $info["year"]))."',
+                  '".addslashes(join("@@@", $info["track"]))."',
+                  '".addslashes($info["path"][0])."'
+                )");
+        }
+//
+//        foreach ($infos as $info) {
+//            foreach ($info as $v) {
+//                if (count($v) > 1) {
+//                    dump($info);
+//                }
+//            }
+//        }
+
+
+
+        /*CREATE TABLE `import` (
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`artist` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`album` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`title` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`label` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`year` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`track` VARCHAR(255) NULL DEFAULT NULL COLLATE 'utf8_bin',
+	`file` TEXT NOT NULL COLLATE 'utf8_bin',
+	PRIMARY KEY (`id`),
+	INDEX `Index 1` (`artist`),
+	INDEX `Index 2` (`album`),
+	INDEX `Index 3` (`title`),
+	INDEX `Index 4` (`label`),
+	INDEX `Index 5` (`year`),
+	INDEX `Index 6` (`track`),
+	INDEX `Index 7` (`file`(255))
+)
+COLLATE='utf8_bin'
+ENGINE=InnoDB
+AUTO_INCREMENT=13
+;
+*/
+    }
+
+    private function extract_track_info($file, GetId3 $id3) {
+        preg_match("#.*\/(.*) - (.*) \((.*), (\d{4})\)\/(?:.*\/)*(\d+) - (?:\g1|.*) - (.*)\.[^.]+#", $file, $matches);
+
+        $info = [
+            "artist" => [],
+            "album" => [],
+            "label" => [],
+            "year" => [],
+            "track" => [],
+            "title" => [],
+        ];
+        if (count($matches) == 7) {
+            $info["artist"][] = $matches[1];
+            $info["album"][] = $matches[2];
+            $info["label"][] = $matches[3];
+            $info["year"][] = intval($matches[4]);
+            $info["track"][] = intval($matches[5]);
+            $info["title"][] = $matches[6];
+        }
+
+        $tag = $id3->analyze($file);
+
+        if (isset($tag["tags"])) {
+            $tag = $tag["tags"];
+
+            foreach ($tag as $t) {
+                if (isset($t["title"])) {
+                    $info["title"][] = $t["title"][0];
+                }
+                if (isset($t["artist"])) {
+                    $info["artist"][] = $t["artist"][0];
+                }
+                if (isset($t["album"])) {
+                    $info["album"][] = $t["album"][0];
+                }
+                if (isset($t["year"])) {
+                    $info["year"][] = intval($t["year"][0]);
+                }
+                if (isset($t["track"])) {
+                    $info["track"][] = intval($t["track"][0]);
+                }
+                if (isset($t["track_num"])) {
+                    $info["track"][] = intval($t["track_num"][0]);
+                }
+            }
+        }
+
+        return [
+            "artist" => array_unique($info["artist"]),
+            "album" => array_unique($info["album"]),
+            "label" => array_unique($info["label"]),
+            "year" => array_unique($info["year"]),
+            "track" => array_unique($info["track"]),
+            "title" => array_unique($info["title"]),
+        ];
+    }
+
+    private function dir_crawl($path) {
+        $blacklist = [
+            "! SINGLI !"
+        ];
+        $items = scandir($path);
+        $ret = [];
+        foreach ($items as $i=>$v) {
+            if (in_array($v, $blacklist)) continue;
+            if (is_file("$path/$v")) {
+                $ret[] = "$path/$v";
+            } elseif ($v != "." && $v != "..") {
+                $ret = array_merge($ret, $this->dir_crawl("$path/$v"));
+            }
+        }
+        return $ret;
     }
 }

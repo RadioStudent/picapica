@@ -25,7 +25,8 @@
         "phing/phing": "~2.10",
         "friendsofsymfony/user-bundle": "~2.0@dev",
         "doctrine/doctrine-fixtures-bundle": "^2.2",
-        "doctrine/doctrine-migrations-bundle": "^1.0"
+        "doctrine/doctrine-migrations-bundle": "^1.0",
+        "phansys/getid3": "2.1.x-dev"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"
