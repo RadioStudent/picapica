@@ -482,17 +482,69 @@ class ImportCommand extends ContainerAwareCommand
 
     }
 
+    private function import_fs_to_db($path)
+    {
+        $files = $this->dir_crawl($path);
+        $id3 = new GetId3();
+
+        foreach ($files as $file) {
+            $allowed_extensions = ["mp3", "flac"];
+            $e = new \SplFileInfo($file);
+            $ext = $e->getExtension();
+            if (!in_array(strtolower($ext), $allowed_extensions)) {
+                continue;
+            }
+            $id3_data = $id3->analyze($file);
+            if (isset($id3_data["tags"])) {
+                $tags = $id3_data["tags"];
+                $tags = "'".addslashes(json_encode($tags, JSON_PRETTY_PRINT | JSON_PARTIAL_OUTPUT_ON_ERROR))."'";
+            } else {
+                $tags = "NULL";
+            }
+
+            $this->c->exec("INSERT INTO digiteka.fs
+                (PATH, TAGS, MD5)
+                VALUES (
+                  '".addslashes($file)."',
+                  $tags,
+                  '".md5_file($file)."'
+                )");
+        }
+
+/*        CREATE TABLE `fs` (
+        `ID` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`PATH` TEXT NULL COLLATE 'utf8_bin',
+	`TAGS` TEXT NULL COLLATE 'utf8_bin',
+	`MD5` TEXT NULL COLLATE 'utf8_bin',
+	PRIMARY KEY (`ID`),
+	INDEX `PATH` (`PATH`(255)),
+	INDEX `TAGS` (`TAGS`(255)),
+	INDEX `MD5` (`TAGS`(32))
+)
+COLLATE='utf8_bin'
+ENGINE=InnoDB
+;*/
+
+    }
+
     private function importMp3s()
     {
         $path = "app/data/mp3s";
+//        $path = "app/data/mp3s/! TUJINA !/Sylvain Chauveau & Ensemble Nocturne - Down to the Bone [Acoustic Tribute to Depeche Mode] (Ici d'ailleurs, 2005)";
+        $this->import_fs_to_db($path);
+        return;
+
+        $path = "app/data/mp3s";
         $path = "app/data/mp3s/! YUGO !/Ana Never - Small Years (Fluttery Records, 2012)/music";
+        $path = "app/data/mp3s/! TUJINA !/Magic Fades - Push Thru (1080p, 2014)";
+        $path = "app/data/mp3s/! TUJINA !/Sylvain Chauveau & Ensemble Nocturne - Down to the Bone [Acoustic Tribute to Depeche Mode] (Ici d'ailleurs, 2005)";
+        $path = "app/data/mp3s/! TUJINA !/V.A. - An Anthology Of Noise & Electronic Music _ Seventh And Last A-Chronology Volume #7  (Sub Rosa, 2013)";
         $path = "app/data/mp3s/! TUJINA !";
 
-        $files = $this->dir_crawl($path);
+        $files = $this->dir_crawl($path, ["! SINGLI !"]);
 
         $id3 = new GetId3();
 //        $t = $id3->analyze($path."/".$dir[2]);
-//        dump($t["tags"]["id3v2"]);
 
 /*        $extensions = [];
         foreach ($files as $file) {
@@ -514,35 +566,24 @@ class ImportCommand extends ContainerAwareCommand
                 continue;
             }
             $info = $this->extract_track_info($file, $id3);
-            $info["path"] = [$file];
+            $info["path"] = $file;
 
             $infos[] = $info;
         }
-
 
         foreach ($infos as $info) {
             $this->c->exec("INSERT INTO digiteka.import
                 (artist, album, title, label, year, track, file)
                 VALUES (
-                  '".addslashes(join("@@@", $info["artist"]))."',
-                  '".addslashes(join("@@@", $info["album"]))."',
-                  '".addslashes(join("@@@", $info["title"]))."',
-                  '".addslashes(join("@@@", $info["label"]))."',
-                  '".addslashes(join("@@@", $info["year"]))."',
-                  '".addslashes(join("@@@", $info["track"]))."',
-                  '".addslashes($info["path"][0])."'
+                  '".addslashes($info["artist"])."',
+                  '".addslashes($info["album"])."',
+                  '".addslashes($info["title"])."',
+                  '".addslashes($info["label"])."',
+                  '".addslashes($info["year"])."',
+                  '".addslashes($info["track"])."',
+                  '".addslashes($info["path"])."'
                 )");
         }
-//
-//        foreach ($infos as $info) {
-//            foreach ($info as $v) {
-//                if (count($v) > 1) {
-//                    dump($info);
-//                }
-//            }
-//        }
-
-
 
         /*CREATE TABLE `import` (
 	`id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -570,8 +611,6 @@ AUTO_INCREMENT=13
     }
 
     private function extract_track_info($file, GetId3 $id3) {
-        preg_match("#.*\/(.*) - (.*) \((.*), (\d{4})\)\/(?:.*\/)*(\d+) - (?:\g1|.*) - (.*)\.[^.]+#", $file, $matches);
-
         $info = [
             "artist" => [],
             "album" => [],
@@ -580,13 +619,23 @@ AUTO_INCREMENT=13
             "track" => [],
             "title" => [],
         ];
+
+        preg_match("#.*\/(.*) - (.*) \((.*), (\d{4})\)\/(?:.*\/)*#", $file, $matches);
+        if (count($matches) == 5) {
+            $info["artist"]['fs'] = $matches[1];
+            $info["album"]['fs'] = $matches[2];
+            $info["label"]['fs'] = $matches[3];
+            $info["year"]['fs'] = intval($matches[4]);
+        }
+
+        preg_match("#.*\/(.*) - (.*) \((.*), (\d{4})\)\/(?:.*\/)*(\d+) - (?:\g1|.*) - (.*)\.[^.]+#", $file, $matches);
         if (count($matches) == 7) {
-            $info["artist"][] = $matches[1];
-            $info["album"][] = $matches[2];
-            $info["label"][] = $matches[3];
-            $info["year"][] = intval($matches[4]);
-            $info["track"][] = intval($matches[5]);
-            $info["title"][] = $matches[6];
+            $info["artist"]['fs'] = $matches[1];
+            $info["album"]['fs'] = $matches[2];
+            $info["label"]['fs'] = $matches[3];
+            $info["year"]['fs'] = intval($matches[4]);
+            $info["track"]['fs'] = intval($matches[5]);
+            $info["title"]['fs'] = $matches[6];
         }
 
         $tag = $id3->analyze($file);
@@ -594,42 +643,71 @@ AUTO_INCREMENT=13
         if (isset($tag["tags"])) {
             $tag = $tag["tags"];
 
-            foreach ($tag as $t) {
+            foreach ($tag as $idx=>$t) {
                 if (isset($t["title"])) {
-                    $info["title"][] = $t["title"][0];
+                    $info["title"][$idx] = $t["title"][0];
                 }
                 if (isset($t["artist"])) {
-                    $info["artist"][] = $t["artist"][0];
+                    $info["artist"][$idx] = $t["artist"][0];
                 }
                 if (isset($t["album"])) {
-                    $info["album"][] = $t["album"][0];
+                    $info["album"][$idx] = $t["album"][0];
                 }
                 if (isset($t["year"])) {
-                    $info["year"][] = intval($t["year"][0]);
+                    $info["year"][$idx] = intval($t["year"][0]);
                 }
                 if (isset($t["track"])) {
-                    $info["track"][] = intval($t["track"][0]);
+                    $info["track"][$idx] = intval($t["track"][0]);
                 }
                 if (isset($t["track_num"])) {
-                    $info["track"][] = intval($t["track_num"][0]);
+                    $info["track"][$idx] = intval($t["track_num"][0]);
                 }
             }
         }
 
         return [
-            "artist" => array_unique($info["artist"]),
-            "album" => array_unique($info["album"]),
-            "label" => array_unique($info["label"]),
-            "year" => array_unique($info["year"]),
-            "track" => array_unique($info["track"]),
-            "title" => array_unique($info["title"]),
+            "artist" => $this->get_best($info["artist"], ["id3v2", "id3v1", "fs"]),
+            "album" => $this->get_best($info["album"], ["fs", "id3v2", "id3v1"]),
+            "label" => $this->get_best($info["label"], ["fs", "id3v2", "id3v1"]),
+            "year" => $this->get_best($info["year"], ["fs", "id3v2", "id3v1"]),
+            "track" => $this->get_best($info["track"], ["id3v2", "id3v1", "fs"]),
+            "title" => $this->get_best($info["title"], ["id3v2", "id3v1", "fs"]),
         ];
     }
 
-    private function dir_crawl($path) {
-        $blacklist = [
-            "! SINGLI !"
-        ];
+    private function get_best($options, $priorities) {
+        $options = $this->eliminate_similar($options);
+
+        foreach ($priorities as $key) {
+            if (isset($options[$key])) {
+                return $options[$key];
+            }
+        }
+
+        if (count($options) == 1) {
+            return array_pop($options);
+        } else {
+            return "@@@" . json_encode($options);
+        }
+    }
+
+    private function eliminate_similar($array) {
+        $ret = [];
+        foreach ($array as $o_k=>$o_v) {
+            foreach ($array as $i_k=>$i_v) {
+                if ($o_k === $i_k) continue;
+                if ($i_v !== $o_v &&
+                    (mb_strpos($i_v, $o_v) === 0 ||  // $o_v is shorter than $i_v but otherwise the same
+                    (($p = mb_strpos($o_v, $i_v)) > 0 && (mb_strlen($o_v) - mb_strlen($i_v)) == $p*2))) {
+                    continue 2;
+                }
+            }
+            $ret[$o_k] = $o_v;
+        }
+        return array_unique($ret);
+    }
+
+    private function dir_crawl($path, $blacklist = []) {
         $items = scandir($path);
         $ret = [];
         foreach ($items as $i=>$v) {
