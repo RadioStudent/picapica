@@ -1,13 +1,13 @@
-"use strict"
+'use strict'
 
-require "angular"
-    .module "picapicaApp"
-        .service "SearchFilter",     require "./search-filter"
-        .service "SortableColumn",   require "./sortable-column"
-        .service "CurrentTrackList", require "./current-track-list"
-        .service "IconGenerator",    require "./icon-generator"
-        .service "Terms",            require "./terms"
-        .factory "Track",            require "./resource/track"
-        .factory "TrackList",        require "./resource/track-list"
-        .factory "Suggestion",       require "./resource/suggestion"
-        .factory "Term",             require "./resource/term"
+require 'angular'
+    .module 'picapicaApp'
+        .service 'SearchFilter',     require './search-filter'
+        .service 'SortableColumn',   require './sortable-column'
+        .service 'CurrentTrackList', require './current-track-list'
+        .service 'IconGenerator',    require './icon-generator'
+        .service 'Terms',            require './terms'
+        .factory 'Track',            require './resource/track'
+        .factory 'TrackList',        require './resource/track-list'
+        .factory 'Suggestion',       require './resource/suggestion'
+        .factory 'Term',             require './resource/term'

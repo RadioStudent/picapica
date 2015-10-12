@@ -1,10 +1,10 @@
-"use strict"
+'use strict'
 
 transformResponse = (response) ->
     response = angular.fromJson response
 
     response.tracks = response.tracks.map (track) ->
-        track.comment = null if track.comment is ""
+        track.comment = null if track.comment is ''
         track
 
     response
@@ -12,13 +12,13 @@ transformResponse = (response) ->
 transformRequest = (request) ->
     request = angular.copy request # Get rid of references
     request.tracks = request.tracks.map (track) ->
-        track.comment = "" unless track.comment?
+        track.comment = '' unless track.comment?
         track
 
     angular.toJson request
 
 TrackList = ($resource) ->
-    $resource "api/v1/tracklists/:id", {},
+    $resource 'api/v1/tracklists/:id', {},
         update:
             method: 'PUT'
             transformRequest: transformRequest

@@ -12,23 +12,26 @@
     "url": "https://github.com/RadioStudent/picapica/issues"
   },
   "dependencies": {
-    "angular": "^1.4.5",
-    "angular-bootstrap-npm": "0.13.3",
-    "angular-resource": "^1.4.5",
-    "angular-route": "^1.4.5",
-    "angular-sanitize": "^1.4.5",
+    "angular": "^1.4.7",
+    "angular-bootstrap-npm": "0.14.1",
+    "angular-resource": "^1.4.7",
+    "angular-route": "^1.4.7",
+    "angular-sanitize": "^1.4.7",
     "angular-ui-sortable": "^0.13.4",
     "bootstrap-sass": "^3.3.5",
     "bootswatch": "^3.3.5",
     "coffeeify": "^1.1.0",
     "grunt": "~0.4.5",
     "grunt-browser-sync": "~2.1.3",
-    "grunt-browserify": "^4.0.0",
+    "grunt-browserify": "^4.0.1",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-copy": "^0.8.1",
     "grunt-contrib-watch": "~0.6.1",
-    "grunt-sass": "^1.0.0",
+    "grunt-sass": "^1.1.0-beta",
     "grunt-svgstore": "~0.5.0",
     "lodash": "^3.10.1"
+  },
+  "scripts": {
+    "postinstall": "grunt"
   }
 }

@@ -1,7 +1,7 @@
-"use strict"
+'use strict'
 
 ppNavbar = ($window) ->
-    templateUrl: "/partials/_navbar.tpl.html"
+    templateUrl: '/partials/_navbar.tpl.html'
     scope:
         activeItem: '='
     link: (scope, element) ->

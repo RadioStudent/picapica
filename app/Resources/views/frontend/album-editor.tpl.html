@@ -1,0 +1,79 @@
+<pp-navbar active-item="'album-editor'"></pp-navbar>
+
+<div class="container album-editor" ng-controller="AlbumEditorCtrl as ae">
+    <div class="row">
+        <div class="col-sm-3">
+            <label>Album</label>
+            <input type="text"
+                   class="form-control input-sm"
+                   ng-model="ae.album.value">
+        </div>
+        <div class="col-sm-3">
+            <label>Artist</label>
+            <div class="input-group input-group-sm">
+                <input type="text"
+                       class="form-control"
+                       ng-model="ae.album.artist.value"
+                       ng-change="ae.defaultValueChanged('artist')">
+                <span class="input-group-addon">
+                    <input type="checkbox"
+                           ng-model="ae.album.artist.copy"
+                           ng-change="ae.defaultValueChanged('artist')">
+                </span>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <label>Label</label>
+            <div class="input-group input-group-sm">
+                <input type="text"
+                       class="form-control"
+                       ng-model="ae.album.label.value"
+                       ng-change="ae.defaultValueChanged('label')">
+                <span class="input-group-addon">
+                    <input type="checkbox"
+                           ng-model="ae.album.label.copy"
+                           ng-change="ae.defaultValueChanged('label')">
+                </span>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <label>Year</label>
+            <div class="input-group input-group-sm">
+                <input type="text"
+                       class="form-control"
+                       ng-model="ae.album.year.value"
+                       ng-change="ae.defaultValueChanged('year')">
+                <span class="input-group-addon">
+                    <input type="checkbox"
+                           ng-model="ae.album.year.copy"
+                           ng-change="ae.defaultValueChanged('year')">
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <hr>
+        </div>
+    </div>
+
+    <div class="row track" ng-repeat="track in ae.album.tracks">
+        <div class="col-sm-3" ng-repeat="field in ae.trackFields">
+            <input type="text"
+                   class="form-control input-sm"
+                   ng-model="track[field]"
+                   ng-disabled="ae.album[field].copy">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <button type="button"
+                    class="btn btn-primary btn-lg"
+                    ng-click="ae.addTrack()">
+                Add track
+            </button>
+        </div>
+    </div>
+</div>

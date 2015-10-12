@@ -1,9 +1,9 @@
-"use strict"
+'use strict'
 
 class TrackSearchCtrl
     constructor: (Track, Suggestion, SearchFilter, SortableColumn, CurrentTrackList, IconGenerator, $http, $sce, $rootScope) ->
         @tracks = []
-        @searchTerm = ""
+        @searchTerm = ''
         @filters = SearchFilter.all
         @columns = SortableColumn.all
         @sort = SortableColumn.sort
@@ -15,23 +15,23 @@ class TrackSearchCtrl
         if CurrentTrackList.list is null
             CurrentTrackList.reset()
 
-        $rootScope.$on "filters.update", =>
+        $rootScope.$on 'filters.update', =>
             @filters = SearchFilter.all
             @doSearch()
 
-        $rootScope.$on "columns.update", =>
+        $rootScope.$on 'columns.update', =>
             @columns = SortableColumn.all
             @doSearch()
 
         @typeInInput = (event) ->
-            if event.type is "keyup" and event.keyCode is 13
-                @addTextFilter if event.shiftKey then "add" else "replace"
+            if event.type is 'keyup' and event.keyCode is 13
+                @addTextFilter if event.shiftKey then 'add' else 'replace'
 
         @addTextFilter = (type) ->
             if @searchTerm.length > 0
-                SearchFilter.reset() if type is "replace"
+                SearchFilter.reset() if type is 'replace'
                 SearchFilter.add @searchTerm
-                @searchTerm = ""
+                @searchTerm = ''
 
         @doSearch = (sortParams) =>
             if SearchFilter.all.length is 0
@@ -45,7 +45,7 @@ class TrackSearchCtrl
                         @tracks = response
 
         @getSuggestions = (searchInput) ->
-            return if searchInput.length is 0 or typeof searchInput is "object"
+            return if searchInput.length is 0 or typeof searchInput is 'object'
             Suggestion.query(search: searchInput).$promise
 
         @selectSuggestion = (selectedItem, model, label) ->
@@ -60,7 +60,7 @@ class TrackSearchCtrl
                                  "#{selectedItem.name}",
                                  yes
 
-            @searchTerm = ""
+            @searchTerm = ''
 
         @doSearch() if @filters.length > 0
 

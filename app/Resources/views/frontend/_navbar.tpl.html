@@ -9,13 +9,13 @@
         <ul class="nav navbar-nav">
             <li ng-class="{ active : activeItem === 'search' }"><a href="/#/search">Search</a></li>
             <li ng-class="{ active : activeItem === 'playlist' }"><a href="/#/playlist">Playlist</a></li>
-            <li ng-class="{ active : activeItem === 'editor' }"><a>Editor</a></li>
+            <li ng-class="{ active : activeItem === 'album-editor' }"><a href="/#/album-editor">Editor</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li>
                 <!-- <a href="/login">{{ username }}</a> -->
-                <span dropdown>
-                    <button id="single-button" type="button" class="btn btn-default btn-xs navbar-btn" dropdown-toggle>
+                <span uib-dropdown>
+                    <button id="single-button" type="button" class="btn btn-default btn-xs navbar-btn" uib-dropdown-toggle>
                         {{ username }} <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu" role="menu" aria-labelledby="single-button">
