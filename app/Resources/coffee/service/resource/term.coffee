@@ -1,6 +1,6 @@
-"use strict"
+'use strict'
 
 Term = ($resource) ->
-    $resource "api/v1/terms/:id"
+    $resource 'api/v1/terms/:id'
 
 module.exports = Term

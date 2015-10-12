@@ -1,5 +1,5 @@
-"use strict"
+'use strict'
 
-require "angular"
-    .module "picapicaApp"
-        .directive "ppNavbar", require "./navbar"
+require 'angular'
+    .module 'picapicaApp'
+        .directive 'ppNavbar', require './navbar'

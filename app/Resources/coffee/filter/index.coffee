@@ -1,6 +1,6 @@
-"use strict"
+'use strict'
 
-require "angular"
-    .module "picapicaApp"
-        .filter "duration",   require "./duration"
-        .filter "hasComment", require "./has-comment"
+require 'angular'
+    .module 'picapicaApp'
+        .filter 'duration',   require './duration'
+        .filter 'hasComment', require './has-comment'

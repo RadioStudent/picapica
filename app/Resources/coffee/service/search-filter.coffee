@@ -1,4 +1,4 @@
-"use strict"
+'use strict'
 
 SearchFilter = ($rootScope, _) ->
     class Filter
@@ -6,24 +6,24 @@ SearchFilter = ($rootScope, _) ->
             @types = Filter.generateFilterTypes type
             @label = label or @text
             service.all.push @
-            $rootScope.$broadcast "filters.update"
+            $rootScope.$broadcast 'filters.update'
 
         remove: ->
             service.all = service.all.filter (filter) =>
                 not angular.equals @, filter
-            $rootScope.$broadcast "filters.update"
+            $rootScope.$broadcast 'filters.update'
 
         getType: ->
             _.findWhere(@types, {active: yes}).type
 
         @generateFilterTypes = (type) ->
             allFilterTypes = [
-                { name: "Artist",    type: "artist.name", active: no, visible: yes }
-                { name: "Artist ID", type: "artist.id",   active: no, visible: no }
-                { name: "Album",     type: "album.name",  active: no, visible: yes }
-                { name: "Album ID",  type: "album.id",    active: no, visible: no }
-                { name: "Title",     type: "track.name",  active: no, visible: yes }
-                { name: "Track ID",  type: "track.id",    active: no, visible: no }
+                { name: 'Artist',    type: 'artist.name', active: no, visible: yes }
+                { name: 'Artist ID', type: 'artist.id',   active: no, visible: no }
+                { name: 'Album',     type: 'album.name',  active: no, visible: yes }
+                { name: 'Album ID',  type: 'album.id',    active: no, visible: no }
+                { name: 'Title',     type: 'track.name',  active: no, visible: yes }
+                { name: 'Track ID',  type: 'track.id',    active: no, visible: no }
             ]
 
             _.find(allFilterTypes, {type: type}).active = yes if type
