@@ -487,7 +487,7 @@ class ImportCommand extends ContainerAwareCommand
         $files = $this->dir_crawl($path);
         $id3 = new GetId3();
 
-        foreach ($files as $file) {
+        foreach ($files as $idx=>$file) {
             $allowed_extensions = ["mp3", "flac"];
             $e = new \SplFileInfo($file);
             $ext = $e->getExtension();
@@ -502,20 +502,35 @@ class ImportCommand extends ContainerAwareCommand
                 $tags = "NULL";
             }
 
-            $this->c->exec("INSERT INTO digiteka.fs
-                (PATH, TAGS, MD5)
+            $duration = null;
+            if (isset($id3_data["playtime_seconds"])) {
+                $duration = round($id3_data["playtime_seconds"]);
+            }
+
+            $this->c->exec("INSERT INTO picapica.digital_import
+                (PATH, TAGS, DURATION, MD5, FILECTIME, TRACK_ID, IMPORTED_TS)
                 VALUES (
                   '".addslashes($file)."',
                   $tags,
-                  '".md5_file($file)."'
+                  $duration,
+                  '".md5_file($file)."',
+                  FROM_UNIXTIME(".filectime($file)."),
+                  NULL,
+                  NULL
                 )");
+
+            if ($idx % 10 == 0) echo round($idx/count($files)*100)."%\n";
         }
 
-/*        CREATE TABLE `fs` (
-        `ID` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+/*        CREATE TABLE `digital_import` (
+        `ID` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`PATH` TEXT NULL COLLATE 'utf8_bin',
 	`TAGS` TEXT NULL COLLATE 'utf8_bin',
+	`DURATION` INT(11) UNSIGNED NULL,
 	`MD5` TEXT NULL COLLATE 'utf8_bin',
+	`FILECTIME` TIMESTAMP NULL,
+	`TRACK_ID` INT(11) NULL,
+	`IMPORTED_TS` TIMESTAMP NULL,
 	PRIMARY KEY (`ID`),
 	INDEX `PATH` (`PATH`(255)),
 	INDEX `TAGS` (`TAGS`(255)),
@@ -530,7 +545,9 @@ ENGINE=InnoDB
     private function importMp3s()
     {
         $path = "app/data/mp3s";
-//        $path = "app/data/mp3s/! TUJINA !/Sylvain Chauveau & Ensemble Nocturne - Down to the Bone [Acoustic Tribute to Depeche Mode] (Ici d'ailleurs, 2005)";
+        $path = "app/data/mp3s/! TUJINA !/Sylvain Chauveau & Ensemble Nocturne - Down to the Bone [Acoustic Tribute to Depeche Mode] (Ici d'ailleurs, 2005)";
+        $path = "app/data/mp3s/! TUJINA !/Magic Fades - Push Thru (1080p, 2014)";
+//        $path = "app/data/mp3s/! TUJINA !";
         $this->import_fs_to_db($path);
         return;
 
@@ -544,7 +561,6 @@ ENGINE=InnoDB
         $files = $this->dir_crawl($path, ["! SINGLI !"]);
 
         $id3 = new GetId3();
-//        $t = $id3->analyze($path."/".$dir[2]);
 
 /*        $extensions = [];
         foreach ($files as $file) {
