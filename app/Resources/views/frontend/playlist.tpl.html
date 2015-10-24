@@ -29,8 +29,8 @@
                        ng-required="true"
                        ng-focus="pl.datepicker.open()"
                        is-open="pl.datepicker.opened"
-                       datepicker-popup="{{pl.datepicker.format}}"
-                       datepicker-options="pl.datepicker.options"
+                       uib-datepicker-popup="{{pl.datepicker.format}}"
+                       uib-datepicker-options="pl.datepicker.options"
                        close-text="Close" />
             </div>
         </div>
@@ -98,5 +98,5 @@
         </div>
     </div>
 
-    <progressbar max="3600 * 4" value="pl.totalDuration">{{pl.totalDuration | duration}}</progressbar>
+    <uib-progressbar max="3600 * 4" value="pl.totalDuration">{{pl.totalDuration | duration}}</uib-progressbar>
 </div>
