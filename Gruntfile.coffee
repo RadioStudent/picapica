@@ -13,7 +13,6 @@ module.exports = (grunt) ->
             '<%= assetsPath %>/js'
             '<%= assetsPath %>/fonts'
         ]
-
         # Copies stuff that needs to be copied
         copy:
             appTemplates:
@@ -77,6 +76,26 @@ module.exports = (grunt) ->
             default:
                 files:
                     'web/images/sprite.svg': ['<%= resourcesPath %>/images/icons/*.svg']
+        # Runs clientside unit tests with Karma
+        karma:
+            options:
+                frameworks: ['jasmine', 'browserify']
+                files: ['test/*Spec.coffee']
+                preprocessors:
+                    'test/*Spec.coffee': ['browserify']
+
+                browserify:
+                    debug: yes
+                    transform: ['coffeeify']
+                    extensions: ['.coffee']
+                    bundleDelay: 1000
+
+                reporters: ['spec']
+                browsers: ['PhantomJS']
+            watch:
+                autoWatch: yes
+            once:
+                singleRun: yes
 
     grunt.loadNpmTasks 'grunt-contrib-clean'
     grunt.loadNpmTasks 'grunt-contrib-copy'
@@ -85,6 +104,8 @@ module.exports = (grunt) ->
     grunt.loadNpmTasks 'grunt-browser-sync'
     grunt.loadNpmTasks 'grunt-svgstore'
     grunt.loadNpmTasks 'grunt-browserify'
+    grunt.loadNpmTasks 'grunt-karma'
 
     grunt.registerTask 'live', ['browserSync', 'watch']
+    grunt.registerTask 'test', ['karma:once']
     grunt.registerTask 'default', ['clean', 'copy', 'browserify', 'sass', 'svgstore']
