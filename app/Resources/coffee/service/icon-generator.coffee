@@ -1,5 +1,3 @@
-'use strict'
-
 IconGenerator = ($rootScope, $sce) ->
     types =
         artist     : 'user'

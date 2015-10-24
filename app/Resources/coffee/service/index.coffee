@@ -1,5 +1,3 @@
-'use strict'
-
 require 'angular'
     .module 'picapicaApp'
         .service 'SearchFilter',     require './search-filter'

@@ -1,5 +1,3 @@
-'use strict'
-
 SearchFilter = ($rootScope, _) ->
     class Filter
         constructor: (@text, type, label, @fromAutocomplete = false) ->

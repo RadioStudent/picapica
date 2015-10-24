@@ -1,5 +1,3 @@
-'use strict'
-
 Duration = () ->
     (seconds) ->
         if seconds

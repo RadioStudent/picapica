@@ -4,7 +4,7 @@ angular   = require 'angular'
 resource  = require 'angular-resource'
 route     = require 'angular-route'
 sanitize  = require 'angular-sanitize'
-bootstrap = require 'angular-bootstrap-npm/dist/angular-bootstrap'
+bootstrap = require 'angular-bootstrap-npm/dist/angular-bootstrap-tpls'
 require 'angular-ui-sortable'
 
 angular.module 'picapicaApp', [route, sanitize, resource, bootstrap, 'ui.sortable']

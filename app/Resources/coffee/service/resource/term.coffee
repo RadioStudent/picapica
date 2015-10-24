@@ -1,5 +1,3 @@
-'use strict'
-
 Term = ($resource) ->
     $resource 'api/v1/terms/:id'
 

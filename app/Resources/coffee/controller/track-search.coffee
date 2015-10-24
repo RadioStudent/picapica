@@ -1,5 +1,3 @@
-'use strict'
-
 class TrackSearchCtrl
     constructor: (Track, Suggestion, SearchFilter, SortableColumn, CurrentTrackList, IconGenerator, $http, $sce, $rootScope) ->
         @tracks = []
@@ -23,15 +21,15 @@ class TrackSearchCtrl
             @columns = SortableColumn.all
             @doSearch()
 
-        @typeInInput = (event) ->
+        @addFilterOnEnter = (event) ->
             if event.type is 'keyup' and event.keyCode is 13
                 @addTextFilter if event.shiftKey then 'add' else 'replace'
 
-        @addTextFilter = (type) ->
-            if @searchTerm.length > 0
-                SearchFilter.reset() if type is 'replace'
-                SearchFilter.add @searchTerm
-                @searchTerm = ''
+        @addTextFilter = (action) ->
+            return if @searchTerm.length is 0
+            SearchFilter.reset() if action is 'replace'
+            SearchFilter.add @searchTerm
+            @searchTerm = ''
 
         @doSearch = (sortParams) =>
             if SearchFilter.all.length is 0

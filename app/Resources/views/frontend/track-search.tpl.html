@@ -3,10 +3,10 @@
 <div class="container search" ng-controller="TrackSearchCtrl as ts">
     <div class="input-group">
         <input type="text"
-               ng-keyup="ts.typeInInput($event)"
+               ng-keyup="ts.addFilterOnEnter($event)"
                ng-model="ts.searchTerm"
                placeholder="enter search term"
-               typeahead="artist.name for artist in ts.getSuggestions($viewValue)"
+               uib-typeahead="artist.name for artist in ts.getSuggestions($viewValue)"
                typeahead-on-select="ts.selectSuggestion($item, $model, $label)"
                typeahead-wait-ms="300"
                typeahead-template-url="/partials/_autocomplete.tpl.html"
@@ -46,7 +46,7 @@
             <tr ng-repeat="track in ts.tracks">
                 <td ng-bind="track.fid" class="column-fid"></td>
                 <td class="column-artist">
-                    {{track.artistName}}&nbsp;<span ng-if="track.artistMistake" tooltip="{{track.artistMistake}}" class="glyphicon glyphicon-ok-sign"></span>
+                    {{track.artistName}}&nbsp;<span ng-if="track.artistMistake" uib-tooltip="{{track.artistMistake}}" class="glyphicon glyphicon-ok-sign"></span>
                 </td>
                 <td ng-bind="track.name" class="column-title"></td>
                 <td ng-bind="track.albumName" class="column-album"></td>

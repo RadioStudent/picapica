@@ -1,5 +1,3 @@
-'use strict'
-
 emptyTrackList =
     id: '-1'
     date: new Date().toISOString()

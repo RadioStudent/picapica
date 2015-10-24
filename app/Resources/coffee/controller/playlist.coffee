@@ -1,5 +1,3 @@
-'use strict'
-
 class PlaylistCtrl
     constructor: (CurrentTrackList, TrackList, Terms, $rootScope, $q, _) ->
         @trackList = CurrentTrackList

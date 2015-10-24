@@ -1,5 +1,3 @@
-'use strict'
-
 transform = (data, IconGenerator) ->
     results = angular.fromJson data
     for key, value of results

@@ -80,8 +80,13 @@ module.exports = (grunt) ->
         karma:
             options:
                 frameworks: ['jasmine', 'browserify']
-                files: ['test/*Spec.coffee']
+                files: [
+                    'app/Resources/coffee/app.coffee'
+                    'node_modules/angular-mocks/angular-mocks.js'
+                    'test/*Spec.coffee'
+                ]
                 preprocessors:
+                    'app/Resources/coffee/app.coffee': ['browserify']
                     'test/*Spec.coffee': ['browserify']
 
                 browserify:

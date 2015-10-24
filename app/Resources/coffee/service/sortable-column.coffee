@@ -1,5 +1,3 @@
-'use strict'
-
 SortableColumn = ($rootScope) ->
     buildParams = ->
         obj = {}

@@ -1,5 +1,3 @@
-'use strict'
-
 transformResponse = (response) ->
     response = angular.fromJson response
 

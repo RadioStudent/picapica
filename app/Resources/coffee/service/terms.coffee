@@ -1,5 +1,3 @@
-'use strict'
-
 Terms = ($rootScope, Term) ->
     service = Term.query()
 

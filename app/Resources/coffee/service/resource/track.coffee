@@ -1,5 +1,3 @@
-'use strict'
-
 Track = ($resource) ->
     $resource 'api/v1/tracks', null,
         search:

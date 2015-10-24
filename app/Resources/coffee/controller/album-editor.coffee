@@ -1,5 +1,3 @@
-'use strict'
-
 class AlbumEditorCtrl
     constructor: (_) ->
         @album =

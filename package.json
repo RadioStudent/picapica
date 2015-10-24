@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "angular": "^1.4.7",
-    "angular-bootstrap-npm": "0.14.1",
+    "angular-bootstrap-npm": "0.14.2",
     "angular-mocks": "^1.4.7",
     "angular-resource": "^1.4.7",
     "angular-route": "^1.4.7",

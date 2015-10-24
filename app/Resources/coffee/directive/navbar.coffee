@@ -1,5 +1,3 @@
-'use strict'
-
 ppNavbar = ($window) ->
     templateUrl: '/partials/_navbar.tpl.html'
     scope:
