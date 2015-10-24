@@ -7,13 +7,13 @@
                 <label class="control-label" for="playlist">Playlist</label>
                 <select id="playlist"
                         class="form-control"
-                        ng-model="pl.trackList.list.id"
+                        ng-model="pl.trackList.id"
                         ng-change="pl.selectTrackList()">
-                    <option value="-1" ng-bind="'(Create new)'" ng-selected="-1 === pl.trackList.list.id"></option>
+                    <option value="-1" ng-bind="'(Create new)'" ng-selected="-1 === pl.trackList.id"></option>
                     <option ng-repeat="trackList in pl.trackLists"
                             value="{{trackList.id}}"
                             ng-bind="trackList.date + ' - ' + trackList.name"
-                            ng-selected="trackList.id === pl.trackList.list.id"></option>
+                            ng-selected="trackList.id === pl.trackList.id"></option>
                 </select>
             </div>
         </div>
@@ -25,7 +25,7 @@
                 <input id="playlist-date"
                        type="text"
                        class="form-control"
-                       ng-model="pl.trackList.list.date"
+                       ng-model="pl.trackList.date"
                        ng-required="true"
                        ng-focus="pl.datepicker.open()"
                        is-open="pl.datepicker.opened"
@@ -39,7 +39,7 @@
                 <label class="control-label" for="playlist-term">Time</label>
                 <select id="playlist-term"
                         class="form-control"
-                        ng-model="pl.trackList.list.termId"
+                        ng-model="pl.trackList.termId"
                         ng-options="term.id as (term.name + ' - ' + term.time) group by term.group for term in pl.terms">
                 </select>
             </div>
@@ -50,12 +50,11 @@
                 <input id="playlist-name"
                        type="text"
                        class="form-control"
-                       ng-model="pl.trackList.list.name"
+                       ng-model="pl.trackList.name"
                        ng-required="true" />
             </div>
         </div>
     </div>
-
 
     <table class="table table-striped table-condensed table-hover">
         <thead>
@@ -69,8 +68,8 @@
                 <th class="column-buttons">PL</th>
             </tr>
         </thead>
-        <tbody ui-sortable ng-model="pl.trackList.list.tracks">
-            <tr ng-repeat="track in pl.trackList.list.tracks" ng-class="{ 'has-comment' : (track|hasComment) }">
+        <tbody ui-sortable ng-model="pl.trackList.tracks">
+            <tr ng-repeat="track in pl.trackList.tracks" ng-class="{ 'has-comment' : (track|hasComment) }">
                 <td ng-bind="track.fid" class="column-fid"></td>
                 <td ng-bind="track.artistName" class="column-artist"></td>
                 <td ng-bind="track.name" class="column-title"></td>
@@ -80,7 +79,7 @@
                 <td class="column-buttons">
                     <span ng-show="!(track|hasComment)" ng-click="pl.addComment(track)" class="glyphicon glyphicon-pencil"></span>
                     <span ng-show="track|hasComment" ng-click="pl.removeComment(track)" class="glyphicon glyphicon-trash"></span>
-                    <span ng-click="pl.toggleTrackInPlaylist(track)" class="glyphicon glyphicon-minus-sign"></span>
+                    <span ng-click="pl.trackList.toggleTrack(track)" class="glyphicon glyphicon-minus-sign"></span>
                 </td>
                 <td class="fake-comment-row">
                     <input type="text" ng-model="track.comment">

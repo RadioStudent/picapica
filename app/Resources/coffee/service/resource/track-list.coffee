@@ -9,8 +9,9 @@ transformResponse = (response) ->
 
 transformRequest = (request) ->
     request = angular.copy request # Get rid of references
+
     request.tracks = request.tracks.map (track) ->
-        track.comment = '' unless track.comment?
+        track.comment = '' if track.comment is null
         track
 
     angular.toJson request

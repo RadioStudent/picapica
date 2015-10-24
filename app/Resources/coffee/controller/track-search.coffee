@@ -1,16 +1,11 @@
 class TrackSearchController
     constructor: (Track, Suggestion, SearchFilter, SortableColumn, CurrentTrackList, $http, $sce, $rootScope) ->
-        @tracks = []
+        @tracks     = []
         @searchTerm = ''
-        @filters = SearchFilter.all
-        @columns = SortableColumn.all
-        @sort = SortableColumn.sort
-
-        @isTrackInTrackList = CurrentTrackList.hasTrack
-        @toggleTrackInTrackList = CurrentTrackList.toggleTrack
-
-        if CurrentTrackList.list is null
-            CurrentTrackList.reset()
+        @filters    = SearchFilter.all
+        @columns    = SortableColumn.all
+        @sort       = SortableColumn.sort
+        @trackList  = CurrentTrackList
 
         $rootScope.$on 'filters.update', =>
             @filters = SearchFilter.all

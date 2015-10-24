@@ -53,8 +53,8 @@
                 <td ng-bind="track.year" class="column-year"></td>
                 <td ng-bind="track.duration | duration" class="column-length"></td>
                 <td class="column-buttons">
-                    <span ng-click="ts.toggleTrackInTrackList(track)" ng-show="!ts.isTrackInTrackList(track)" class="glyphicon glyphicon-plus-sign"></span>
-                    <span ng-click="ts.toggleTrackInTrackList(track)" ng-show="ts.isTrackInTrackList(track)"  class="glyphicon glyphicon-minus-sign"></span>
+                    <span ng-click="ts.trackList.toggleTrack(track)" ng-show="!ts.trackList.hasTrack(track)" class="glyphicon glyphicon-plus-sign"></span>
+                    <span ng-click="ts.trackList.toggleTrack(track)" ng-show="ts.trackList.hasTrack(track)"  class="glyphicon glyphicon-minus-sign"></span>
                 </td>
             </tr>
         </tbody>
