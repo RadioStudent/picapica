@@ -1,11 +1,10 @@
-class TrackSearchCtrl
-    constructor: (Track, Suggestion, SearchFilter, SortableColumn, CurrentTrackList, IconGenerator, $http, $sce, $rootScope) ->
+class TrackSearchController
+    constructor: (Track, Suggestion, SearchFilter, SortableColumn, CurrentTrackList, $http, $sce, $rootScope) ->
         @tracks = []
         @searchTerm = ''
         @filters = SearchFilter.all
         @columns = SortableColumn.all
         @sort = SortableColumn.sort
-        @generateIcon = IconGenerator.forType
 
         @isTrackInTrackList = CurrentTrackList.hasTrack
         @toggleTrackInTrackList = CurrentTrackList.toggleTrack
@@ -23,11 +22,11 @@ class TrackSearchCtrl
 
         @addFilterOnEnter = (event) ->
             if event.type is 'keyup' and event.keyCode is 13
-                @addTextFilter if event.shiftKey then 'add' else 'replace'
+                @addTextFilter not event.shiftKey
 
-        @addTextFilter = (action) ->
+        @addTextFilter = (reset = yes) ->
             return if @searchTerm.length is 0
-            SearchFilter.reset() if action is 'replace'
+            SearchFilter.reset() if reset
             SearchFilter.add @searchTerm
             @searchTerm = ''
 
@@ -64,4 +63,4 @@ class TrackSearchCtrl
 
         return
 
-module.exports = TrackSearchCtrl
+module.exports = TrackSearchController

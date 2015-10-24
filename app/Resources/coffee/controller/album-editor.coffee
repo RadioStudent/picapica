@@ -1,4 +1,4 @@
-class AlbumEditorCtrl
+class AlbumEditorController
     constructor: (_) ->
         @album =
             value: 'some name'
@@ -28,4 +28,4 @@ class AlbumEditorCtrl
 
         return
 
-module.exports = AlbumEditorCtrl
+module.exports = AlbumEditorController

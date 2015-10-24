@@ -1,4 +1,4 @@
-class PlaylistCtrl
+class PlaylistController
     constructor: (CurrentTrackList, TrackList, Terms, $rootScope, $q, _) ->
         @trackList = CurrentTrackList
         @trackLists = TrackList.query()
@@ -45,4 +45,4 @@ class PlaylistCtrl
 
         return
 
-module.exports = PlaylistCtrl
+module.exports = PlaylistController

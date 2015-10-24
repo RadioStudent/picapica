@@ -1,6 +1,6 @@
 <pp-navbar active-item="'search'"></pp-navbar>
 
-<div class="container search" ng-controller="TrackSearchCtrl as ts">
+<div class="container search" ng-controller="TrackSearchController as ts">
     <div class="input-group">
         <input type="text"
                ng-keyup="ts.addFilterOnEnter($event)"
@@ -14,8 +14,8 @@
                class="form-control search-bar">
 
         <span class="input-group-btn">
-            <button class="btn btn-default" ng-click="ts.addTextFilter('replace')">Search</button>
-            <button class="btn btn-default" ng-click="ts.addTextFilter('add')">+</button>
+            <button class="btn btn-default" ng-click="ts.addTextFilter(true)">Search</button>
+            <button class="btn btn-default" ng-click="ts.addTextFilter()">+</button>
         </span>
     </div>
 
@@ -27,8 +27,8 @@
                 <input type="checkbox" ng-model="type.active" ng-change="ts.doSearch()"> {{ type.name }}
             </label>
             <span ng-click="filter.remove()" class="glyphicon glyphicon-remove filter-remove-icon" aria-hidden="true"></span>
-            <h2 class="filter-label" ng-if="!filter.fromAutocomplete" ng-bind-html="ts.generateIcon('search') + '“' + filter.label + '”'"></h2>
-            <h2 class="filter-label" ng-if="filter.fromAutocomplete" ng-bind-html="ts.generateIcon(filter.getType()) + filter.label"></h2>
+            <h2 class="filter-label" ng-if="!filter.fromAutocomplete" ng-bind-html="('search'|icon) + '“' + filter.label + '”'"></h2>
+            <h2 class="filter-label" ng-if="filter.fromAutocomplete" ng-bind-html="(filter.getType()|icon) + filter.label"></h2>
         </div>
     </div>
 

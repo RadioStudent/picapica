@@ -1,7 +1,6 @@
-'use strict'
-
 durationFilter   = require('../app/Resources/coffee/filter/duration')()
 hasCommentFilter = require('../app/Resources/coffee/filter/has-comment')()
+iconFilter       = require('../app/Resources/coffee/filter/icon')()
 
 describe 'filter', ->
     describe 'duration', ->
@@ -30,3 +29,6 @@ describe 'filter', ->
             expect(hasCommentFilter track1).toBe false
             expect(hasCommentFilter track2).toBe false
             expect(hasCommentFilter track3).toBe false
+    describe 'icon', ->
+        it 'should generate html with appropriate icon class', ->
+            expect(@sce.getTrustedHtml(iconFilter 'artist')).toBe '<span class="glyphicon glyphicon-user"></span>'

@@ -1,4 +1,4 @@
-transform = (data, IconGenerator) ->
+transform = (data, $filter) ->
     results = angular.fromJson data
     for key, value of results
         if results[key].length > 0 and key != 'query'
@@ -10,7 +10,7 @@ transform = (data, IconGenerator) ->
                 if result.elastica_highlights['name.autocomplete']?.length > 0
                     highlights = result.elastica_highlights['name.autocomplete']
 
-                result.label = "#{IconGenerator.forType(result.type)}<span>#{prepend}#{highlights or result.name}</span>"
+                result.label = "#{$filter('icon')(result.type)}<span>#{prepend}#{highlights or result.name}</span>"
 
             results[key].push
                 searchInField: yes
@@ -22,10 +22,10 @@ transform = (data, IconGenerator) ->
     results[results.length - 1]?.last = yes
     results
 
-Suggestion = ($resource, IconGenerator) ->
+Suggestion = ($resource, $filter) ->
     $resource 'api/v1/ac', null,
         query:
             isArray: true
-            transformResponse: (data) -> transform(data, IconGenerator)
+            transformResponse: (data) -> transform(data, $filter)
 
 module.exports = Suggestion
