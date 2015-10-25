@@ -13,7 +13,7 @@
                     <option ng-repeat="trackList in pl.trackLists"
                             value="{{trackList.id}}"
                             ng-bind="trackList.date + ' - ' + trackList.name"
-                            ng-selected="trackList.id === pl.trackList.id"></option>
+                            ng-selected="pl.trackList.id === trackList.id"></option>
                 </select>
             </div>
         </div>

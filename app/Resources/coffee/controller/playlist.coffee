@@ -1,7 +1,8 @@
 class PlaylistController
     constructor: (CurrentTrackList, TrackList, Terms, $rootScope, $q, _) ->
         @trackList = CurrentTrackList
-        @trackLists = TrackList.query()
+        TrackList.query (newTrackLists) =>
+            @trackLists = newTrackLists
         @terms = Terms
         @loaders =
             save: off
@@ -31,14 +32,19 @@ class PlaylistController
 
             if @trackList.id is '-1'
                 TrackList.save {}, @trackList, (response) =>
-                    @trackLists = TrackList.query =>
+                    TrackList.query (newTrackLists) =>
+                        @trackLists = newTrackLists
                         TrackList.get {id: response.id}, (newTrackList) =>
                             _.assign @trackList, newTrackList
                             @loaders.save = off
                             $rootScope.$broadcast 'tracklist.update'
             else
-                TrackList.update {id: @trackList.id}, _.clone(@trackList), =>
-                    @trackLists = TrackList.query =>
+                TrackList.update {id: @trackList.id}, @trackList, =>
+                    TrackList.query (newTrackLists) =>
+                        fromClient = _.findWhere @trackLists,   {id: @trackList.id}
+                        fromServer = _.findWhere newTrackLists, {id: @trackList.id}
+                        _.assign fromClient, fromServer
+                        # @trackLists = newTrackLists
                         @loaders.save = off
 
         @addComment = (track) -> track.comment = ''
