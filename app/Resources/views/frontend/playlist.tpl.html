@@ -77,8 +77,8 @@
                 <td ng-bind="track.year" class="column-year"></td>
                 <td ng-bind="track.duration | duration" class="column-length"></td>
                 <td class="column-buttons">
-                    <span ng-show="!(track|hasComment)" ng-click="pl.addComment(track)" class="glyphicon glyphicon-pencil"></span>
-                    <span ng-show="track|hasComment" ng-click="pl.removeComment(track)" class="glyphicon glyphicon-trash"></span>
+                    <span ng-show="!(track|hasComment)" ng-click="pl.trackList.addCommentToTrack(track)" class="glyphicon glyphicon-pencil"></span>
+                    <span ng-show="track|hasComment" ng-click="pl.trackList.removeCommentFromTrack(track)" class="glyphicon glyphicon-trash"></span>
                     <span ng-click="pl.trackList.toggleTrack(track)" class="glyphicon glyphicon-minus-sign"></span>
                 </td>
                 <td class="fake-comment-row">

@@ -1,13 +1,5 @@
-CurrentTrackList = ($rootScope, _) ->
-    emptyTrackList =
-        id      : '-1'
-        date    : new Date().toISOString()
-        name    : 'New playlist'
-        termId  : 1
-        comment : ''
-        tracks  : []
-
-    new class TrackList
+module.exports = ($rootScope, $q, _, TrackList) ->
+    new class CurrentTrackList
         constructor: ->
             @reset()
 
@@ -22,7 +14,31 @@ CurrentTrackList = ($rootScope, _) ->
         hasTrack: (track) ->
             _.some @tracks, 'fid', track.fid
 
+        addCommentToTrack: (track) ->
+            track.comment = ''
+
+        removeCommentFromTrack: (track) ->
+            delete track.comment
+
         reset: ->
+            emptyTrackList =
+                id      : '-1'
+                date    : new Date().toISOString()
+                name    : 'New playlist'
+                termId  : 1
+                comment : ''
+                tracks  : []
             _.assign @, emptyTrackList
 
-module.exports = CurrentTrackList
+        save: ->
+            fetching = $q.defer()
+
+            if @id is '-1'
+                TrackList.save {}, @, (response) =>
+                    @id = response.id
+                    fetching.resolve()
+            else
+                TrackList.update {id: @id}, @, =>
+                    fetching.resolve()
+
+            fetching.promise

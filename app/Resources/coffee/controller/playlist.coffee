@@ -1,11 +1,9 @@
 class PlaylistController
     constructor: (CurrentTrackList, TrackList, Terms, $rootScope, $q, _) ->
         @trackList = CurrentTrackList
-        TrackList.query (newTrackLists) =>
-            @trackLists = newTrackLists
+        @trackLists = TrackList.query()
         @terms = Terms
-        @loaders =
-            save: off
+        @loaders = { save: off }
 
         @datepicker =
             options:
@@ -15,40 +13,25 @@ class PlaylistController
             opened: no
             open: => @datepicker.opened = yes
 
-        $rootScope.$on 'tracklist.update', =>
-            @totalDuration = _.pluck(@trackList.tracks, 'duration').filter(Number).reduce ((a, b) -> a + b), 0
+        $rootScope.$on 'tracklist.update', refreshDuration
 
         @selectTrackList = ->
             if @trackList.id is '-1'
                 @trackList.reset()
-                $rootScope.$broadcast 'tracklist.update'
+                $refreshDuration()
             else
                 TrackList.get {id: @trackList.id}, (newTrackList) =>
                     _.assign @trackList, newTrackList
-                    $rootScope.$broadcast 'tracklist.update'
+                    refreshDuration()
 
-        @save = =>
+        @save = ->
             @loaders.save = on
+            @trackList.save().then () =>
+                refreshDuration()
+                @trackLists = TrackList.query () => @loaders.save = off
 
-            if @trackList.id is '-1'
-                TrackList.save {}, @trackList, (response) =>
-                    TrackList.query (newTrackLists) =>
-                        @trackLists = newTrackLists
-                        TrackList.get {id: response.id}, (newTrackList) =>
-                            _.assign @trackList, newTrackList
-                            @loaders.save = off
-                            $rootScope.$broadcast 'tracklist.update'
-            else
-                TrackList.update {id: @trackList.id}, @trackList, =>
-                    TrackList.query (newTrackLists) =>
-                        fromClient = _.findWhere @trackLists,   {id: @trackList.id}
-                        fromServer = _.findWhere newTrackLists, {id: @trackList.id}
-                        _.assign fromClient, fromServer
-                        # @trackLists = newTrackLists
-                        @loaders.save = off
-
-        @addComment = (track) -> track.comment = ''
-        @removeComment = (track) -> delete track.comment
+        refreshDuration = =>
+            @totalDuration = _.pluck(@trackList.tracks, 'duration').filter(Number).reduce ((a, b) -> a + b), 0
 
         return
 
