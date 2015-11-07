@@ -13,7 +13,7 @@ class AlbumEditorController
                 copy: on
             tracks: []
 
-        @trackFields = [ 'title', 'artist', 'label', 'year']
+        @trackFields = ['title', 'artist', 'label', 'year']
 
         @addTrack = () ->
             @album.tracks.push
@@ -22,7 +22,7 @@ class AlbumEditorController
                 label:  if @album.label.copy  then @album.label.value  else ''
                 year:   if @album.year.copy   then @album.year.value   else ''
 
-        @defaultValueChanged = (field) ->
+        @defaultValueChanged = (field) =>
             if @album[field].copy
                 @album.tracks.forEach (track) => track[field] = @album[field].value
 

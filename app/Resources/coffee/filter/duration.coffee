@@ -1,24 +1,22 @@
 Duration = () ->
     (seconds) ->
-        if seconds
-            hours = Math.floor(seconds / 3600)
-            minutes = Math.floor(seconds % 3600 / 60)
-            seconds = seconds % 60
-            timeString = ''
+        return '/' unless seconds
 
-            if hours > 0
-                timeString = "#{hours}:"
-                if minutes < 10
-                    timeString += '0'
+        hours      = Math.floor(seconds / 3600)
+        minutes    = Math.floor(seconds % 3600 / 60)
+        seconds    = seconds % 60
+        timeString = ''
 
-            timeString += "#{minutes}:"
-
-            if seconds < 10
+        if hours > 0
+            timeString = "#{hours}:"
+            if minutes < 10
                 timeString += '0'
 
-            timeString += seconds
+        timeString += "#{minutes}:"
 
-        else
-            return '/'
+        if seconds < 10
+            timeString += '0'
+
+        timeString += seconds
 
 module.exports = Duration

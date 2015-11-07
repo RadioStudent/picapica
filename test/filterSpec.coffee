@@ -1,8 +1,14 @@
+capitaliseFilter = require('../app/Resources/coffee/filter/capitalise')()
 durationFilter   = require('../app/Resources/coffee/filter/duration')()
 hasCommentFilter = require('../app/Resources/coffee/filter/has-comment')()
 iconFilter       = require('../app/Resources/coffee/filter/icon')()
 
 describe 'filter', ->
+    describe 'capitalise', ->
+        it 'should capitalise strings', ->
+            expect(capitaliseFilter 'abc').toBe 'Abc'
+        it 'should throw TypeError unless a string is passed', ->
+            expect(-> capitaliseFilter 123).toThrow(new TypeError 'Capitalise filter parameter must be a string.')
     describe 'duration', ->
         it 'should convert seconds to H:MM:SS', ->
             expect(durationFilter 3600).toBe '1:00:00'
@@ -31,4 +37,4 @@ describe 'filter', ->
             expect(hasCommentFilter track3).toBe false
     describe 'icon', ->
         it 'should generate html with appropriate icon class', ->
-            expect(@sce.getTrustedHtml(iconFilter 'artist')).toBe '<span class="glyphicon glyphicon-user"></span>'
+            expect(iconFilter 'artist').toBe '<span class="glyphicon glyphicon-user"></span>'

@@ -1,0 +1,14 @@
+<div class="col-sm-{{columns}}">
+    <label>{{type|capitalise}}</label>
+    <div class="input-group input-group-sm">
+        <input type="text"
+               class="form-control"
+               ng-model="field.value"
+               ng-change="change(type)">
+        <span class="input-group-addon">
+            <input type="checkbox"
+                   ng-model="field.copy"
+                   ng-change="change(type)">
+        </span>
+    </div>
+</div>

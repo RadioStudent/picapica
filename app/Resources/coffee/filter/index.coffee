@@ -1,5 +1,6 @@
 require 'angular'
     .module 'picapicaApp'
+        .filter 'capitalise', require './capitalise'
         .filter 'duration',   require './duration'
         .filter 'hasComment', require './has-comment'
         .filter 'icon',       require './icon'
