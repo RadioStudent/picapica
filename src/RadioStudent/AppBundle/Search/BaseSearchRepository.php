@@ -33,7 +33,7 @@ abstract class BaseSearchRepository {
      */
     public function search($search = null, $sort = null, $from = 0, $size = 100)
     {
-        $boolQuery = new Query\Bool();
+        $boolQuery = new Query\BoolQuery();
 
         $highlightFields = [];
 
@@ -52,7 +52,7 @@ abstract class BaseSearchRepository {
                     $highlightFields[] = $field;
 
                 } else {
-                    $q = new Query\Bool();
+                    $q = new Query\BoolQuery();
                     foreach ($fields as $field=>$value) {
                         $mq = new Query\Match();
                         $mq->setField($field, $value);
