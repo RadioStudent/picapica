@@ -1,0 +1,20 @@
+FROM php:7.2-fpm
+
+# PHP Config
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+
+# UTF BOM fix?
+#COPY docker-config/php-zend-multibyte.ini $PHP_INI_DIR/conf.d/
+
+# Composer 
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Zip extension
+RUN apt-get update && apt-get install unzip zlib1g-dev
+RUN docker-php-ext-install zip
+
+# Mysql extension
+RUN docker-php-ext-install pdo_mysql
+
+# PHP memory limit (for elasticsearch)
+RUN  echo 'memory_limit = 6G' > $PHP_INI_DIR/conf.d/memory_limit.ini;
