@@ -14,10 +14,13 @@ Web app for physical music library management.
 5. index the database with elasticsearch "./console.sh fos:elastica:populate"
 6. install javascript dependencies "npm i"
 7. js and css can always be built with "npm run build"
+8. the app is accessible at "localhost:8080"
 
 Composer is inside docker, you run it with "./composer.sh"
 The symfony console helper is also inside docker, accessible with "./console.sh"
 In case of permission issues, run "./docker-permfix.sh" (may need sudo)
+
+There's a default user, "fonoteka", with the password "fonoteka"
 
 # Installation (non-docker)
 
