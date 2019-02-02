@@ -1,10 +1,10 @@
 parameters:
     database_driver:   pdo_mysql
-    database_host:     127.0.0.1
+    database_host:     database
     database_port:     ~
-    database_name:     picapica
-    database_user:     root
-    database_password: root
+    database_name:     fonoteka_pica
+    database_user:     FONOTEKA
+    database_password: huehuehue
     # You should uncomment this if you want use pdo_sqlite
     # database_path: "%kernel.root_dir%/data.db3"
 
@@ -20,3 +20,4 @@ parameters:
     debug_redirects:        false
     use_assetic_controller: true
     log_level:              info
+    elasticsearch_host:     elasticsearch

@@ -10,7 +10,7 @@ services:
     links:
       - php
   php:
-    build: 
+    build:
       context: .
       dockerfile: ./docker-config/Dockerfile-php
     volumes:
@@ -32,7 +32,7 @@ services:
       MYSQL_PASSWORD: huehuehue
       MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
   elasticsearch:
-    build: 
+    build:
       context: .
       dockerfile: ./docker-config/Dockerfile-elasticsearch
 
