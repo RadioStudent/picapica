@@ -1,59 +1,68 @@
 <pp-navbar active-item="'playlist'"></pp-navbar>
 
 <div class="container playlist" ng-controller="PlaylistController as pl">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="form-group">
-                <label class="control-label" for="playlist">Playlist</label>
-                <select id="playlist"
+    <div class="playlist-form">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="control-label" for="playlist">Playlist</label>
+                    <select id="playlist"
+                            class="form-control"
+                            ng-model="pl.trackList.id"
+                            ng-change="pl.selectTrackList()">
+                        <option value="-1" ng-bind="'(Create new)'" ng-selected="-1 === pl.trackList.id"></option>
+                        <option ng-repeat="trackList in pl.trackLists"
+                                value="{{trackList.id}}"
+                                ng-bind="trackList.date + ' - ' + trackList.name"
+                                ng-selected="pl.trackList.id === trackList.id"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group playlist-date">
+                    <label class="control-label" for="playlist-date">Date</label>
+                    <input id="playlist-date"
+                        type="text"
                         class="form-control"
-                        ng-model="pl.trackList.id"
-                        ng-change="pl.selectTrackList()">
-                    <option value="-1" ng-bind="'(Create new)'" ng-selected="-1 === pl.trackList.id"></option>
-                    <option ng-repeat="trackList in pl.trackLists"
-                            value="{{trackList.id}}"
-                            ng-bind="trackList.date + ' - ' + trackList.name"
-                            ng-selected="pl.trackList.id === trackList.id"></option>
-                </select>
+                        ng-model="pl.trackList.date"
+                        ng-required="true"
+                        ng-focus="pl.datepicker.open()"
+                        is-open="pl.datepicker.opened"
+                        uib-datepicker-popup="{{pl.datepicker.format}}"
+                        uib-datepicker-options="pl.datepicker.options"
+                        close-text="Close" />
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label" for="playlist-term">Time</label>
+                    <select id="playlist-term"
+                            class="form-control"
+                            ng-model="pl.trackList.termId"
+                            ng-options="term.id as (term.name + ' - ' + term.time) group by term.group for term in pl.terms">
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group playlist-name">
+                    <label class="control-label" for="playlist-name">Name</label>
+                    <input id="playlist-name"
+                        type="text"
+                        class="form-control"
+                        ng-model="pl.trackList.name"
+                        ng-required="true" />
+                </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-4">
-            <div class="form-group playlist-date">
-                <label class="control-label" for="playlist-date">Date</label>
-                <input id="playlist-date"
-                       type="text"
-                       class="form-control"
-                       ng-model="pl.trackList.date"
-                       ng-required="true"
-                       ng-focus="pl.datepicker.open()"
-                       is-open="pl.datepicker.opened"
-                       uib-datepicker-popup="{{pl.datepicker.format}}"
-                       uib-datepicker-options="pl.datepicker.options"
-                       close-text="Close" />
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                <label class="control-label" for="playlist-term">Time</label>
-                <select id="playlist-term"
-                        class="form-control"
-                        ng-model="pl.trackList.termId"
-                        ng-options="term.id as (term.name + ' - ' + term.time) group by term.group for term in pl.terms">
-                </select>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="form-group playlist-name">
-                <label class="control-label" for="playlist-name">Name</label>
-                <input id="playlist-name"
-                       type="text"
-                       class="form-control"
-                       ng-model="pl.trackList.name"
-                       ng-required="true" />
-            </div>
-        </div>
+
+    <div class="printable-metadata">
+        <strong>Datum:</strong> {{ pl.printMetadata.date }} <br>
+        <strong>Termin:</strong> {{ pl.printMetadata.term }} <br>
+        <strong>Avtor:</strong> {{ pl.printMetadata.author }} <br>
+        <strong>Trajanje:</strong> {{ pl.printMetadata.duration }} <br>
     </div>
 
     <table class="table table-striped table-condensed table-hover">

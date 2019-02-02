@@ -1,9 +1,25 @@
+formatDate = (isoString) ->
+    dateObject = new Date(isoString)
+    dateString =
+        dateObject.getDate() + '. ' +
+        (dateObject.getMonth() + 1) + '. ' +
+        dateObject.getFullYear()
+
+    return dateString
+
+
 class PlaylistController
-    constructor: (CurrentTrackList, TrackList, Terms, $rootScope, $q, _) ->
+    constructor: (CurrentTrackList, TrackList, Terms, $filter, $rootScope, $q, _) ->
         @trackList = CurrentTrackList
         @trackLists = TrackList.query()
         @terms = Terms
         @loaders = { save: off }
+
+        @printMetadata = {
+            author: '',
+            date: '',
+            term: ''
+        }
 
         @datepicker =
             options:
@@ -13,25 +29,35 @@ class PlaylistController
             opened: no
             open: => @datepicker.opened = yes
 
-        $rootScope.$on 'tracklist.update', refreshDuration
+        $rootScope.$on 'tracklist.update', refresh
 
         @selectTrackList = ->
             if @trackList.id is '-1'
                 @trackList.reset()
-                $refreshDuration()
+                refresh()
             else
                 TrackList.get {id: @trackList.id}, (newTrackList) =>
                     _.assign @trackList, newTrackList
-                    refreshDuration()
+                    refresh()
 
         @save = ->
             @loaders.save = on
             @trackList.save().then () =>
-                refreshDuration()
+                refresh()
                 @trackLists = TrackList.query () => @loaders.save = off
 
-        refreshDuration = =>
+        refresh = =>
+            # Refresh duration meter at the bottom
             @totalDuration = _.pluck(@trackList.tracks, 'duration').filter(Number).reduce ((a, b) -> a + b), 0
+
+            # Refresh hidden metadata for printing
+            term = _.findWhere(@terms, {id: @trackList.termId})
+            @printMetadata = {
+                author: CurrentTrackList.authorName,
+                date: formatDate(CurrentTrackList.date),
+                term: term.time + ' (' + term.name + ')'
+                duration: $filter('duration')(@totalDuration)
+            }
 
         return
 
