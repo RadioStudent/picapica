@@ -30,9 +30,9 @@ class LoadUserData implements FixtureInterface {
         $manager->persist($testAuthor);
 
         $times = [
-            "Enka"   => new \DateTime('07:00:00'),
-            "Dvojka" => new \DateTime('11:00:00'),
-            "Trojka" => new \DateTime('15:00:00'),
+            "Jutranjc" => new \DateTime('07:00:00'),
+            "Enka"     => new \DateTime('11:00:00'),
+            "Dvojka"   => new \DateTime('15:00:00'),
         ];
 
         foreach ($times as $k=>$v) {
