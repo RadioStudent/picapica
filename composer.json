@@ -20,7 +20,7 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/elastica-bundle": "~3.2",
         "friendsofsymfony/rest-bundle": "~1.5",
-        "jms/serializer-bundle": "0.13.*",
+        "jms/serializer-bundle": "~2.4.3",
         "pagerfanta/pagerfanta": "~1.0",
         "phing/phing": "~2.10",
         "friendsofsymfony/user-bundle": "~2.0@dev",
