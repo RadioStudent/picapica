@@ -13,6 +13,7 @@ To do the following steps, you need `docker`, `docker-compose` and `npm` (with N
 4. install dependencies with composer `./composer.sh install`
 5. copy assets `./console.sh assets:install`
 6. index the database with elasticsearch `./console.sh fos:elastica:populate`
+  This one is superlong, you can proceed with other steps while it's running
 7. install javascript dependencies `npm i`
 8. build js and css with `npm run build`
 9. the app is now accessible at [localhost:8080](http://localhost:8080)
