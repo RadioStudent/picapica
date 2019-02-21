@@ -4,32 +4,35 @@
     "type": "project",
     "description": "picapica",
     "autoload": {
-        "psr-0": { "": "src/", "SymfonyStandard": "app/" }
+        "psr-4": {
+            "AppBundle\\": "src/RadioStudent/AppBundle"
+        },
+        "files": [
+            "app/AppKernel.php",
+            "app/AppCache.php"
+        ]
     },
     "require": {
-        "php": ">=5.3.3",
-        "symfony/symfony": "~2.8",
+        "php": ">=7.1",
+        "symfony/symfony": "~3.4",
         "doctrine/orm": "~2.2,>=2.2.3",
         "doctrine/doctrine-bundle": "~1.2",
         "twig/extensions": "~1.0",
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
         "symfony/monolog-bundle": "~2.4",
-        "sensio/distribution-bundle": "~3.0",
-        "sensio/framework-extra-bundle": "~3.0",
+        "sensio/distribution-bundle": "~5.0",
+        "sensio/framework-extra-bundle": "~5.0",
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/elastica-bundle": "~3.2",
         "friendsofsymfony/rest-bundle": "~1.5",
         "jms/serializer-bundle": "~2.4.3",
         "pagerfanta/pagerfanta": "~1.0",
         "phing/phing": "~2.10",
-        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "friendsofsymfony/user-bundle": "~2.0",
         "doctrine/doctrine-fixtures-bundle": "^2.2",
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "james-heinrich/getid3": "^1.9"
-    },
-    "require-dev": {
-        "sensio/generator-bundle": "~2.3"
     },
     "scripts": {
         "post-root-package-install": [
