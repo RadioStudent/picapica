@@ -73,14 +73,27 @@ class AlbumController extends FOSRestController
         $em = $this->container->get('doctrine.orm.entity_manager');
 
         try {
-            $data = json_decode($request->getContent(), true)['data'];
+            $data = json_decode($request->getContent(), true);
             $album = $em->getRepository("RadioStudentAppBundle:Album")->create($data);
 
-            return new JsonReponse($album->getId(), 201);
+            $em->flush();
+
+            // Poindeksirajmo novosti
+            $albumPersister = $this->container->get('fos_elastica.object_persister.picapica.album');
+            $artistPersister = $this->container->get('fos_elastica.object_persister.picapica.artist');
+            $trackPersister = $this->container->get('fos_elastica.object_persister.picapica.track');
+
+            $albumPersister->replaceOne($album);
+            $artistPersister->replaceMany($album->getArtists()->toArray());
+            $trackPersister->replaceMany($album->getTracks()->toArray());
+
+            return new JsonResponse($album->getId(), 201);
         } catch (\Exception $e) {
             return new JsonResponse([
-                "message" => $e->getMessage()
-            ], 422);
+                ["error" => [
+                    "message" => $e->getMessage()
+                ]]
+            ], 412);
         }
     }
 }

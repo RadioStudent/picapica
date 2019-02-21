@@ -29,7 +29,8 @@ class AlbumEditorController
         @album.tracks.push
             fid: number
             title: ''
-            artist: ''#artist: if last and last.artist then last.artist else @album.albumArtist
+            artist: ''
+            artistModel: null
             length: ''
 
     getArtistSuggestions: (searchInput) ->
@@ -46,16 +47,26 @@ class AlbumEditorController
         @album.albumArtistModel =
             id: $item.id
             name: $item.name
-        console.log @album
 
     selectTrackArtist: ($item, $model, $label, $index) ->
         @album.tracks[$index].artistModel =
             id: $item.id
             name: $item.name
-        console.log @album
 
     saveAlbum: () ->
-        @RAlbum.save data: JSON.stringify @album
+        promise = @RAlbum.save JSON.stringify(@album), @handleSuccess, @handleError
+
+    handleSuccess: () ->
+        alert 'Album uspešno shranjen!'
+        #location.reload()
+
+    handleError: (resp) ->
+        if resp.data[0]
+            alert 'Napaka pri shranjevanju: ' + resp.data[0].error.message
+        else if resp.data.error
+            alert 'Napaka pri shranjevanju: ' + resp.data.error.message
+        else
+            alert 'Napaka pri shranjevanju'
 
 
 module.exports = AlbumEditorController

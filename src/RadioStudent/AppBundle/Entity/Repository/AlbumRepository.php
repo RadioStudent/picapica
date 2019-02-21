@@ -4,14 +4,14 @@ namespace RadioStudent\AppBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use RadioStudent\AppBundle\Entity\Album;
+use RadioStudent\AppBundle\Entity\Artist;
+use RadioStudent\AppBundle\Entity\Track;
 
 class AlbumRepository extends EntityRepository {
 
-    public function create($request)
+    public function create($data)
     {
         $em = $this->getEntityManager();
-
-        $data = $this->parseAlbumData($request);
 
         $album = new Album();
 
@@ -24,44 +24,85 @@ class AlbumRepository extends EntityRepository {
         $album->setFid($data['fid']);
         $album->setName($data['title']);
 
-        $artistsRepo = $this->getDoctrine()->getRepository('RadioStudentAppBundle:Artist');
         $albumArtist = null;
-        if ($data['albumArtistModel'] && $data['albumArtistModel']['id'] && $albumArtist === $data['albumArtistModel']['name']) {
+        if ($data['albumArtistModel'] && $data['albumArtistModel']['id'] && $data['albumArtist'] === $data['albumArtistModel']['name']) {
+            $artistRepo = $em->getRepository('RadioStudentAppBundle:Artist');
             $albumArtist = $artistRepo->find($data['albumArtistModel']['id']);
-            $album->setAlbumArtistName($albumArtist->getName());
         } else {
             $albumArtist = new Artist();
-            $albumArtist->setName($data['albumArtistName']);
+            $albumArtist->setName($data['albumArtist']);
             $em->persist($albumArtist);
         }
-        $album->addArtist($albumArtist);
 
-        if (!$artist || !$artist->getName()) {
+        if (!$albumArtist || !$albumArtist->getName()) {
             throw new \Exception('Ime izvajalca albuma je neveljavno');
         }
 
-        if (!$data['year']) {
-            throw new \Exception('Letnica albuma je neveljavna');
+        $album->setAlbumArtistName($albumArtist->getName());
+        $album->addArtist($albumArtist);
+
+        $album->setStrDate($data['year']);
+        $album->setLabel($data['label']);
+
+        if (!count($data['tracks'])) {
+            throw new \Exception('Praznega albuma ne moreš dodati');
         }
 
-        // Validation
-        throw new \Exception("hurrah");
+        $this->parseTrackData($data['tracks'], $album, $albumArtist, $em);
 
         $em->persist($album);
 
         return $album;
     }
 
-    protected function parseAlbumData($request)
+    protected function parseTrackData($trackData, $album, $albumArtist, $em)
     {
-        var_dump($request->get);die;
-        return array_map(function ($param) use ($request) {
-            return $request->get($param);
-        }, array_keys($request->keys()));
-    }
+        return array_map(function ($komad) use ($album, $albumArtist, $em) {
+            $track = new Track();
 
-    protected function parseTrackData($tracks)
-    {
-        var_dump($tracks);die;
+            if (!$komad['fid']) {
+                throw new \Exception('Vsak komad rabi fid');
+            }
+            $track->setTrackNum($komad['fid']);
+            $track->setFid($album->getFid() . '-' . $komad['fid']);
+
+            if (!$komad['title']) {
+                throw new \Exception('Vsak komad rabi ime');
+            }
+            $track->setName($komad['title']);
+            $track->setFid($album->getFid() . '-' . $komad['fid']);
+
+            $artist = null;
+            if (!$komad['artist']) {
+                $artist = $albumArtist;
+            } elseif ($komad['artistModel'] && $komad['artistModel']['id'] && $komad['artist'] === $komad['artistModel']['name']) {
+                $artistRepo = $em->getRepository('RadioStudentAppBundle:Artist');
+                $artist = $artistRepo->find($komad['artistModel']['id']);
+            } else {
+                $artist = new Artist();
+                $artist->setName($komad['artist']);
+                $em->persist($artist);
+            }
+
+            if (!$artist || !$artist->getName()) {
+                throw new \Exception('Ime izvajalca komada je neveljavno');
+            }
+
+            $track->setArtist($artist);
+            $album->addArtist($artist);
+
+            $track->setDate($album->getDate());
+            $track->setStrDate($album->getStrDate());
+
+            if (!$komad['length']) {
+                throw new \Exception('Vsak komad rabi trajanje');
+            }
+            $trajanje = explode(':', $komad['length']);
+            $track->setDuration($trajanje[0] * 60 + $trajanje[1]);
+
+            $em->persist($track);
+
+            $album->addTrack($track);
+        }, $trackData);
     }
 }
