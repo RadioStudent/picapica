@@ -1,0 +1,5 @@
+
+<a class="dropdown-suggestion-text" ng-class="{ 'precomputed-suggestion': match.model.searchInField }">
+    <span ng-bind-html="match.model.elastica_highlights.autocomplete[0]"></span>
+</a>
+</li ng-if="match.model.searchInField && !match.model.last"><li ng-if="match.model.searchInField && !match.model.last" class="divider">

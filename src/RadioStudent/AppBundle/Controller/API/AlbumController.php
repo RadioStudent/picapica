@@ -6,6 +6,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
 use RadioStudent\AppBundle\Entity\Album;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class AlbumController
@@ -21,7 +22,7 @@ class AlbumController extends FOSRestController
     /**
      * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function cgetAction(Request $request)
     {
@@ -59,5 +60,27 @@ class AlbumController extends FOSRestController
         $view = $this->view($album->getFlat('long'), 200);
 
         return $this->handleView($view);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function postAction(Request $request)
+    {
+        /** @var EntityManager $em */
+        $em = $this->container->get('doctrine.orm.entity_manager');
+
+        try {
+            $data = json_decode($request->getContent(), true)['data'];
+            $album = $em->getRepository("RadioStudentAppBundle:Album")->create($data);
+
+            return new JsonReponse($album->getId(), 201);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                "message" => $e->getMessage()
+            ], 422);
+        }
     }
 }

@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  name="data_albums",
  *  indexes={@ORM\Index(name="name", columns={"name"})}
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="RadioStudent\AppBundle\Entity\Repository\AlbumRepository")
  */
 class Album extends BaseEntity
 {
@@ -101,6 +101,13 @@ class Album extends BaseEntity
     public function setArtists(Collection $artists)
     {
         $this->artists = $artists;
+
+        return $this;
+    }
+
+    public function addArtist($artist)
+    {
+        $this->artists->add($artist);
 
         return $this;
     }

@@ -24,15 +24,30 @@
 
 // Table on search and playlist page
 .table
+    tr.selected
+        background-color: #ccffcc!important
+
+        &:nth-of-type(2n+1)
+            background-color: #99ff99!important
+
+        &:hover
+          filter: brightness(95%)
+
     .column-fid
         white-space: nowrap
         width: 125px
     .column-year, .column-length, .column-buttons
-        width: 45px
+        width: 60px
     .column-length, .column-buttons
         text-align: right
     .column-artist, .column-title, .column-album
         flex: 1
+
+    .column-buttons > *
+        cursor: pointer
+
+        &.glyphicon-minus-sign
+            color: #ff6666
 
     th
         white-space: nowrap
@@ -117,8 +132,26 @@
 
 // Album editor page
 .album-editor
+    .album input
+        padding: 7px 7px
     .track
         margin-bottom: 8px
+
+        > .column-fid > div > input
+            display: inline-block
+
+            &:first-child
+                width: 70%
+                text-align: right
+            &:last-child
+                width: 30%
+
+        .input-sm
+            padding: 4px 4px
+
+    .dropdown-suggestion-text em
+        font-style: normal
+        font-weight: bold
 
 @keyframes spin
     from

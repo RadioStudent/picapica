@@ -43,7 +43,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="track in ts.tracks">
+            <tr ng-repeat="track in ts.tracks" ng-class="ts.trackList.hasTrack(track) ? 'selected' : null">
                 <td ng-bind="track.fid" class="column-fid"></td>
                 <td class="column-artist">
                     {{track.artistName}}&nbsp;<span ng-if="track.artistMistake" uib-tooltip="{{track.artistMistake}}" class="glyphicon glyphicon-ok-sign"></span>
