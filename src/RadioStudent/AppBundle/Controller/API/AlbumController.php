@@ -69,6 +69,8 @@ class AlbumController extends FOSRestController
      */
     public function postAction(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_EDITOR');
+
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine.orm.entity_manager');
 
