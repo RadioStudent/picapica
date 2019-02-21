@@ -24,6 +24,8 @@ class AlbumRepository extends EntityRepository {
         $album->setFid($data['fid']);
         $album->setName($data['title']);
 
+        $artistList = [];
+
         $albumArtist = null;
         if ($data['albumArtistModel'] && $data['albumArtistModel']['id'] && $data['albumArtist'] === $data['albumArtistModel']['name']) {
             $artistRepo = $em->getRepository('RadioStudentAppBundle:Artist');
@@ -33,6 +35,8 @@ class AlbumRepository extends EntityRepository {
             $albumArtist->setName($data['albumArtist']);
             $em->persist($albumArtist);
         }
+
+        $artistList[$albumArtist->getName()] = $albumArtist;
 
         if (!$albumArtist || !$albumArtist->getName()) {
             throw new \Exception('Ime izvajalca albuma je neveljavno');
@@ -48,16 +52,16 @@ class AlbumRepository extends EntityRepository {
             throw new \Exception('Praznega albuma ne moreš dodati');
         }
 
-        $this->parseTrackData($data['tracks'], $album, $albumArtist, $em);
+        $this->parseTrackData($data['tracks'], $album, $albumArtist, $artistList, $em);
 
         $em->persist($album);
 
         return $album;
     }
 
-    protected function parseTrackData($trackData, $album, $albumArtist, $em)
+    protected function parseTrackData($trackData, $album, $albumArtist, $artistList, $em)
     {
-        return array_map(function ($komad) use ($album, $albumArtist, $em) {
+        return array_map(function ($komad) use ($album, $albumArtist, $artistList, $em) {
             $track = new Track();
 
             if (!$komad['fid']) {
@@ -75,13 +79,17 @@ class AlbumRepository extends EntityRepository {
             $artist = null;
             if (!$komad['artist']) {
                 $artist = $albumArtist;
+            } elseif (isset($artistList[$komad['artist']])) {
+                $artist = $artistList[$komad['artist']];
             } elseif ($komad['artistModel'] && $komad['artistModel']['id'] && $komad['artist'] === $komad['artistModel']['name']) {
                 $artistRepo = $em->getRepository('RadioStudentAppBundle:Artist');
                 $artist = $artistRepo->find($komad['artistModel']['id']);
+                $artistList[$artist->getName()] = $artist;
             } else {
                 $artist = new Artist();
                 $artist->setName($komad['artist']);
                 $em->persist($artist);
+                $artistList[$artist->getName()] = $artist;
             }
 
             if (!$artist || !$artist->getName()) {

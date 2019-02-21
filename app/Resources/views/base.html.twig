@@ -14,7 +14,6 @@
     <script>
         window.username = '{{ app.user.username }}';
         window.user_roles = JSON.parse('{{ app.user.roles | json_encode() | raw }}');
-        window.haveRole = function (role) { return user_roles.indexOf(role) !== -1; };
     </script>
 </head>
 <body>
