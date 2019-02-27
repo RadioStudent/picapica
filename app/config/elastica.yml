@@ -1,6 +1,6 @@
 fos_elastica:
   clients:
-    default: { host: %elasticsearch_host%, port: 9200 }
+    default: { host: %elasticsearch_host%, port: %elasticsearch_port% }
 
   indexes:
     picapica:
@@ -64,8 +64,8 @@ fos_elastica:
 
         artist:
           _all:
-            index_analyzer: edge_NGram_analyzer
-            search_analyzer: whitespace_analyzer
+            analyzer: edge_NGram_analyzer
+            #search_analyzer: whitespace_analyzer
 
           mappings:
             id:
@@ -74,13 +74,13 @@ fos_elastica:
 
             name:
               type: string
-              index_analyzer: whitespace_analyzer
-              search_analyzer: whitespace_analyzer
+              analyzer: whitespace_analyzer
+              #search_analyzer: whitespace_analyzer
               fields:
                 autocomplete:
                   type: string
-                  index_analyzer: edge_NGram_analyzer
-                  search_analyzer: whitespace_analyzer
+                  analyzer: edge_NGram_analyzer
+                  #search_analyzer: whitespace_analyzer
 
             autocompleteName:
               type: string
@@ -89,15 +89,14 @@ fos_elastica:
               fields:
                 autocomplete:
                   type: string
-                  index_analyzer: edge_NGram_analyzer
-                  search_analyzer: whitespace_analyzer
+                  analyzer: edge_NGram_analyzer
+                  #search_analyzer: whitespace_analyzer
 
           persistence:
             driver: orm
             model: RadioStudent\AppBundle\Entity\Artist
             provider: ~
-            listener:
-              immediate: ~
+            listener: ~
             finder: ~
             model_to_elastica_transformer:
               service: search.transformer.model.artist
@@ -106,8 +105,8 @@ fos_elastica:
 
         album:
           _all:
-            index_analyzer: edge_NGram_analyzer
-            search_analyzer: whitespace_analyzer
+            analyzer: edge_NGram_analyzer
+            #search_analyzer: whitespace_analyzer
 
           mappings:
             id:
@@ -121,37 +120,36 @@ fos_elastica:
               fields:
                 autocomplete:
                   type: string
-                  index_analyzer: edge_NGram_analyzer_fid
-                  search_analyzer: keyword_analyzer
+                  analyzer: edge_NGram_analyzer_fid
+                  #search_analyzer: keyword_analyzer
                 numeric:
                   type: string
-                  index_analyzer: whitespace
-                  search_analyzer: whitespace
+                  analyzer: whitespace
+                  #search_analyzer: whitespace
 
             name:
               type: string
-              index_analyzer: whitespace_analyzer
-              search_analyzer: whitespace_analyzer
+              analyzer: whitespace_analyzer
+              #search_analyzer: whitespace_analyzer
               fields:
                 autocomplete:
                   type: string
-                  index_analyzer: edge_NGram_analyzer
-                  search_analyzer: whitespace_analyzer
+                  analyzer: edge_NGram_analyzer
+                  #search_analyzer: whitespace_analyzer
 
           persistence:
             driver: orm
             model: RadioStudent\AppBundle\Entity\Album
             provider: ~
-            listener:
-              immediate: ~
+            listener: ~
             finder: ~
 
 
 
         track:
           _all:
-            index_analyzer: edge_NGram_analyzer
-            search_analyzer: whitespace_analyzer
+            analyzer: edge_NGram_analyzer
+            #search_analyzer: whitespace_analyzer
 
           mappings:
             id:
@@ -161,17 +159,17 @@ fos_elastica:
             fid:
               type: string
               include_in_all: true
-              index_analyzer: edge_NGram_analyzer
-              search_analyzer: whitespace_analyzer
+              analyzer: edge_NGram_analyzer
+              #search_analyzer: whitespace_analyzer
               fields:
                 autocomplete:
                   type: string
-                  index_analyzer: edge_NGram_analyzer_fid
-                  search_analyzer: keyword_analyzer
+                  analyzer: edge_NGram_analyzer_fid
+                  #search_analyzer: keyword_analyzer
                 numeric:
                   type: string
-                  index_analyzer: whitespace
-                  search_analyzer: whitespace
+                  analyzer: whitespace
+                  #search_analyzer: whitespace
                 order:
                   type: string
                   analyzer: keyword_analyzer
@@ -189,13 +187,13 @@ fos_elastica:
 
             name:
               include_in_all: true
-              index_analyzer: edge_NGram_analyzer
-              search_analyzer: whitespace_analyzer
+              analyzer: edge_NGram_analyzer
+              #search_analyzer: whitespace_analyzer
               fields:
                 autocomplete:
                   type: string
-                  index_analyzer: edge_NGram_analyzer
-                  search_analyzer: whitespace_analyzer
+                  analyzer: edge_NGram_analyzer
+                  #search_analyzer: whitespace_analyzer
                 order:
                   type: string
                   analyzer: keyword_analyzer
@@ -228,8 +226,8 @@ fos_elastica:
                 name:
                   include_in_all: true
                   index_name: track_artist_name
-                  index_analyzer: edge_NGram_analyzer
-                  search_analyzer: whitespace_analyzer
+                  analyzer: edge_NGram_analyzer
+                  #search_analyzer: whitespace_analyzer
                   fields:
                     order:
                       type: string
@@ -249,8 +247,8 @@ fos_elastica:
                 name:
                   index_name: track_album_name
                   include_in_all: true
-                  index_analyzer: edge_NGram_analyzer
-                  search_analyzer: whitespace_analyzer
+                  analyzer: edge_NGram_analyzer
+                  #search_analyzer: whitespace_analyzer
                   fields:
                     order:
                       type: string
@@ -262,6 +260,5 @@ fos_elastica:
             model: RadioStudent\AppBundle\Entity\Track
             provider:
               batch_size: 1000
-            listener:
-              immediate: ~
+            listener: ~
             finder: ~

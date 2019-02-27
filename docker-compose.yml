@@ -32,7 +32,11 @@ services:
       MYSQL_PASSWORD: huehuehue
       MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
   elasticsearch:
-    build:
-      context: .
-      dockerfile: ./docker-config/Dockerfile-elasticsearch
+    ports:
+      - "9300:9300"
+      - "9200:9200"
+    image: centerforopenscience/elasticsearch:2.4
+    #build:
+    #  context: .
+    #  dockerfile: ./docker-config/Dockerfile-elasticsearch
 

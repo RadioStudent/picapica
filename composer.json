@@ -24,7 +24,7 @@
         "sensio/distribution-bundle": "~5.0",
         "sensio/framework-extra-bundle": "~5.0",
         "incenteev/composer-parameter-handler": "~2.0",
-        "friendsofsymfony/elastica-bundle": "~3.2",
+        "friendsofsymfony/elastica-bundle": "~4.1",
         "friendsofsymfony/rest-bundle": "~1.5",
         "jms/serializer-bundle": "~2.4.3",
         "pagerfanta/pagerfanta": "~1.0",
