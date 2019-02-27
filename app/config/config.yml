@@ -18,7 +18,6 @@ framework:
         #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
     trusted_hosts:   ~
-    trusted_proxies: ~
     session:
         handler_id: ~
         cookie_lifetime: 0
@@ -31,13 +30,13 @@ twig:
     strict_variables: "%kernel.debug%"
 
 # Assetic Configuration
-assetic:
-    debug:          "%kernel.debug%"
-    use_controller: false
-    bundles:        [ ]
+#assetic:
+#    debug:          "%kernel.debug%"
+#    use_controller: false
+#    bundles:        [ ]
     #java: /usr/bin/java
-    filters:
-        cssrewrite: ~
+    #    filters:
+    #        cssrewrite: ~
         #closure:
         #    jar: "%kernel.root_dir%/Resources/java/compiler.jar"
         #yui_css:
