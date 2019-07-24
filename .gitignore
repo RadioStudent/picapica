@@ -13,6 +13,9 @@
 /.idea/
 .vagrant
 
+/var/cache/*
+/var/log/*
+
 bower_components
 /node_modules
 npm-debug.log*
