@@ -24,6 +24,7 @@
     "lodash": "^4.17.0"
   },
   "devDependencies": {
+    "acorn": "^6.2.1",
     "audit": "0.0.6",
     "coffeeify": "^3.0.0",
     "coffeescript": "^2.4.0",
@@ -40,18 +41,19 @@
     "jasmine": "^2.3.2",
     "jasmine-core": "^2.3.4",
     "karma": "^4.0.0",
-    "karma-browserify": "^4.4.0",
+    "karma-browserify": "^6.1.0",
     "karma-coffee-preprocessor": "^0.3.0",
     "karma-jasmine": "^0.3.6",
-    "karma-phantomjs-launcher": "^0.2.1",
+    "karma-phantomjs-launcher": "^1.0.4",
     "karma-spec-reporter": "0.0.21",
     "node-sass": "^4.12.0",
-    "phantomjs": "^1.9.18"
+    "phantomjs-prebuilt": "^2.1.0"
   },
   "scripts": {
     "start": "npm run watch",
     "watch": "./node_modules/.bin/grunt watch",
     "postinstall": "npm run build",
-    "build": "./node_modules/.bin/grunt"
+    "build": "./node_modules/.bin/grunt",
+    "test": "./node_modules/.bin/grunt test"
   }
 }
