@@ -12,7 +12,7 @@ SearchFilter = ($rootScope, _) ->
             $rootScope.$broadcast 'filters.update'
 
         getType: ->
-            _.findWhere(@types, {active: yes}).type
+            _.find(@types, {active: yes}).type
 
         @generateFilterTypes = (type) ->
             allFilterTypes = [

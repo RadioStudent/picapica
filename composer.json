@@ -5,7 +5,7 @@
     "description": "picapica",
     "autoload": {
         "psr-4": {
-            "AppBundle\\": "src/RadioStudent/AppBundle"
+            "": "src/"
         },
         "files": [
             "app/AppKernel.php",

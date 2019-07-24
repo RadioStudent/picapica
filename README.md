@@ -12,18 +12,21 @@ To do the following steps, you need `docker`, `docker-compose` and `npm` (with N
 3. waaaait for it
 4. install dependencies with composer `./composer.sh install`
 5. copy assets `./console.sh assets:install`
-6. index the database with elasticsearch `./console.sh fos:elastica:populate`
-  This one is superlong, you can proceed with other steps while it's running
-7. install javascript dependencies `npm i`
-8. build js and css with `npm run build`
-9. the app is now accessible at [localhost:8080](http://localhost:8080)
-10. login with *fonoteka/fonoteka*
+5. Run latest migrations `./console.sh doctrine:migrations:migrate`
+7. index the database with elasticsearch `./console.sh fos:elastica:populate`
+  This one is superlong, you can proceed with other steps while it's running.
+  If there's a problem, rebuild the docker images; `docker-compose down; docker-compose up --build`
+8. install javascript dependencies `npm i`
+9. build js and css with `npm run build`
+10. the app is now accessible at [localhost:8080](http://localhost:8080)
+11. login with *fonoteka/fonoteka*
 
 
 The following helper scripts are available for your convenience:
 - `./composer.sh` - runs composer CLI tool
 - `./console.sh` - runs Symfony console helper
 - `./docker-permfix.sh` - fixes potential permission issues (may need sudo)
+- `npm run watch` - run the watcher which reacts to changes in CSS/javascript source files
 
 
 # Installation (non-docker)

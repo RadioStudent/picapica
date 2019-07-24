@@ -1,3 +1,5 @@
+sass = require 'node-sass'
+
 module.exports = (grunt) ->
     # Project configuration.
     grunt.initConfig
@@ -38,6 +40,7 @@ module.exports = (grunt) ->
         sass:
             options:
                 sourceMap: true
+                implementation: sass
                 includePaths: ['node_modules']
             dist:
                 files:

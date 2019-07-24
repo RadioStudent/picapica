@@ -48,10 +48,10 @@ class PlaylistController
 
         refresh = =>
             # Refresh duration meter at the bottom
-            @totalDuration = _.pluck(@trackList.tracks, 'duration').filter(Number).reduce ((a, b) -> a + b), 0
+            @totalDuration = _.map(@trackList.tracks, 'duration').filter(Number).reduce Math.sum
 
             # Refresh hidden metadata for printing
-            term = _.findWhere(@terms, {id: @trackList.termId})
+            term = _.find(@terms, {id: @trackList.termId})
             @printMetadata = {
                 author: CurrentTrackList.authorName,
                 date: formatDate(CurrentTrackList.date),

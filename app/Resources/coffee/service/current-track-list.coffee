@@ -12,7 +12,7 @@ module.exports = ($rootScope, $q, _, TrackList) ->
             $rootScope.$broadcast 'tracklist.update'
 
         hasTrack: (track) ->
-            _.some @tracks, 'fid', track.fid
+            _.some @tracks, fid: track.fid
 
         addCommentToTrack: (track) ->
             track.comment = ''
