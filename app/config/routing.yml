@@ -8,31 +8,31 @@ radio_student_app:
 
 API_artists:
     type: rest
-    resource: @RadioStudentAppBundle/Controller/API/ArtistController.php
+    resource: "@RadioStudentAppBundle/Controller/API/ArtistController.php"
 
 API_albums:
     type: rest
-    resource: @RadioStudentAppBundle/Controller/API/AlbumController.php
+    resource: "@RadioStudentAppBundle/Controller/API/AlbumController.php"
 
 API_tracks:
     type: rest
-    resource: @RadioStudentAppBundle/Controller/API/TrackController.php
+    resource: "@RadioStudentAppBundle/Controller/API/TrackController.php"
 
 API_tracklists:
     type: rest
-    resource: @RadioStudentAppBundle/Controller/API/TracklistController.php
+    resource: "@RadioStudentAppBundle/Controller/API/TracklistController.php"
 
 API_terms:
     type: rest
-    resource: @RadioStudentAppBundle/Controller/API/TermController.php
+    resource: "@RadioStudentAppBundle/Controller/API/TermController.php"
 
 API_authors:
     type: rest
-    resource: @RadioStudentAppBundle/Controller/API/AuthorController.php
+    resource: "@RadioStudentAppBundle/Controller/API/AuthorController.php"
 
 API_autocomplete:
     type: rest
-    resource: @RadioStudentAppBundle/Controller/API/AutoCompleteController.php
+    resource: "@RadioStudentAppBundle/Controller/API/AutoCompleteController.php"
 
 #radio_student_API:
 #  type: rest
