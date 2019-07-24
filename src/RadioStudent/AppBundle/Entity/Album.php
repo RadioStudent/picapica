@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  name="data_albums",
  *  indexes={@ORM\Index(name="name", columns={"name"})}
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="RadioStudent\AppBundle\Entity\Repository\AlbumRepository")
  */
 class Album extends BaseEntity
 {
@@ -80,9 +80,17 @@ class Album extends BaseEntity
      */
     private $albumArtistName;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="LABEL", type="string", length=255)
+     */
+    private $label;
+
     public function __construct()
     {
         $this->artists = new ArrayCollection();
+        $this->tracks = new ArrayCollection();
     }
 
     /**
@@ -101,6 +109,15 @@ class Album extends BaseEntity
     public function setArtists(Collection $artists)
     {
         $this->artists = $artists;
+
+        return $this;
+    }
+
+    public function addArtist($artist)
+    {
+        if (!$this->artists->contains($artist)) {
+            $this->artists->add($artist);
+        }
 
         return $this;
     }
@@ -214,6 +231,16 @@ class Album extends BaseEntity
     public function setTracks(Collection $tracks)
     {
         $this->tracks = $tracks;
+
+        return $this;
+    }
+
+    public function addTrack($track)
+    {
+        $track->setAlbum($this);
+        $this->tracks->add($track);
+
+        return $this;
     }
 
     /**
@@ -234,6 +261,29 @@ class Album extends BaseEntity
         $this->albumArtistName = $albumArtistName;
 
         return $this;
+    }
+
+    /**
+     * Set label
+     *
+     * @param string $label
+     * @return Album
+     */
+    public function setLabel($label)
+    {
+        $this->label = $label;
+
+        return $this;
+    }
+
+    /**
+     * Get label
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return $this->label;
     }
 
     public function getFlat($preset = 'short')

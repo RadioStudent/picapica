@@ -1,31 +1,106 @@
 <pp-navbar active-item="'album-editor'"></pp-navbar>
 
 <div class="container album-editor" ng-controller="AlbumEditorController as ae">
+
+  <h2>Album</h2>
+  <div class="row album">
+    <div class="col-sm-2">
+      <div class="form-group">
+        <label class="control-label" for="album-fid">FID</label>
+        <input id="album-fid" class="form-control ng-not-empty" ng-model="ae.album.fid" ng-required="true" required="required" type="text">
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="form-group">
+        <label class="control-label" for="album-title">Title</label>
+        <input id="album-title" class="form-control ng-not-empty" ng-model="ae.album.title" ng-required="true" required="required" type="text">
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="form-group">
+        <label class="control-label" for="album-label">Label</label>
+        <input id="album-label" class="form-control ng-not-empty" ng-model="ae.album.label" ng-required="true" required="required" type="text">
+      </div>
+    </div>
+    <div class="col-sm-2">
+      <div class="form-group">
+        <label class="control-label" for="album-title">Year</label>
+        <input id="album-year" class="form-control ng-not-empty" ng-model="ae.album.year" ng-required="true" required="required" type="text">
+      </div>
+    </div>
+
+    <div class="col-sm-4">
+      <div class="form-group">
+        <label class="control-albumArtist" for="album-albumArtist">Album artist</label>
+        <input
+            id="album-albumArtist"
+            type="text"
+            class="form-control"
+            ng-model="ae.album.albumArtist"
+            uib-typeahead="artist.name for artist in ae.getArtistSuggestions($viewValue)"
+            typeahead-on-select="ae.selectAlbumArtist($item, $model, $label)"
+            typeahead-wait-ms="300"
+            typeahead-template-url="/partials/_autocomplete-artist.tpl.html"
+            typeahead-focus-first="false">
+      </div>
+    </div>
+  </div>
+
+  <h2>Tracks</h2>
+
     <div class="row">
-        <div class="col-sm-3">
-            <label>Album</label>
-            <input type="text"
-                   class="form-control input-sm"
-                   ng-model="ae.album.value">
-        </div>
-        <pp-editor-field
-            columns="3"
-            field="ae.album.artist"
-            type="'artist'"
-            change="ae.defaultValueChanged">
-        </pp-editor-field>
-        <pp-editor-field
-            columns="3"
-            field="ae.album.label"
-            type="'label'"
-            change="ae.defaultValueChanged">
-        </pp-editor-field>
-        <pp-editor-field
-            columns="3"
-            field="ae.album.year"
-            type="'year'"
-            change="ae.defaultValueChanged">
-        </pp-editor-field>
+      <table class="table table-striped table-condensed">
+        <thead>
+          <tr>
+            <th class="column-fid">FID</th>
+            <th class="column-artist">Artist</th>
+            <th class="column-title">Title</th>
+            <th class="column-length">Length</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr class="track" ng-repeat="track in ae.album.tracks">
+            <td class="column-fid">
+              <div class="input-group">
+                <input type="text"
+                       class="form-control input-sm"
+                       ng-model="ae.album.fid"
+                       disabled>
+                <input type="text"
+                       class="form-control input-sm"
+                       maxlength="4"
+                       ng-model="track.fid">
+              </div>
+            </td>
+
+            <td class="column-artist">
+              <input type="text"
+                     class="form-control input-sm"
+                     placeholder="{{ae.album.albumArtist}}"
+                     ng-model="track.artist"
+                     uib-typeahead="artist.name for artist in ae.getArtistSuggestions($viewValue)"
+                     typeahead-on-select="ae.selectTrackArtist($item, $model, $label, $index)"
+                     typeahead-wait-ms="300"
+                     typeahead-template-url="/partials/_autocomplete-artist.tpl.html"
+                     typeahead-focus-first="false">
+            </td>
+
+            <td class="column-title">
+              <input type="text"
+                     class="form-control input-sm"
+                     ng-model="track.title">
+            </td>
+
+            <td class="column-length">
+              <input type="text"
+                     class="form-control input-sm"
+                     ng-model="track.length">
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
     </div>
 
     <div class="row">
@@ -34,21 +109,18 @@
         </div>
     </div>
 
-    <div class="row track" ng-repeat="track in ae.album.tracks">
-        <div class="col-sm-3" ng-repeat="field in ae.trackFields">
-            <input type="text"
-                   class="form-control input-sm"
-                   ng-model="track[field]"
-                   ng-disabled="ae.album[field].copy">
-        </div>
-    </div>
-
     <div class="row">
         <div class="col-sm-12">
             <button type="button"
-                    class="btn btn-primary btn-lg"
+                    class="btn btn-primary btn-md"
                     ng-click="ae.addTrack()">
                 Add track
+            </button>
+
+            <button type="button"
+                    class="btn btn-primary btn-lg pull-right"
+                    ng-click="ae.saveAlbum()">
+                Save album
             </button>
         </div>
     </div>

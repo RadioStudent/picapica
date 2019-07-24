@@ -1,31 +1,72 @@
 class AlbumEditorController
-    constructor: (_) ->
+    constructor: (Artist, Album) ->
+        @RArtist = Artist
+        @RAlbum = Album
+
         @album =
-            value: 'some name'
-            artist:
-                value: 'some artist'
-                copy: on
-            label:
-                value: 'some label'
-                copy: on
-            year:
-                value: 1999
-                copy: on
+            fid: ''
+            title: ''
+            albumArtist: ''
+            albumArtistModel: null
+            label: ''
+            year: ''
             tracks: []
 
-        @trackFields = ['title', 'artist', 'label', 'year']
+    digitize: (n) ->
+      if n < 10
+        return "0" + n
 
-        @addTrack = () ->
-            @album.tracks.push
-                title: ''
-                artist: if @album.artist.copy then @album.artist.value else ''
-                label:  if @album.label.copy  then @album.label.value  else ''
-                year:   if @album.year.copy   then @album.year.value   else ''
+      return n
 
-        @defaultValueChanged = (field) =>
-            if @album[field].copy
-                @album.tracks.forEach (track) => track[field] = @album[field].value
+    addTrack: () ->
+        [..., last] = @album.tracks
 
-        return
+        number = 'A/01'
+        if last and last.fid
+            fields = last.fid.split /\//
+            number = fields[0] + '/' + this.digitize(parseInt(fields[1]) + 1)
+
+        @album.tracks.push
+            fid: number
+            title: ''
+            artist: ''
+            artistModel: null
+            length: ''
+
+    getArtistSuggestions: (searchInput) ->
+        return if searchInput.length is 0 or typeof searchInput is 'object'
+
+        searchParams =
+            "autocomplete": searchInput
+
+        searchQuery = JSON.stringify [searchParams]
+
+        @RArtist.query(search: searchQuery).$promise
+
+    selectAlbumArtist: ($item, $model, $label) ->
+        @album.albumArtistModel =
+            id: $item.id
+            name: $item.name
+
+    selectTrackArtist: ($item, $model, $label, $index) ->
+        @album.tracks[$index].artistModel =
+            id: $item.id
+            name: $item.name
+
+    saveAlbum: () ->
+        promise = @RAlbum.save JSON.stringify(@album), @handleSuccess, @handleError
+
+    handleSuccess: () ->
+        alert 'Album uspešno shranjen!'
+        #location.reload()
+
+    handleError: (resp) ->
+        if resp.data[0]
+            alert 'Napaka pri shranjevanju: ' + resp.data[0].error.message
+        else if resp.data.error
+            alert 'Napaka pri shranjevanju: ' + resp.data.error.message
+        else
+            alert 'Napaka pri shranjevanju'
+
 
 module.exports = AlbumEditorController

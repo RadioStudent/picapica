@@ -90,7 +90,7 @@ class Tracklist
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -114,7 +114,7 @@ class Tracklist
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -138,7 +138,7 @@ class Tracklist
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -226,6 +226,7 @@ class Tracklist
             'date'           => $this->date->format("Y-m-d"),
             'termId'         => $this->term->getId(),
             'authorId'       => $this->author->getId(),
+            'authorName'     => $this->author->getName(),
         ];
 
         if ($preset == 'short') {
