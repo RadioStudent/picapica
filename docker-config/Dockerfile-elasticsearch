@@ -1,6 +1,6 @@
 FROM java:openjdk-8-jre-alpine
 
 RUN apk update && apk add curl tar
-RUN curl -s https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.4.6/elasticsearch-2.4.6.tar.gz | tar xvzf - -C /
+RUN curl -s https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.8.1.tar.gz | tar xvzf - -C /
 
 ENTRYPOINT /elasticsearch-2.4.6/bin/elasticsearch -Des.insecure.allow.root=true

@@ -156,7 +156,8 @@ fos_elastica:
               type: integer
               include_in_all: false
 
-            fid:
+            track_fid:
+              property_path: fid
               type: string
               include_in_all: true
               analyzer: edge_NGram_analyzer
@@ -185,8 +186,9 @@ fos_elastica:
                   type: string
                   analyzer: keyword_analyzer
 
-            name:
+            track_name:
               include_in_all: true
+              property_path: name
               analyzer: edge_NGram_analyzer
               #search_analyzer: whitespace_analyzer
               fields:
@@ -220,12 +222,12 @@ fos_elastica:
 #                  type: integer
 #                  include_in_all: false
 #                  index_name: track_artist_id
-                allRelatedArtistIds:
-                  index_name: id
+                id:
+                  property_path: allRelatedArtistIds
                   include_in_all: false
-                name:
+                track_artist_name:
                   include_in_all: true
-                  index_name: track_artist_name
+                  property_path: name
                   analyzer: edge_NGram_analyzer
                   #search_analyzer: whitespace_analyzer
                   fields:
@@ -236,16 +238,16 @@ fos_elastica:
             album:
               type: object
               properties:
-                id:
-                  index_name: track_album_id
+                track_album_id:
+                  property_path: id
                   type: integer
                   include_in_all: false
-                fid:
-                  index_name: track_album_fid
+                track_album_fid:
+                  property_path: fid
                   include_in_all: false
                   index: not_analyzed
-                name:
-                  index_name: track_album_name
+                track_album_name:
+                  property_path: name
                   include_in_all: true
                   analyzer: edge_NGram_analyzer
                   #search_analyzer: whitespace_analyzer
