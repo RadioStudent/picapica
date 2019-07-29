@@ -9,8 +9,15 @@ SortableColumn = ($rootScope) ->
         JSON.stringify obj
 
     sort = (column, index) ->
+
+        # Clear existing sort
+        for col, i in service.all
+            if i isnt index
+                delete col.sortOrder
+
         service.active = index
         column.sortOrder = if column.sortOrder is 'asc' then 'desc' else 'asc'
+
         $rootScope.$broadcast 'filters.update'
 
     service =

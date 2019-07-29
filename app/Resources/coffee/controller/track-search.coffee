@@ -7,8 +7,19 @@ class TrackSearchController
         @sort       = SortableColumn.sort
         @trackList  = CurrentTrackList
 
+        @offset     = 0
+
         $rootScope.$on 'filters.update', =>
             @filters = SearchFilter.all
+
+            if @filters.length is 0
+                # Clear sort on filter reset
+                for col in SortableColumn.all
+                    delete col.sortOrder
+
+                # Loadmore reset, too
+                @offset = 0
+
             @doSearch()
 
         $rootScope.$on 'columns.update', =>
@@ -21,6 +32,7 @@ class TrackSearchController
 
         @addTextFilter = (reset = yes) ->
             return if @searchTerm.length is 0
+
             SearchFilter.reset() if reset
             SearchFilter.add @searchTerm
             @searchTerm = ''
@@ -29,12 +41,33 @@ class TrackSearchController
             if SearchFilter.all.length is 0
                 @tracks = []
             else
-                searchParams =
+                searchParams = SearchFilter.buildParams()
+
                 Track.search
-                    search: SearchFilter.buildParams()
+                    search: searchParams
                     sort:   SortableColumn.buildParams(),
                     (response) =>
                         @tracks = response
+
+                        if @tracks.length is 100
+                            @offset = 100
+                        else
+                            @offset = 0
+
+        @loadMore = () ->
+            searchParams = SearchFilter.buildParams()
+
+            Track.search
+                search: searchParams
+                from:   @offset
+                sort:   SortableColumn.buildParams(),
+                (response) =>
+                    @tracks = @tracks.concat response
+
+                    if response.length is 100
+                        @offset += 100
+                    else
+                        @offset = 0
 
         @getSuggestions = (searchInput) ->
             return if searchInput.length is 0 or typeof searchInput is 'object'
