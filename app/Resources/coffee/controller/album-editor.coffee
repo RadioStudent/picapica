@@ -1,10 +1,17 @@
 class AlbumEditorController
-    constructor: (Artist, Album) ->
+    constructor: (Artist, Album, $routeParams, $scope) ->
+        @albumId = $routeParams.albumId
+
+        $scope.titlePrepend = if @albumId then "Edit" else "New"
+
         @RArtist = Artist
         @RAlbum = Album
 
         @album =
+            id: null
             fid: ''
+            fidPrepend: ''
+            fidNumber: ''
             title: ''
             albumArtist: ''
             albumArtistModel: null
@@ -12,11 +19,17 @@ class AlbumEditorController
             year: ''
             tracks: []
 
-    digitize: (n) ->
-      if n < 10
-        return "0" + n
+        if @albumId
+            #@album = this.loadAlbum(@albumId).then data ->
+            #    console.log "GOT", data
+            @loadAlbum(@albumId)
 
-      return n
+    fidGroups: ['CD', 'CDYU', 'CDJ', 'CDDE', 'CDWR', 'CDFG', 'CDKO', 'CDK', 'CDEX', 'CDFO', 'CDG', 'RŠPYU', 'RŠP', 'LP', 'LPYU', 'LPJ', 'LPRE', 'LPK', 'LPEX', 'LPAM', 'LPYF', 'SG', 'SGYU', 'SGFG', 'KNJ']
+
+    updateAlbumFid: () =>
+        @album.fid = @album.fidPrepend + ' ' + @album.fidNumber
+
+    digitize: (n) -> if (n < 10) then ("0" + n) else n
 
     addTrack: () ->
         [..., last] = @album.tracks
@@ -53,8 +66,35 @@ class AlbumEditorController
             id: $item.id
             name: $item.name
 
-    saveAlbum: () ->
-        promise = @RAlbum.save JSON.stringify(@album), @handleSuccess, @handleError
+    parseDuration: (duration) => parseInt(duration / 60) + ':' + @digitize(duration % 60)
+
+    parseTrack: (track) =>
+        id: track.id
+        fid: track.fid.split("-")[1]
+        title: track.name
+        artist: track.artistName
+        artistModel:
+            id: track.artistId
+            name: track.artistName
+        length: @parseDuration track.duration
+
+    loadAlbum: (albumId) ->
+        @RAlbum.get { id: albumId }, (data) =>
+            fidSplit = data.fid.split " "
+
+            @album.id = data.id
+            @album.fid = data.fid
+            @album.fidPrepend = fidSplit[0]
+            @album.fidNumber = fidSplit[1]
+            @album.title = data.name
+            @album.albumArtist = data.albumArtistName
+            @album.albumArtistModel = data.artists[0]
+            @album.label = data.label
+            @album.year = data.year
+            @album.tracks = data.tracks.map @parseTrack
+
+    saveAlbum: () =>
+        @RAlbum.save JSON.stringify(@album), @handleSuccess, @handleError
 
     handleSuccess: () ->
         alert 'Album uspešno shranjen!'

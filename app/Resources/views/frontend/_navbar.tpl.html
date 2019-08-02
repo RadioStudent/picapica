@@ -7,9 +7,15 @@
             <a class="navbar-brand" href="#">PicaPica</a>
         </div>
         <ul class="nav navbar-nav">
-            <li ng-class="{ active : activeItem === 'search' }"><a href="/#!/search">Search</a></li>
-            <li ng-class="{ active : activeItem === 'playlist' }"><a href="/#!/playlist">Playlist</a></li>
-            <li ng-show="haveRole('ROLE_EDITOR')" ng-class="{ active : activeItem === 'album-editor' }"><a href="/#!/album-editor">Editor</a></li>
+            <li ng-class="{ active : activeItem === 'search' }">
+                <a href="/#!/search">Search</a>
+            </li>
+            <li ng-class="{ active : activeItem === 'playlist' }">
+                <a href="/#!/playlist">Playlist</a>
+            </li>
+            <li ng-show="haveRole('ROLE_EDITOR')" ng-class="{ active : activeItem === 'album-editor' }">
+                <a href="/#!/album-editor">Album editor</a>
+            </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             <li>

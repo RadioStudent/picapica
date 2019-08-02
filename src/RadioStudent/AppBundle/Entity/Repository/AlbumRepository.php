@@ -8,13 +8,9 @@ use RadioStudent\AppBundle\Entity\Artist;
 use RadioStudent\AppBundle\Entity\Track;
 
 class AlbumRepository extends EntityRepository {
-
-    public function create($data)
+    protected function setData($album, $data)
     {
         $em = $this->getEntityManager();
-
-        $album = new Album();
-
         $album->setDate(new \DateTime());
 
         if (!$data['fid']) {
@@ -53,6 +49,29 @@ class AlbumRepository extends EntityRepository {
         }
 
         $this->parseTrackData($data['tracks'], $album, $albumArtist, $artistList, $em);
+    }
+
+    public function create($data)
+    {
+        $em = $this->getEntityManager();
+
+        $album = new Album();
+        $this->setData($album, $data);
+
+        $em->persist($album);
+
+        return $album;
+    }
+
+    public function update($data)
+    {
+        if (!isset($data['id']) || empty($data['id'])) {
+            throw new \Exception('Za urejanje album potrebuje ID');
+        }
+
+        $em = $this->getEntityManager();
+        $album = $em->getRepository('RadioStudentAppBundle:Album')->find($data['id']);
+        $this->setData($album, $data);
 
         $em->persist($album);
 
@@ -61,12 +80,22 @@ class AlbumRepository extends EntityRepository {
 
     protected function parseTrackData($trackData, $album, $albumArtist, $artistList, $em)
     {
-        return array_map(function ($komad) use ($album, $albumArtist, $artistList, $em) {
-            $track = new Track();
+        $artistRepository = $em->getRepository('RadioStudentAppBundle:Artist');
+        $trackRepository = $em->getRepository('RadioStudentAppBundle:Track');
+
+        return array_map(function ($komad) use ($album, $albumArtist, $artistList, $em, $artistRepository, $trackRepository) {
+            $track = null;
+
+            if (isset($komad['id']) && !empty($komad['id'])) {
+                $track = $trackRepository->find($komad['id']);
+            } else {
+                $track = new Track();
+            }
 
             if (!$komad['fid']) {
                 throw new \Exception('Vsak komad rabi fid');
             }
+
             $track->setTrackNum($komad['fid']);
             $track->setFid($album->getFid() . '-' . $komad['fid']);
 
@@ -82,8 +111,7 @@ class AlbumRepository extends EntityRepository {
             } elseif (isset($artistList[$komad['artist']])) {
                 $artist = $artistList[$komad['artist']];
             } elseif ($komad['artistModel'] && $komad['artistModel']['id'] && $komad['artist'] === $komad['artistModel']['name']) {
-                $artistRepo = $em->getRepository('RadioStudentAppBundle:Artist');
-                $artist = $artistRepo->find($komad['artistModel']['id']);
+                $artist = $artistRepository->find($komad['artistModel']['id']);
                 $artistList[$artist->getName()] = $artist;
             } else {
                 $artist = new Artist();

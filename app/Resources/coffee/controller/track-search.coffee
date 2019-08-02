@@ -1,11 +1,13 @@
 class TrackSearchController
-    constructor: (Track, Suggestion, SearchFilter, SortableColumn, CurrentTrackList, $http, $sce, $rootScope) ->
+    constructor: (Track, Suggestion, SearchFilter, SortableColumn, CurrentTrackList, $http, $sce, $rootScope, Authorization, $scope) ->
         @tracks     = []
         @searchTerm = ''
         @filters    = SearchFilter.all
         @columns    = SortableColumn.all
         @sort       = SortableColumn.sort
         @trackList  = CurrentTrackList
+
+        $scope.haveRole = Authorization.haveRole
 
         @offset     = 0
 

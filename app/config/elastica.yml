@@ -160,7 +160,6 @@ fos_elastica:
 
             fid:
               type: string
-              boost: 10
               include_in_all: true
               index_analyzer: edge_NGram_analyzer
               search_analyzer: whitespace_analyzer
@@ -193,7 +192,6 @@ fos_elastica:
 
             name:
               include_in_all: true
-              boost: 8
               index_analyzer: edge_NGram_analyzer
               search_analyzer: whitespace_analyzer
               fields:
@@ -222,7 +220,6 @@ fos_elastica:
 
             artist:
               type: object
-              boost: 5
               properties:
 #                id:
 #                  type: integer
@@ -243,7 +240,6 @@ fos_elastica:
 
             album:
               type: object
-              boost: 5
               properties:
                 id:
                   index_name: track_album_id

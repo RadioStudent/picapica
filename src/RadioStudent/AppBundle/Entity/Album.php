@@ -292,21 +292,18 @@ class Album extends BaseEntity
             'id'              => $this->id,
             'fid'             => $this->fid,
             'name'            => $this->name,
-            'year'            => $this->date? $this->date->format('Y'): null,
+            'year'            => $this->strDate,
+            'label'           => $this->label,
             'albumArtistName' => $this->getAlbumArtistName(),
+            'artists'         => array_map(function ($a) { return $a->getFlat(); }, $this->artists->toArray()),
+            'tracks'          => array_map(function ($t) { return $t->getFlat(); }, $this->tracks->toArray())
         ];
-
-        $result['artists'] = [];
-        foreach ($this->artists as $a) {
-            $result['artists'][] = ['id' => $a->getId(), 'name' => $a->getName()];
-        }
 
         return $result;
     }
 
     public static function mapFieldsToElastic($type)
     {
-        return [
-        ];
+        return [];
     }
 }
