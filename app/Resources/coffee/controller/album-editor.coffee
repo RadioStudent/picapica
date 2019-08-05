@@ -93,6 +93,12 @@ class AlbumEditorController
             @album.year = data.year
             @album.tracks = data.tracks.map @parseTrack
 
+    removeTrack: (index) =>
+        head = @album.tracks.slice 0, index
+        tail = @album.tracks.slice index + 1, @album.tracks.length
+
+        @album.tracks = [...head, ...tail]
+
     saveAlbum: () =>
         @RAlbum.save JSON.stringify(@album), @handleSuccess, @handleError
 

@@ -66,6 +66,7 @@
             <th class="column-artist">Artist</th>
             <th class="column-title">Title</th>
             <th class="column-length">Length</th>
+            <th class="column-buttons"></th>
           </tr>
         </thead>
 
@@ -107,8 +108,10 @@
                      class="form-control input-sm"
                      ng-model="track.length">
             </td>
+            <td class="column-buttons">
+                <span ng-click="ae.removeTrack($index)" class="glyphicon glyphicon-minus-sign"></span>
+            </td>
           </tr>
-
         </tbody>
       </table>
     </div>

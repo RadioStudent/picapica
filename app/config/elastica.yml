@@ -158,6 +158,10 @@ fos_elastica:
               type: integer
               include_in_all: false
 
+            deleted:
+              type: boolean
+              include_in_all: false
+
             fid:
               type: string
               include_in_all: true

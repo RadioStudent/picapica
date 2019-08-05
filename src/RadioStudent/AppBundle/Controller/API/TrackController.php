@@ -40,6 +40,7 @@ class TrackController extends FOSRestController
             ->container
             ->get('search.repository.track');
 
+        $search[] = ['track.deleted' => 0];
         $data = $repo->search($search, $sort, $from, $size);
 
         $view = $this->view($data, 200);

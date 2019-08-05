@@ -83,13 +83,16 @@ class AlbumRepository extends EntityRepository {
         $artistRepository = $em->getRepository('RadioStudentAppBundle:Artist');
         $trackRepository = $em->getRepository('RadioStudentAppBundle:Track');
 
-        return array_map(function ($komad) use ($album, $albumArtist, $artistList, $em, $artistRepository, $trackRepository) {
+        $albumTracks = [];
+        foreach ($trackData as $komad) {
             $track = null;
 
             if (isset($komad['id']) && !empty($komad['id'])) {
                 $track = $trackRepository->find($komad['id']);
             } else {
                 $track = new Track();
+                $em->persist($track);
+                $album->addTrack($track);
             }
 
             if (!$komad['fid']) {
@@ -136,9 +139,16 @@ class AlbumRepository extends EntityRepository {
             $trajanje = explode(':', $komad['length']);
             $track->setDuration($trajanje[0] * 60 + $trajanje[1]);
 
-            $em->persist($track);
+            $albumTracks[] = $track->getId();
+        }
 
-            $album->addTrack($track);
-        }, $trackData);
+        // Brisi odstranjene komade
+        $deletedTracks = array_filter($album->getTracks()->toArray(), function ($track) use ($albumTracks) {
+            return !in_array($track->getId(), $albumTracks);
+        });
+
+        foreach($deletedTracks as $track) {
+            $track->setDeleted(true);
+        }
     }
 }

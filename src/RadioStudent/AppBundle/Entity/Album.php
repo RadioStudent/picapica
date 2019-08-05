@@ -296,7 +296,11 @@ class Album extends BaseEntity
             'label'           => $this->label,
             'albumArtistName' => $this->getAlbumArtistName(),
             'artists'         => array_map(function ($a) { return $a->getFlat(); }, $this->artists->toArray()),
-            'tracks'          => array_map(function ($t) { return $t->getFlat(); }, $this->tracks->toArray())
+            'tracks'          => array_values(array_map(function ($t) {
+                return $t->getFlat();
+            }, array_filter($this->tracks->toArray(), function ($track) {
+                return $track->getDeleted() !== true;
+            })))
         ];
 
         return $result;
