@@ -96,9 +96,16 @@ class Track extends BaseEntity
     private $languages;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="deleted", type="boolean", options={"default":"0"})
+     */
+    private $deleted = false;
+
+    /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -321,6 +328,18 @@ class Track extends BaseEntity
     public function setArtist(Artist $artist)
     {
         $this->artist = $artist;
+
+        return $this;
+    }
+
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
 
         return $this;
     }

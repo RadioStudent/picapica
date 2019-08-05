@@ -1,6 +1,6 @@
 {
   "name": "picapica",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Web app for physical music library management.",
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
     "angular-route": "^1.4.7",
     "angular-sanitize": "^1.4.7",
     "angular-ui-sortable": "^0.13.4",
-    "bootstrap-sass": "^3.4.0",
+    "bootstrap-sass": "^3.4.1",
     "bootswatch": "^3.3.0",
     "lodash": "^4.17.0"
   },

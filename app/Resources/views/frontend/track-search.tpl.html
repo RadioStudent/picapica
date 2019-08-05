@@ -36,8 +36,8 @@
         <thead>
             <tr>
                 <th ng-repeat="column in ts.columns" ng-click="ts.sort(column, $index)" class="column-{{column.label|lowercase}}" >{{ column.label }}
-                    <span class="glyphicon glyphicon-triangle-bottom" ng-show="column.sortOrder === 'asc'"></span>
-                    <span class="glyphicon glyphicon-triangle-top" ng-show="column.sortOrder === 'desc'"></span>
+                    <span class="glyphicon glyphicon-triangle-top" ng-show="column.sortOrder === 'asc'"></span>
+                    <span class="glyphicon glyphicon-triangle-bottom" ng-show="column.sortOrder === 'desc'"></span>
                 </th>
                 <th class="column-buttons">PL</th>
             </tr>
@@ -49,7 +49,12 @@
                     {{track.artistName}}&nbsp;<span ng-if="track.artistMistake" uib-tooltip="{{track.artistMistake}}" class="glyphicon glyphicon-ok-sign"></span>
                 </td>
                 <td ng-bind="track.name" class="column-title"></td>
-                <td ng-bind="track.albumName" class="column-album"></td>
+                <td class="column-album">
+                    <a ng-href="#!/album-editor/{{track.albumId}}" ng-show="haveRole('ROLE_EDITOR')">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </a>
+                    <span ng-bind="track.albumName"></span>
+                </td>
                 <td ng-bind="track.year" class="column-year"></td>
                 <td ng-bind="track.duration | duration" class="column-length"></td>
                 <td class="column-buttons">
@@ -58,5 +63,14 @@
                 </td>
             </tr>
         </tbody>
+        <tfoot>
+            <tr ng-show="ts.offset > 0">
+                <td colspan="7" style="width: 100%; text-align: center">
+                    <button type="button" class="btn btn-secondary btn-md" ng-click="ts.loadMore()">
+                        Load more tracks
+                    </button>
+                </td>
+            </tr>
+        </tfoot>
     </table>
 </div>

@@ -28,21 +28,19 @@ class TrackController extends FOSRestController
         $search = $request->query->get('search', null);
         $sort   = $request->query->get('sort', null);
         $from   = $request->query->get('from', 0);
-        $size   = $request->query->get('size', 10);
+        $size   = $request->query->get('size', 100);
 
         if ($search) {
             $search = Track::fieldsToElastic(json_decode($search, 1));
         }
 
-        $sort = Track::fieldsToElastic($sort? json_decode($sort): [
-            '_score' => 'desc',
-            'fid'    => 'asc'
-        ], 'sort');
+        $sort = Track::fieldsToElastic($sort && !empty(json_decode($sort, true)) ? json_decode($sort, true) : $this->getDefaultSort($search), 'sort');
 
         $repo = $this
             ->container
             ->get('search.repository.track');
 
+        $search[] = ['track.deleted' => 0];
         $data = $repo->search($search, $sort, $from, $size);
 
         $view = $this->view($data, 200);
@@ -62,5 +60,21 @@ class TrackController extends FOSRestController
         $view = $this->view($track, 200);
 
         return $this->handleView($view);
+    }
+
+    protected function getDefaultSort($search)
+    {
+        foreach ($search as $filter) {
+            if (isset($filter['artist.id']) || isset($filter['album.id'])) {
+                return [
+                    'fid.raw' => 'asc'
+                ];
+            }
+        }
+
+        return [
+            '_score' => 'desc',
+            'fid.raw'    => 'asc'
+        ];
     }
 }

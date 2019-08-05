@@ -76,7 +76,13 @@ class AlbumController extends FOSRestController
 
         try {
             $data = json_decode($request->getContent(), true);
-            $album = $em->getRepository("RadioStudentAppBundle:Album")->create($data);
+
+            $album = null;
+            if ($data['id']) {
+                $album = $em->getRepository("RadioStudentAppBundle:Album")->update($data);
+            } else {
+                $album = $em->getRepository("RadioStudentAppBundle:Album")->create($data);
+            }
 
             $em->flush();
 
@@ -89,13 +95,13 @@ class AlbumController extends FOSRestController
             $artistPersister->replaceMany($album->getArtists()->toArray());
             $trackPersister->replaceMany($album->getTracks()->toArray());
 
-            return new JsonResponse($album->getId(), 201);
+            return new JsonResponse($album, 200);
         } catch (\Exception $e) {
             return new JsonResponse([
                 ["error" => [
                     "message" => $e->getMessage()
                 ]]
-            ], 412);
+            ], 422);
         }
     }
 }

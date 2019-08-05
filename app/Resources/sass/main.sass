@@ -33,6 +33,9 @@
         &:hover
           filter: brightness(95%)
 
+    th[ng-click]
+        cursor: pointer
+
     .column-fid
         white-space: nowrap
         width: 125px
@@ -42,6 +45,7 @@
         text-align: right
     .column-artist, .column-title, .column-album
         flex: 1
+        word-break: break-word
 
     .column-buttons > *
         cursor: pointer
@@ -54,6 +58,10 @@
 
     tr
         display: flex
+
+// Search results table
+table.results
+    margin-bottom: 20rem
 
 // Search page
 .search
@@ -152,6 +160,12 @@
     .dropdown-suggestion-text em
         font-style: normal
         font-weight: bold
+
+#album-fid-prepend
+    width: 9rem
+
+#album-fid
+    width: 50%
 
 @keyframes spin
     from
