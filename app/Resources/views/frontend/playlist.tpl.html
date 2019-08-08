@@ -41,7 +41,7 @@
                     <select id="playlist-term"
                             class="form-control"
                             ng-model="pl.trackList.termId"
-                            ng-options="term.id as (term.name + ' - ' + term.time) group by term.group for term in pl.terms">
+                            ng-options="term.id as (term.name + ' - ' + term.time) group by term.group for term in pl.RTerms">
                     </select>
                 </div>
             </div>
@@ -79,14 +79,34 @@
             </tr>
         </thead>
         <tbody ui-sortable ng-model="pl.trackList.tracks">
-            <tr ng-repeat="track in pl.trackList.tracks" ng-class="{ 'has-comment' : (track|hasComment) }">
-                <td class="column-number">{{$index + 1}}.</td>
-                <td ng-bind="track.fid" class="column-fid"></td>
-                <td ng-bind="track.artistName" class="column-artist"></td>
-                <td ng-bind="track.name" class="column-title"></td>
-                <td ng-bind="track.albumName" class="column-album"></td>
-                <td ng-bind="track.year" class="column-year"></td>
-                <td ng-bind="track.duration | duration" class="column-length"></td>
+            <tr ng-repeat="track in pl.trackList.tracks" ng-class="{ 'has-comment': (track|hasComment), mp3: track.mp3 }">
+                <td class="column-number">
+                    <span>{{$index + 1}}.</span>
+                </td>
+                <td ng-if="!track.mp3" ng-bind="track.fid" class="column-fid"></td>
+                <td ng-if="track.mp3" class="column-fid">
+                    <input ng-model="track.fid" placeholder="Filename" type="text" class="form-control input-sm">
+                </td>
+                <td ng-if="!track.mp3" ng-bind="track.artistName" class="column-artist"></td>
+                <td ng-if="track.mp3" class="column-artist">
+                    <input ng-model="track.artistName" placeholder="Artist" type="text" class="form-control input-sm">
+                </td>
+                <td ng-if="!track.mp3" ng-bind="track.name" class="column-title"></td>
+                <td ng-if="track.mp3" class="column-title">
+                    <input ng-model="track.name" placeholder="Title" type="text" class="form-control input-sm">
+                </td>
+                <td ng-if="!track.mp3" ng-bind="track.albumName" class="column-album"></td>
+                <td ng-if="track.mp3" class="column-album">
+                    <input ng-model="track.albumName" placeholder="Album" type="text" class="form-control input-sm">
+                </td>
+                <td ng-if="!track.mp3" ng-bind="track.year" class="column-year"></td>
+                <td ng-if="track.mp3" class="column-year">
+                    <input ng-model="track.year" placeholder="Year" type="text" class="form-control input-sm">
+                </td>
+                <td ng-if="!track.mp3" ng-bind="track.duration | duration" class="column-length"></td>
+                <td ng-if="track.mp3" class="column-length">
+                    <input ng-model="track.duration" duration-input placeholder="0:00" type="text" class="form-control input-sm" style="text-align: right">
+                </td>
                 <td class="column-buttons">
                     <span ng-show="!(track|hasComment)" ng-click="pl.trackList.addCommentToTrack(track)" class="glyphicon glyphicon-pencil"></span>
                     <span ng-show="track|hasComment" ng-click="pl.trackList.removeCommentFromTrack(track)" class="glyphicon glyphicon-trash"></span>
@@ -101,13 +121,24 @@
 
     <div class="row">
         <div class="col-sm-12 action-buttons">
-            <div class="save-button btn btn-success btn-lg"
-                 ng-click="pl.save()">
+            <div class="btn btn-default btn-lg pull-left"
+                ng-click="pl.addMp3Track()">
+                Add mp3 track
+            </div>
+
+            <span ng-show="pl.loaders.save" class="glyphicon glyphicon-refresh loader pull-right"></span>
+            <button class="save-button btn btn-success btn-lg pull-right"
+                 ng-click="pl.save()" ng-disabled="pl.totalDuration == 0">
                  Save
-             </div>
-             <span ng-show="pl.loaders.save" class="glyphicon glyphicon-refresh loader"></span>
+             </button>
         </div>
     </div>
 
-    <uib-progressbar max="3600 * 4" value="pl.totalDuration">{{pl.totalDuration | duration}}</uib-progressbar>
+    <uib-progressbar
+        max="3600 * 4"
+        value="pl.totalDuration"
+        min="1000"
+        ng-show="pl.totalDuration > 0">
+        {{pl.totalDuration | duration}}
+    </uib-progressbar>
 </div>

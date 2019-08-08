@@ -1,4 +1,5 @@
 module.exports = ($rootScope, $q, _, TrackList) ->
+
     new class CurrentTrackList
         constructor: ->
             @reset()

@@ -238,23 +238,31 @@ class Tracklist
         $result['tracks'] = [];
         foreach ($this->tracklistTracks as $t) {
             $track = $t->getTrack();
-            $result['tracks'][] = [
+            $result['tracks'][] = array_merge([
                 'tracklistTrackId'  => $t->getId(),
                 'comment'           => $t->getComment(),
                 'id'                => $track->getId(),
                 'fid'               => $track->getFid(),
                 'trackNum'          => $track->getTrackNum(),
                 'name'              => $track->getName(),
-                'year'              => $track->getDate()? $track->getDate()->format('Y'): null,
-                'artistName'        => $track->getArtist()->getCorrectName(),
-                'artistId'          => $track->getArtist()->getId(),
+                'year'              => $track->getStrDate(),
+                'duration'          => $track->getDuration(),
+                'languages'         => $track->getLanguages(),
+                'genres'            => $track->getGenres()
+            ], $track->getMp3() ? [
+                'artistName'        => $track->getMp3ArtistName(),
+                'albumArtistName'   => $track->getMp3ArtistName(),
+                'artistId'          =>  null,
+                'albumName'         => $track->getMp3AlbumName(),
+                'albumId'           => null,
+                'mp3'               => true
+            ] : [
                 'albumName'         => $track->getAlbum()->getName(),
                 'albumArtistName'   => $track->getAlbum()->getAlbumArtistName(),
                 'albumId'           => $track->getAlbum()->getId(),
-                'duration'          => $track->getDuration(),
-                'languages'         => $track->getLanguages(),
-                'genres'            => $track->getGenres(),
-            ];
+                'artistName'        => $track->getArtist()->getCorrectName(),
+                'artistId'          => $track->getArtist()->getId()
+            ]);
         }
 
         return $result;

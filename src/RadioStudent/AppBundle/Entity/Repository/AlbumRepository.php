@@ -136,8 +136,7 @@ class AlbumRepository extends EntityRepository {
             if (!$komad['length']) {
                 throw new \Exception('Vsak komad rabi trajanje');
             }
-            $trajanje = explode(':', $komad['length']);
-            $track->setDuration($trajanje[0] * 60 + $trajanje[1]);
+            $track->setDuration($komad['length']);
 
             $albumTracks[] = $track->getId();
         }

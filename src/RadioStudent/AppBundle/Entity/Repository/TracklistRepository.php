@@ -5,6 +5,7 @@ namespace RadioStudent\AppBundle\Entity\Repository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use RadioStudent\AppBundle\Entity\Author;
+use RadioStudent\AppBundle\Entity\Track;
 use RadioStudent\AppBundle\Entity\Tracklist;
 use RadioStudent\AppBundle\Entity\TracklistTrack;
 use Symfony\Component\HttpFoundation\ParameterBag;
@@ -72,9 +73,12 @@ class TracklistRepository extends EntityRepository
             }
         }
 
+        // Remove cleared tracklist tracks
         $currentTracklistTracks = $tracklist->getTracklistTracks();
         foreach ($currentTracklistTracks as $currentTracklistTrack) {
             if (!in_array($currentTracklistTrack->getId(), $newTracklistTrackIds)) {
+                // If it's an mp3, also remove the track entity
+                $em->remove($currentTracklistTrack->getTrack());
                 $em->remove($currentTracklistTrack);
 //                echo "removing track ".$currentTracklistTrack->getTrack()->getName()."\n";
             }
@@ -85,23 +89,55 @@ class TracklistRepository extends EntityRepository
         foreach ($tracklistTracksData as $trackNum=>$newTracklistTrackData) {
             if (isset($newTracklistTrackData["tracklistTrackId"])) {
                 $id = $newTracklistTrackData["tracklistTrackId"];
-                $oldTracklistTrack = $tracklistTrackRepo->find($id);
-                $oldTracklistTrack
+                $tracklistTrack = $tracklistTrackRepo->find($id);
+
+                $tracklistTrack
                     ->setTrackNum($trackNum)
                     ->setComment($newTracklistTrackData["comment"]);
 //                echo "updating track ".$oldTracklistTrack->getTrack()->getName()."\n";
+
+                // Fill mp3 data?
+                if (isset($newTracklistTrackData['mp3']) && $newTracklistTrackData['mp3']) {
+                    $this->setMp3Data($tracklistTrack->getTrack(), $newTracklistTrackData);
+                }
             } else {
-                $track = $trackRepo->find($newTracklistTrackData["id"]);
-                $newTracklistTrack = new TracklistTrack();
-                $newTracklistTrack
-                    ->setTrack($track)
+                $tracklistTrack = new TracklistTrack();
+                $tracklistTrack
                     ->setTracklist($tracklist)
                     ->setComment($newTracklistTrackData["comment"])
                     ->setTrackNum($trackNum);
 //                echo "adding track ".$newTracklistTrack->getTrack()->getName()."\n";
-                $tracklist->getTracklistTracks()->add($newTracklistTrack);
+
+                if (isset($newTracklistTrackData['id'])) {
+                    $track = $trackRepo->find($newTracklistTrackData["id"]);
+                    $tracklistTrack->setTrack($track);
+                } elseif (isset($newTracklistTrackData['mp3']) && $newTracklistTrackData['mp3']) {
+                    // If it's an mp3, fill remaining fields
+                    $track = new Track();
+                    $track->setMp3(true);
+                    $em->persist($track);
+
+                    $tracklistTrack->setTrack($track);
+
+                    $this->setMp3Data($track, $newTracklistTrackData);
+                }
+
+                $tracklist->getTracklistTracks()->add($tracklistTrack);
             }
         }
+
         $em->flush();
+    }
+
+    protected function setMp3Data(Track $track, array $trackData)
+    {
+        $track->setFid($trackData['fid']);
+        $track->setTrackNum($trackData['fid']);
+        $track->setName($trackData['name']);
+        $track->setMp3ArtistName($trackData['artistName']);
+        $track->setMp3AlbumName($trackData['albumName']);
+        $track->setDate(new \DateTime());
+        $track->setStrDate($trackData['year']);
+        $track->setDuration($trackData['duration']);
     }
 }

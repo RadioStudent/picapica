@@ -1,64 +1,71 @@
-formatDate = (isoString) ->
-    dateObject = new Date(isoString)
-    dateString =
-        dateObject.getDate() + '. ' +
-        (dateObject.getMonth() + 1) + '. ' +
-        dateObject.getFullYear()
+module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter, $routeParams) ->
 
-    return dateString
+    new class PlaylistController
+        constructor: ->
+            @trackList = CurrentTrackList
+            @trackLists = TrackList.query()
+            @loaders = { save: off }
+            @RTerms = Terms
 
+            @printMetadata = {
+                author: '',
+                date: '',
+                term: ''
+            }
 
-class PlaylistController
-    constructor: (CurrentTrackList, TrackList, Terms, $filter, $rootScope, $q, _) ->
-        @trackList = CurrentTrackList
-        @trackLists = TrackList.query()
-        @terms = Terms
-        @loaders = { save: off }
+            @datepicker =
+                options:
+                    formatYear: 'yy'
+                    startingDay: 1
+                format: 'yyyy-MM-dd'
+                opened: no
+                open: => @datepicker.opened = yes
 
-        @printMetadata = {
-            author: '',
-            date: '',
-            term: ''
-        }
+            $rootScope.$on 'tracklist.update', @refresh
 
-        @datepicker =
-            options:
-                formatYear: 'yy'
-                startingDay: 1
-            format: 'yyyy-MM-dd'
-            opened: no
-            open: => @datepicker.opened = yes
+            if $routeParams.tracklistId
+                @trackList.id = $routeParams.tracklistId
+                @selectTrackList()
 
-        $rootScope.$on 'tracklist.update', refresh
+            return
 
-        @selectTrackList = ->
+        formatDate: (isoString) ->
+            dateObject = new Date(isoString)
+            dateString =
+                dateObject.getDate() + '. ' +
+                (dateObject.getMonth() + 1) + '. ' +
+                dateObject.getFullYear()
+
+            return dateString
+
+        selectTrackList: () ->
             if @trackList.id is '-1'
                 @trackList.reset()
-                refresh()
+                @refresh()
             else
                 TrackList.get {id: @trackList.id}, (newTrackList) =>
                     _.assign @trackList, newTrackList
-                    refresh()
+                    window.location.replace('#!/playlist/' + newTrackList.id)
+                    @refresh()
 
-        @save = ->
+        save: () ->
             @loaders.save = on
             @trackList.save().then () =>
-                refresh()
+                @refresh()
                 @trackLists = TrackList.query () => @loaders.save = off
 
-        refresh = =>
+        refresh: () =>
             # Refresh duration meter at the bottom
             @totalDuration = _.map(@trackList.tracks, 'duration').filter(Number).reduce ((a, b) -> a + b), 0
 
             # Refresh hidden metadata for printing
-            term = _.find(@terms, {id: @trackList.termId})
+            term = _.find(Terms, {id: @trackList.termId})
             @printMetadata = {
-                author: CurrentTrackList.authorName,
-                date: formatDate(CurrentTrackList.date),
+                author: @trackList.authorName,
+                date: @formatDate(@trackList.date),
                 term: term.time + ' (' + term.name + ')'
                 duration: $filter('duration')(@totalDuration)
             }
 
-        return
-
-module.exports = PlaylistController
+        addMp3Track: () =>
+            @trackList.tracks.push mp3: true

@@ -66,8 +66,6 @@ class AlbumEditorController
             id: $item.id
             name: $item.name
 
-    parseDuration: (duration) => parseInt(duration / 60) + ':' + @digitize(duration % 60)
-
     parseTrack: (track) =>
         id: track.id
         fid: track.fid.split("-")[1]
@@ -76,7 +74,7 @@ class AlbumEditorController
         artistModel:
             id: track.artistId
             name: track.artistName
-        length: @parseDuration track.duration
+        length: track.duration
 
     loadAlbum: (albumId) ->
         @RAlbum.get { id: albumId }, (data) =>

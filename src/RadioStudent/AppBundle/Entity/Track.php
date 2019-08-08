@@ -103,6 +103,34 @@ class Track extends BaseEntity
     private $deleted = false;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="mp3", type="boolean", options={"default":"0"})
+     */
+    private $mp3 = false;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mp3_artist_name", type="string", length=255)
+     */
+    private $mp3ArtistName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mp3_album_name", type="string", length=255)
+     */
+    private $mp3AlbumName;
+
+    public function setAlbumArtistName($albumArtistName)
+    {
+        $this->albumArtistName = $albumArtistName;
+
+        return $this;
+    }
+
+    /**
      * Get id
      *
      * @return integer
@@ -151,7 +179,7 @@ class Track extends BaseEntity
     /**
      * Get trackNum
      *
-     * @return string 
+     * @return string
      */
     public function getTrackNum()
     {
@@ -174,7 +202,7 @@ class Track extends BaseEntity
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -197,7 +225,7 @@ class Track extends BaseEntity
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -262,7 +290,7 @@ class Track extends BaseEntity
     /**
      * Get genres
      *
-     * @return string 
+     * @return string
      */
     public function getGenres()
     {
@@ -285,7 +313,7 @@ class Track extends BaseEntity
     /**
      * Get languages
      *
-     * @return string 
+     * @return string
      */
     public function getLanguages()
     {
@@ -344,6 +372,42 @@ class Track extends BaseEntity
         return $this;
     }
 
+    public function getMp3()
+    {
+        return $this->mp3;
+    }
+
+    public function setMp3($mp3)
+    {
+        $this->mp3 = $mp3;
+
+        return $this;
+    }
+
+    public function getMp3ArtistName()
+    {
+        return $this->mp3ArtistName;
+    }
+
+    public function setMp3ArtistName($mp3Artist)
+    {
+        $this->mp3ArtistName = $mp3Artist;
+
+        return $this;
+    }
+
+    public function getMp3AlbumName()
+    {
+        return $this->mp3AlbumName;
+    }
+
+    public function setMp3AlbumName($mp3Album)
+    {
+        $this->mp3AlbumName = $mp3Album;
+
+        return $this;
+    }
+
     public function getFlat($preset = 'short')
     {
         $result = [
@@ -360,6 +424,7 @@ class Track extends BaseEntity
             'duration'          => $this->duration,
             'languages'         => $this->languages,
             'genres'            => $this->genres,
+            'mp3'               => $this->mp3
         ];
 
         if ($result['artistName'] != $this->artist->getName()) {
