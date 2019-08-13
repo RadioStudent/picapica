@@ -18,3 +18,7 @@ RUN docker-php-ext-install pdo_mysql
 
 # PHP memory limit (for elasticsearch)
 RUN  echo 'memory_limit = 6G' > $PHP_INI_DIR/conf.d/memory_limit.ini;
+
+# Ldap extension
+RUN apt-get update && apt-get install libldap2-dev
+RUN docker-php-ext-install ldap

@@ -1,5 +1,5 @@
 {
-    "name": "RadioStudent/picapica",
+    "name": "radio-student/picapica",
     "license": "MIT",
     "type": "project",
     "description": "picapica",
@@ -17,22 +17,23 @@
         "symfony/symfony": "~3.4",
         "doctrine/orm": "~2.2,>=2.2.3",
         "doctrine/doctrine-bundle": "~1.2",
-        "twig/extensions": "~1.0",
+        "twig/extensions": "~1.5",
         "symfony/assetic-bundle": "~2.3",
-        "symfony/swiftmailer-bundle": "~2.3",
-        "symfony/monolog-bundle": "~2.4",
+        "symfony/swiftmailer-bundle": "~3.2",
+        "symfony/monolog-bundle": "~3.4",
         "sensio/distribution-bundle": "~5.0",
-        "sensio/framework-extra-bundle": "~5.0",
+        "sensio/framework-extra-bundle": "~5.4",
         "incenteev/composer-parameter-handler": "~2.0",
         "friendsofsymfony/elastica-bundle": "~3.2",
-        "friendsofsymfony/rest-bundle": "~1.5",
+        "friendsofsymfony/rest-bundle": "~2.5",
         "jms/serializer-bundle": "~2.4.3",
         "pagerfanta/pagerfanta": "~1.0",
         "phing/phing": "~2.10",
         "friendsofsymfony/user-bundle": "~2.0",
         "doctrine/doctrine-fixtures-bundle": "^2.2",
         "doctrine/doctrine-migrations-bundle": "^1.0",
-        "james-heinrich/getid3": "^1.9"
+        "james-heinrich/getid3": "^1.9",
+        "fr3d/ldap-bundle": "^4.0"
     },
     "scripts": {
         "post-root-package-install": [

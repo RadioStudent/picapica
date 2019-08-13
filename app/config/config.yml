@@ -90,3 +90,17 @@ fos_user:
       address: "%mailer_address%"
       sender_name: "%mailer_sender_name%"
 
+fr3d_ldap:
+    driver:
+        host: bartoldo.radiostudent.local
+        bindRequiresDn: false
+        username: null
+        password: null
+        useSsl: false
+        useStartTls: false
+    user:
+        baseDn: "ou=Users,dc=radiostudent,dc=si"
+        filter: "(objectclass=inetOrgPerson)"
+        attributes:
+            - { ldap_attr: uid, user_method: setUsername }
+            - { ldap_attr: email, user_method: setEmail }
