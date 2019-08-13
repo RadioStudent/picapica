@@ -5,7 +5,9 @@ module.exports = ($rootScope, $q, _, TrackList) ->
             @reset()
 
         toggleTrack: (track) ->
-            if @hasTrack track
+            if track.mp3 and not track.fid
+                _.remove @tracks, ((t) -> t.mp3 and not t.fid)
+            else if @hasTrack track
                 _.remove @tracks, ((t) -> t.fid is track.fid)
             else
                 @tracks.push angular.copy(track)

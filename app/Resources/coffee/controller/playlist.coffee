@@ -68,4 +68,4 @@ module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter
             }
 
         addMp3Track: () =>
-            @trackList.tracks.push mp3: true
+            @trackList.tracks.push mp3: true, duration: 0

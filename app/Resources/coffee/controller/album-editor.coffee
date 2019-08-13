@@ -24,7 +24,7 @@ class AlbumEditorController
             #    console.log "GOT", data
             @loadAlbum(@albumId)
 
-    fidGroups: ['CD', 'CDYU', 'CDJ', 'CDDE', 'CDWR', 'CDFG', 'CDKO', 'CDK', 'CDEX', 'CDFO', 'CDG', 'RŠPYU', 'RŠP', 'LP', 'LPYU', 'LPJ', 'LPRE', 'LPK', 'LPEX', 'LPAM', 'LPYF', 'SG', 'SGYU', 'SGFG', 'KNJ']
+    fidGroups: ['CD', 'CDYU', 'CDJ', 'CDDE', 'CDWR', 'CDFG', 'CDKO', 'CDK', 'CDEX', 'CDFO', 'CDG', 'RŠPYU', 'RŠP', 'LP', 'LPYU', 'LPJ', 'LPRE', 'LPK', 'LPEX', 'LPAM', 'LPYF', 'SG', 'SGYU', 'SGFG', 'KNJ', 'TR']
 
     updateAlbumFid: () =>
         @album.fid = @album.fidPrepend + ' ' + @album.fidNumber
@@ -67,14 +67,17 @@ class AlbumEditorController
             name: $item.name
 
     parseTrack: (track) =>
-        id: track.id
-        fid: track.fid.split("-")[1]
-        title: track.name
-        artist: track.artistName
-        artistModel:
-            id: track.artistId
-            name: track.artistName
-        length: track.duration
+        fidSplit = track.fid.split "-"
+
+        return
+            id: track.id
+            fid: fidSplit[fidSplit.length - 1]
+            title: track.name
+            artist: track.artistName
+            artistModel:
+                id: track.artistId
+                name: track.artistName
+            length: track.duration
 
     loadAlbum: (albumId) ->
         @RAlbum.get { id: albumId }, (data) =>
