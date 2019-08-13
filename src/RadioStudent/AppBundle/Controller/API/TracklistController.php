@@ -6,8 +6,10 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
-use RadioStudent\AppBundle\Entity\Tracklist;
 use Symfony\Component\HttpFoundation\Request;
+
+use RadioStudent\AppBundle\Entity\Author;
+use RadioStudent\AppBundle\Entity\Tracklist;
 
 /**
  * Class TracklistController
@@ -78,6 +80,16 @@ class TracklistController extends FOSRestController
         $em = $this->container->get('doctrine.orm.entity_manager');
 
         $author = $em->getRepository("RadioStudentAppBundle:Author")->findOneBy(["user" => $this->getUser()]);
+
+        // Create author entry if missing
+        if (!$author) {
+            $author = new Author();
+            $author->setUser($this->getUser());
+            $author->setName($this->getUser()->getUsername());
+            $em->persist($author);
+            $em->flush();
+        }
+
         $tracklist = $em->getRepository("RadioStudentAppBundle:Tracklist")->create($author, $request->request);
 
         $view = $this->view($tracklist->getFlat('long'));

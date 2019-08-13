@@ -95,7 +95,12 @@
                 <td ng-if="track.mp3" class="column-title">
                     <input ng-model="track.name" placeholder="Title" type="text" class="form-control input-sm">
                 </td>
-                <td ng-if="!track.mp3" ng-bind="track.albumName" class="column-album"></td>
+                <td ng-if="!track.mp3" class="column-album">
+                    <a ng-href="#!/album-editor/{{track.albumId}}" ng-show="haveRole('ROLE_EDITOR')" class="icon">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </a>
+                    <span ng-bind="track.albumName"></span>
+                </td>
                 <td ng-if="track.mp3" class="column-album">
                     <input ng-model="track.albumName" placeholder="Album" type="text" class="form-control input-sm">
                 </td>
@@ -126,11 +131,12 @@
                 Add mp3 track
             </div>
 
-            <span ng-show="pl.loaders.save" class="glyphicon glyphicon-refresh loader pull-right"></span>
             <button class="save-button btn btn-success btn-lg pull-right"
                  ng-click="pl.save()" ng-disabled="pl.totalDuration == 0">
                  Save
              </button>
+
+             <span ng-show="pl.loaders.save" class="glyphicon glyphicon-refresh loader pull-right"></span>
         </div>
     </div>
 

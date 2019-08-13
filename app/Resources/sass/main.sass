@@ -62,6 +62,10 @@
     tr
         display: flex
 
+    tr > td > a.icon
+        text-decoration: none
+        margin-right: .3rem
+
 // Search results table
 table.results
     margin-bottom: 20rem
@@ -135,6 +139,11 @@ table.results
 
     .action-buttons
         padding-bottom: 20px
+
+        > .loader
+          margin-right: 2rem
+          font-size: 2rem
+          margin-top: 1rem
 
     .loader
         animation: spin 1s infinite linear

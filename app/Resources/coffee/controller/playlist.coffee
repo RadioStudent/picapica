@@ -1,4 +1,4 @@
-module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter, $routeParams) ->
+module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter, $routeParams, $scope, Authorization) ->
 
     new class PlaylistController
         constructor: ->
@@ -26,6 +26,9 @@ module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter
             if $routeParams.tracklistId
                 @trackList.id = $routeParams.tracklistId
                 @selectTrackList()
+
+
+            $scope.haveRole = Authorization.haveRole
 
             return
 

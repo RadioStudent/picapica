@@ -30,12 +30,13 @@ security:
                 provider: chain_provider
                 #provider: fr3d_ldapbundle
                 csrf_token_generator: security.csrf.token_manager
-                always_use_default_target_path: true
-                default_target_path: /profile
+                #always_use_default_target_path: true
+                #default_target_path: /profile
 
-            #form_login_ldap:
-            #    service: Symfony\Component\Ldap\Ldap
-            #    dn_string: "uid={username},dc=radiostudent,dc=si"
+            remember_me:
+                secret: '%secret%'
+                lifetime: 2592000
+                path: /
 
             fr3d_ldap: ~
 
