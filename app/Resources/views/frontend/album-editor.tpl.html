@@ -7,7 +7,7 @@
   <div class="row album">
     <div class="col-sm-4">
       <div class="form-group">
-        <label class="control-label" for="album-fid">FID</label>
+        <label for="album-fid">FID</label>
 
         <div class="input-group">
             <select id="album-fid-prepend" class="form-control input-group-button" ng-model="ae.album.fidPrepend" ng-change="ae.updateAlbumFid()">
@@ -21,26 +21,26 @@
     </div>
     <div class="col-sm-3">
       <div class="form-group">
-        <label class="control-label" for="album-title">Title</label>
+        <label for="album-title">Title</label>
         <input id="album-title" class="form-control ng-not-empty" ng-model="ae.album.title" ng-required="true" required="required" type="text">
       </div>
     </div>
     <div class="col-sm-3">
       <div class="form-group">
-        <label class="control-label" for="album-label">Label</label>
+        <label for="album-label">Label</label>
         <input id="album-label" class="form-control ng-not-empty" ng-model="ae.album.label" ng-required="true" required="required" type="text">
       </div>
     </div>
     <div class="col-sm-2">
       <div class="form-group">
-        <label class="control-label" for="album-title">Year</label>
+        <label for="album-title">Year</label>
         <input id="album-year" class="form-control ng-not-empty" ng-model="ae.album.year" ng-required="true" required="required" type="text">
       </div>
     </div>
 
     <div class="col-sm-4">
       <div class="form-group">
-        <label class="control-albumArtist" for="album-albumArtist">Album artist</label>
+        <label for="album-albumArtist">Album artist</label>
         <input
             id="album-albumArtist"
             type="text"
@@ -52,6 +52,34 @@
             typeahead-template-url="/partials/_autocomplete-artist.tpl.html"
             typeahead-focus-first="false">
       </div>
+    </div>
+
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label for="album-herkunft">Herkunft (poreklo)</label>
+            <!-- input
+                id="album-herkunft"
+                type="text"
+                class="form-control"
+                ng-model="ae.album.herkunft"-->
+            <tags-input
+                class="form-control"
+                ng-model="ae.album.herkunft"
+                placeholder="Država"
+                spellcheck="false"
+            ></tags-input>
+        </div>
+    </div>
+
+    <div class="col-sm-4">
+        <div class="form-group">
+            <label for="album-genre">Genre</label>
+            <input
+                id="album-genre"
+                type="text"
+                class="form-control"
+                ng-model="ae.album.genre">
+        </div>
     </div>
   </div>
 

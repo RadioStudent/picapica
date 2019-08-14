@@ -7,6 +7,7 @@ class AlbumEditorController
         @RArtist = Artist
         @RAlbum = Album
 
+
         @album =
             id: null
             fid: ''
@@ -20,9 +21,7 @@ class AlbumEditorController
             tracks: []
 
         if @albumId
-            #@album = this.loadAlbum(@albumId).then data ->
-            #    console.log "GOT", data
-            @loadAlbum(@albumId)
+            @loadAlbum @albumId
 
     fidGroups: ['CD', 'CDYU', 'CDJ', 'CDDE', 'CDWR', 'CDFG', 'CDKO', 'CDK', 'CDEX', 'CDFO', 'CDG', 'RŠPYU', 'RŠP', 'LP', 'LPYU', 'LPJ', 'LPRE', 'LPK', 'LPEX', 'LPAM', 'LPYF', 'SG', 'SGYU', 'SGFG', 'KNJ', 'TR']
 
@@ -93,6 +92,8 @@ class AlbumEditorController
             @album.label = data.label
             @album.year = data.year
             @album.tracks = data.tracks.map @parseTrack
+            # test
+            @album.herkunft = [{ text: 'slo' }, { text: 'en' }]
 
     removeTrack: (index) =>
         head = @album.tracks.slice 0, index
@@ -105,7 +106,6 @@ class AlbumEditorController
 
     handleSuccess: () ->
         alert 'Album uspešno shranjen!'
-        #location.reload()
 
     handleError: (resp) ->
         if resp.data[0]

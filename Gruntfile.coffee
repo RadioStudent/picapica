@@ -27,6 +27,11 @@ module.exports = (grunt) ->
                 cwd: '<%= npmPath %>/bootstrap-sass/assets/fonts/bootstrap/'
                 src: '*'
                 dest: '<%= assetsPath %>/fonts'
+            ngTagsInput:
+                expand: true
+                cwd: '<%= npmPath %>/ng-tags-input/build/'
+                src: 'ng-tags-input.bootstrap.min.css'
+                dest: '<%= assetsPath %>/css'
         # Compiles JS from coffee, enables Node.js module support
         browserify:
             main:
@@ -61,14 +66,13 @@ module.exports = (grunt) ->
                 tasks: ['svgstore']
         # Watches for changes to CSS and reloads page in browser
         browserSync:
-            dev:
-                bsFiles:
-                    src : ['<%= assetsPath %>/css/*.css']
-                options:
-                    watchTask: true,
-                    debugInfo: true,
-                    proxy: 'picapica.dev'
-                    open: false
+            bsFiles:
+                src : ['<%= assetsPath %>/css/*.css']
+            options:
+                watchTask: true,
+                debugInfo: true,
+                proxy: 'localhost:8080'
+                open: false
         # Generates SVG sprite from single files
         svgstore:
             options:
