@@ -87,10 +87,44 @@ class Album extends BaseEntity
      */
     private $label;
 
+    /**
+     * @var Collection[]
+     *
+     * @ORM\ManyToMany(targetEntity="Herkunft", inversedBy="albums")
+     * @ORM\JoinTable(name="rel_album2herkunft",
+     *      joinColumns={@ORM\JoinColumn(name="album_id", referencedColumnName="ID")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="herkunft_id", referencedColumnName="ID")}
+     * )
+     */
+    private $herkunft;
+
+    /**
+     * @var Collection[]
+     *
+     * @ORM\ManyToMany(targetEntity="Label", inversedBy="albums")
+     * @ORM\JoinTable(name="rel_album2label",
+     *      joinColumns={@ORM\JoinColumn(name="album_id", referencedColumnName="ID")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="label_id", referencedColumnName="ID")}
+     * )
+     */
+    private $labels;
+
+    /**
+     * @var Collection[]
+     *
+     * @ORM\ManyToMany(targetEntity="Genre", inversedBy="genres")
+     * @ORM\JoinTable(name="rel_album2genre",
+     *      joinColumns={@ORM\JoinColumn(name="album_id", referencedColumnName="ID")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="genre_id", referencedColumnName="ID")}
+     * )
+     */
+    private $genres;
+
     public function __construct()
     {
         $this->artists = new ArrayCollection();
         $this->tracks = new ArrayCollection();
+        $this->herkunft = new ArrayCollection();
     }
 
     /**
@@ -286,6 +320,93 @@ class Album extends BaseEntity
         return $this->label;
     }
 
+    public function addHerkunft(Herkunft $herkunft)
+    {
+        if (!$this->herkunft->contains($herkunft)) {
+            $herkunft->addAlbum($this);
+            $this->herkunft[] = $herkunft;
+        }
+
+        return $this;
+    }
+
+    public function removeHerkunft(Herkunft $herkunft)
+    {
+        $this->herkunft->removeElement($herkunft);
+
+        return $this;
+    }
+
+    public function getHerkunft()
+    {
+        return $this->herkunft;
+    }
+
+    public function getHerkunftFlat()
+    {
+        return $this->getHerkunft()->map(function ($h) {
+            return $h->getFlat();
+        });
+    }
+
+    public function addLabel(Label $label)
+    {
+        if (!$this->labels->contains($label)) {
+            $label->addAlbum($this);
+            $this->labels[] = $label;
+        }
+
+        return $this;
+    }
+
+    public function removeLabel(Label $label)
+    {
+        $this->labels->removeElement($label);
+
+        return $this;
+    }
+
+    public function getLabels()
+    {
+        return $this->labels;
+    }
+
+    public function getLabelsFlat()
+    {
+        return $this->labels->map(function ($h) {
+            return $h->getFlat();
+        });
+    }
+
+    public function addGenre(Genre $genre)
+    {
+        if (!$this->genres->contains($genre)) {
+            $genre->addAlbum($this);
+            $this->genres[] = $genre;
+        }
+
+        return $this;
+    }
+
+    public function removeGenre(Genre $genre)
+    {
+        $this->genres->removeElement($genre);
+
+        return $this;
+    }
+
+    public function getGenres()
+    {
+        return $this->genres;
+    }
+
+    public function getGenresFlat()
+    {
+        return $this->genres->map(function ($h) {
+            return $h->getFlat();
+        });
+    }
+
     public function getFlat($preset = 'short')
     {
         $result = [
@@ -300,7 +421,10 @@ class Album extends BaseEntity
                 return $t->getFlat();
             }, array_filter($this->tracks->toArray(), function ($track) {
                 return $track->getDeleted() !== true;
-            })))
+            }))),
+            'herkunft'        => $this->getHerkunftFlat(),
+            'labels'          => $this->getLabelsFlat(),
+            'genres'          => $this->getGenresFlat()
         ];
 
         return $result;

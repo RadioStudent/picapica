@@ -422,8 +422,9 @@ class Track extends BaseEntity
             'albumArtistName'   => $this->album->getAlbumArtistName(),
             'albumId'           => $this->album->getId(),
             'duration'          => $this->duration,
-            'languages'         => $this->languages,
-            'genres'            => $this->genres,
+            'herkunft'          => $this->album->getHerkunftFlat(),
+            //'genres'            => $this->genres,
+            'genres'            => $this->album->getGenresFlat(),
             'mp3'               => $this->mp3
         ];
 
@@ -441,7 +442,7 @@ class Track extends BaseEntity
                 'artistName' => 'artist.name',
                 'artistId'   => 'artist.id',
                 'albumName'  => 'album.name',
-                'albumId'    => 'album.id',
+                'albumId'    => 'album.id'
             ],
             'sort' => [
                 'artistName' => 'artist.name.order',

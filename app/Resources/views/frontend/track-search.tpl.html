@@ -50,7 +50,7 @@
                 </td>
                 <td ng-bind="track.name" class="column-title"></td>
                 <td class="column-album">
-                    <a ng-href="#!/album-editor/{{track.albumId}}" ng-show="haveRole('ROLE_EDITOR')">
+                    <a ng-href="#!/album-editor/{{track.albumId}}" ng-show="haveRole('ROLE_EDITOR')" class="icon">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </a>
                     <span ng-bind="track.albumName"></span>

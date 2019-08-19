@@ -175,11 +175,13 @@ table.results
         font-weight: bold
 
 // Tags input
-tags-input
+tags-input.form-control
     padding: 0 !important
+    min-height: 38px
+    height: auto
 
     .tags
-        padding: 4px 0
+        padding: 4px 0 2px 0
         border: none !important
         box-shadow: none !important
 
@@ -201,7 +203,7 @@ tags-input
 
         .tag-item
             padding: 4px
-            margin: 0 0 0 3px
+            margin: 0 0 2px 3px
             border-radius: 3px
 
         > input
@@ -210,6 +212,19 @@ tags-input
             width: 56px !important
             border-radius: 3px
             border: 1px solid #cfcfcf
+
+    .suggestion-list
+        padding-left: 0
+        margin-bottom: 0
+
+        li
+            list-style: none
+            padding: 3px 10px
+            cursor: pointer
+
+        em
+            font-weight: bold
+
 
 #album-fid-prepend
     width: 9rem

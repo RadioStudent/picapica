@@ -1,5 +1,5 @@
 class AlbumEditorController
-    constructor: (Artist, Album, $routeParams, $scope) ->
+    constructor: (Artist, Album, $routeParams, $scope, $http) ->
         @albumId = $routeParams.albumId
 
         $scope.titlePrepend = if @albumId then "Edit" else "New"
@@ -19,6 +19,10 @@ class AlbumEditorController
             label: ''
             year: ''
             tracks: []
+
+        $scope.loadHerkunft = (query) => $http.get('/api/v1/herkunfts?query=' + query)
+        $scope.loadLabels = (query) => $http.get('/api/v1/labels?query=' + query)
+        $scope.loadGenres = (query) => $http.get('/api/v1/genres?query=' + query)
 
         if @albumId
             @loadAlbum @albumId
@@ -92,8 +96,9 @@ class AlbumEditorController
             @album.label = data.label
             @album.year = data.year
             @album.tracks = data.tracks.map @parseTrack
-            # test
-            @album.herkunft = [{ text: 'slo' }, { text: 'en' }]
+            @album.herkunft = data.herkunft
+            @album.labels = data.labels
+            @album.genres = data.genres
 
     removeTrack: (index) =>
         head = @album.tracks.slice 0, index

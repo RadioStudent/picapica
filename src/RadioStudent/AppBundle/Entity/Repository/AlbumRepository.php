@@ -6,6 +6,9 @@ use Doctrine\ORM\EntityRepository;
 use RadioStudent\AppBundle\Entity\Album;
 use RadioStudent\AppBundle\Entity\Artist;
 use RadioStudent\AppBundle\Entity\Track;
+use RadioStudent\AppBundle\Entity\Herkunft;
+use RadioStudent\AppBundle\Entity\Label;
+use RadioStudent\AppBundle\Entity\Genre;
 
 class AlbumRepository extends EntityRepository {
     protected function setData($album, $data)
@@ -42,13 +45,16 @@ class AlbumRepository extends EntityRepository {
         $album->addArtist($albumArtist);
 
         $album->setStrDate($data['year']);
-        $album->setLabel($data['label']);
+        //$album->setLabel($data['label']);
 
         if (!count($data['tracks'])) {
             throw new \Exception('Praznega albuma ne moreš dodati');
         }
 
         $this->parseTrackData($data['tracks'], $album, $albumArtist, $artistList, $em);
+        $this->parseHerkunft($data['herkunft'], $album, $em);
+        $this->parseLabels($data['labels'], $album, $em);
+        $this->parseGenres($data['genres'], $album, $em);
     }
 
     public function create($data)
@@ -148,6 +154,93 @@ class AlbumRepository extends EntityRepository {
 
         foreach($deletedTracks as $track) {
             $track->setDeleted(true);
+        }
+    }
+
+    protected function parseHerkunft($herkunft, $album, $em)
+    {
+        $hr = $em->getRepository('RadioStudentAppBundle:Herkunft');
+
+        $albumHerkunft = [];
+        foreach ($herkunft as $h) {
+            $herkunft = null;
+
+            if (isset($h['id']) && !empty($h['id'])) {
+                $herkunft = $hr->find($h['id']);
+            } else {
+                $herkunft = new Herkunft();
+                $herkunft->setName($h['name']);
+                $em->persist($herkunft);
+            }
+
+            $album->addHerkunft($herkunft);
+
+            $albumHerkunft[] = $herkunft->getId();
+        }
+
+        // Brisi odstranjene komade
+        foreach ($album->getHerkunft()->toArray() as $h) {
+            if (!in_array($h->getId(), $albumHerkunft)) {
+                $album->removeHerkunft($h);
+            }
+        }
+    }
+
+    protected function parseLabels($labels, $album, $em)
+    {
+        $hr = $em->getRepository('RadioStudentAppBundle:Label');
+
+        $albumLabels = [];
+        foreach ($labels as $h) {
+            $label = null;
+
+            if (isset($h['id']) && !empty($h['id'])) {
+                $label = $hr->find($h['id']);
+            } else {
+                $label = new Label();
+                $label->setName($h['name']);
+                $em->persist($label);
+            }
+
+            $album->addLabel($label);
+
+            $albumLabels[] = $label->getId();
+        }
+
+        // Brisi odstranjene komade
+        foreach ($album->getLabels()->toArray() as $h) {
+            if (!in_array($h->getId(), $albumLabels)) {
+                $album->removeLabel($h);
+            }
+        }
+    }
+
+    protected function parseGenres($genres, $album, $em)
+    {
+        $hr = $em->getRepository('RadioStudentAppBundle:Genre');
+
+        $albumGenres = [];
+        foreach ($genres as $h) {
+            $genre = null;
+
+            if (isset($h['id']) && !empty($h['id'])) {
+                $genre = $hr->find($h['id']);
+            } else {
+                $genre = new Genre();
+                $genre->setName($h['name']);
+                $em->persist($genre);
+            }
+
+            $album->addGenre($genre);
+
+            $albumGenres[] = $genre->getId();
+        }
+
+        // Brisi odstranjene komade
+        foreach ($album->getGenres()->toArray() as $h) {
+            if (!in_array($h->getId(), $albumGenres)) {
+                $album->removeGenre($h);
+            }
         }
     }
 }

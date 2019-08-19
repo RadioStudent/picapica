@@ -28,7 +28,16 @@
     <div class="col-sm-3">
       <div class="form-group">
         <label for="album-label">Label</label>
-        <input id="album-label" class="form-control ng-not-empty" ng-model="ae.album.label" ng-required="true" required="required" type="text">
+        <tags-input
+            class="form-control"
+            ng-model="ae.album.labels"
+            placeholder="Label"
+            spellcheck="false"
+            display-property="name"
+            key-property="id"
+        >
+            <auto-complete source="loadLabels($query)"></auto-complete>
+        </tags-input>
       </div>
     </div>
     <div class="col-sm-2">
@@ -57,28 +66,32 @@
     <div class="col-sm-4">
         <div class="form-group">
             <label for="album-herkunft">Herkunft (poreklo)</label>
-            <!-- input
-                id="album-herkunft"
-                type="text"
-                class="form-control"
-                ng-model="ae.album.herkunft"-->
             <tags-input
                 class="form-control"
                 ng-model="ae.album.herkunft"
                 placeholder="Država"
                 spellcheck="false"
-            ></tags-input>
+                display-property="name"
+                key-property="id"
+            >
+                <auto-complete source="loadHerkunft($query)"></auto-complete>
+            </tags-input>
         </div>
     </div>
 
     <div class="col-sm-4">
         <div class="form-group">
             <label for="album-genre">Genre</label>
-            <input
-                id="album-genre"
-                type="text"
+            <tags-input
                 class="form-control"
-                ng-model="ae.album.genre">
+                ng-model="ae.album.genres"
+                placeholder="Genre"
+                spellcheck="false"
+                display-property="name"
+                key-property="id"
+            >
+                <auto-complete source="loadGenres($query)"></auto-complete>
+            </tags-input>
         </div>
     </div>
   </div>
