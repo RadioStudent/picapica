@@ -110,7 +110,7 @@ class TracklistController extends FOSRestController
 
         $em->getRepository("RadioStudentAppBundle:Tracklist")->update($tracklist, $request->request);
 
-        $view = $this->view(true);
+        $view = $this->view($tracklist->getFlat('long'));
         return $this->handleView($view);
     }
 }

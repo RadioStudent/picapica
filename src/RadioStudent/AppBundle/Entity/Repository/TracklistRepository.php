@@ -76,11 +76,15 @@ class TracklistRepository extends EntityRepository
         // Remove cleared tracklist tracks
         $currentTracklistTracks = $tracklist->getTracklistTracks();
         foreach ($currentTracklistTracks as $currentTracklistTrack) {
-            if (!in_array($currentTracklistTrack->getId(), $newTracklistTrackIds)) {
+            $id = $currentTracklistTrack->getId();
+            if (!in_array($id, $newTracklistTrackIds)) {
                 // If it's an mp3, also remove the track entity
-                $em->remove($currentTracklistTrack->getTrack());
+                $track = $currentTracklistTrack->getTrack();
+
                 $em->remove($currentTracklistTrack);
-//                echo "removing track ".$currentTracklistTrack->getTrack()->getName()."\n";
+                if ($track->getMp3()) {
+                    $em->remove($track);
+                }
             }
         }
 

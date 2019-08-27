@@ -1,6 +1,8 @@
 transformResponse = (response) ->
     response = angular.fromJson response
 
+    return unless response.tracks
+
     response.tracks = response.tracks.map (track) ->
         track.comment = null if track.comment is ''
         track

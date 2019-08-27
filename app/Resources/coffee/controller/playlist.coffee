@@ -42,6 +42,7 @@ module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter
             return dateString
 
         selectTrackList: () ->
+            console.log "selecting tracklist", @trackList
             if @trackList.id is '-1'
                 @trackList.reset()
                 @refresh()
