@@ -1,13 +1,13 @@
 {
   "name": "picapica",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Web app for physical music library management.",
   "repository": {
     "type": "git",
     "url": "git://github.com/RadioStudent/picapica.git"
   },
   "author": "",
-  "license": "MIT",
+  "license": "AGPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/RadioStudent/picapica/issues"
   },

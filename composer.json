@@ -1,8 +1,9 @@
 {
     "name": "radio-student/picapica",
-    "license": "MIT",
+    "license": "AGPL-3.0-or-later",
     "type": "project",
-    "description": "picapica",
+    "description": "Physical music library management and playlist creation tool",
+    "version": "0.3.0",
     "autoload": {
         "psr-4": {
             "": "src/"
