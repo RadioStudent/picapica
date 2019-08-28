@@ -83,7 +83,7 @@ class Album extends BaseEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="LABEL", type="string", length=255)
+     * @ORM\Column(name="LABEL", type="string", length=255, nullable=true)
      */
     private $label;
 
@@ -125,6 +125,8 @@ class Album extends BaseEntity
         $this->artists = new ArrayCollection();
         $this->tracks = new ArrayCollection();
         $this->herkunft = new ArrayCollection();
+        $this->labels = new ArrayCollection();
+        $this->genres = new ArrayCollection();
     }
 
     /**

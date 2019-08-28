@@ -6,9 +6,9 @@ import MySQLdb
 
 baza_old = MySQLdb.connect(
     host="localhost",
-    user="fonoteka",
-    passwd="fonoteka",
-    database="fonoteka_old",
+    user="FONOTEKA",
+    #passwd="fonoteka",
+    db="fonoteka_old",
     charset="utf8",
     use_unicode=True
 )
@@ -61,11 +61,11 @@ for j, jid in jeziki.items():
 # Izgradimo sql asociacijo jezikov z albumi
 
 baza_new = MySQLdb.connect(
-    host="127.0.0.1",
-    port=33060,
+    host="localhost",
+    #port=33060,
     user="FONOTEKA",
-    passwd="huehuehue",
-    database="fonoteka_pica",
+    #passwd="huehuehue",
+    db="fonoteka_pica",
     charset="utf8",
     use_unicode=True
 )

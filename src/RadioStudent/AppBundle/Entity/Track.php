@@ -112,14 +112,14 @@ class Track extends BaseEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="mp3_artist_name", type="string", length=255)
+     * @ORM\Column(name="mp3_artist_name", type="string", length=255, nullable=true)
      */
     private $mp3ArtistName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="mp3_album_name", type="string", length=255)
+     * @ORM\Column(name="mp3_album_name", type="string", length=255, nullable=true)
      */
     private $mp3AlbumName;
 

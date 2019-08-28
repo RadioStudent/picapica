@@ -6,9 +6,9 @@ import MySQLdb
 
 baza_old = MySQLdb.connect(
     host="localhost",
-    user="fonoteka",
-    passwd="fonoteka",
-    database="fonoteka_old",
+    user="FONOTEKA",
+    #passwd="fonoteka",
+    db="fonoteka_old",
     charset="utf8",
     use_unicode=True
 )
@@ -52,6 +52,35 @@ for r in rezultat:
 #print(zalozbe)
 #print(len(zalozbe))
 
+# Preberemo vnesene labele v pici
+baza_new = MySQLdb.connect(
+    host="localhost",
+    #port=33060,
+    user="FONOTEKA",
+    #passwd="huehuehue",
+    db="fonoteka_pica",
+    charset="utf8",
+    use_unicode=True
+)
+
+kazalec = baza_new.cursor()
+
+kazalec.execute("SELECT FID,LABEL FROM data_albums WHERE LABEL <> ''")
+rezultat = kazalec.fetchall()
+for r in rezultat:
+    index = r[0]
+    zalozba = r[1]
+
+    #print("najden " + zalozba + " za album " + index)
+
+    if index not in albumi:
+        albumi[index] = set()
+
+    albumi[index].add(zalozba)
+
+    if zalozba not in zalozbe:
+        zalozbe[zalozba] = jid
+        jid += 1
 
 # Izgradimo sql za vnos zalozb
 for j, jid in zalozbe.items():
@@ -59,17 +88,6 @@ for j, jid in zalozbe.items():
 
 # Izgradimo sql asociacijo  z albumi
 
-baza_new = MySQLdb.connect(
-    host="127.0.0.1",
-    port=33060,
-    user="FONOTEKA",
-    passwd="huehuehue",
-    database="fonoteka_pica",
-    charset="utf8",
-    use_unicode=True
-)
-
-kazalec = baza_new.cursor()
 for fid, data in albumi.items():
     #print(fid)
     kazalec.execute("SELECT ID FROM data_albums WHERE FID='" + fid + "'")
