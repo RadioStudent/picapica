@@ -54,7 +54,7 @@ class Album extends BaseEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="STR_DATE", type="string", length=255)
+     * @ORM\Column(name="STR_DATE", type="string", length=255, nullable=true)
      */
     private $strDate;
 
@@ -79,13 +79,6 @@ class Album extends BaseEntity
      * @ORM\Column(name="ALBUM_ARTIST_NAME", type="string", length=255)
      */
     private $albumArtistName;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="LABEL", type="string", length=255, nullable=true)
-     */
-    private $label;
 
     /**
      * @var Collection[]
@@ -299,29 +292,6 @@ class Album extends BaseEntity
         return $this;
     }
 
-    /**
-     * Set label
-     *
-     * @param string $label
-     * @return Album
-     */
-    public function setLabel($label)
-    {
-        $this->label = $label;
-
-        return $this;
-    }
-
-    /**
-     * Get label
-     *
-     * @return string
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
-
     public function addHerkunft(Herkunft $herkunft)
     {
         if (!$this->herkunft->contains($herkunft)) {
@@ -416,7 +386,6 @@ class Album extends BaseEntity
             'fid'             => $this->fid,
             'name'            => $this->name,
             'year'            => $this->strDate,
-            'label'           => $this->label,
             'albumArtistName' => $this->getAlbumArtistName(),
             'artists'         => array_map(function ($a) { return $a->getFlat(); }, $this->artists->toArray()),
             'tracks'          => array_values(array_map(function ($t) {

@@ -3,6 +3,10 @@ class AlbumEditorController
         @albumId = $routeParams.albumId
 
         $scope.titlePrepend = if @albumId then "Edit" else "New"
+        $scope.markNewTag = (tag) ->
+            if not tag.id
+                tag.id = Math.floor Date.now()
+                tag.new = true
 
         @RArtist = Artist
         @RAlbum = Album

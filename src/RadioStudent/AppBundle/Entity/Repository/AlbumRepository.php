@@ -165,7 +165,7 @@ class AlbumRepository extends EntityRepository {
         foreach ($herkunft as $h) {
             $herkunft = null;
 
-            if (isset($h['id']) && !empty($h['id'])) {
+            if ($this->tagExists($h)) {
                 $herkunft = $hr->find($h['id']);
             } else {
                 $herkunft = new Herkunft();
@@ -194,7 +194,7 @@ class AlbumRepository extends EntityRepository {
         foreach ($labels as $h) {
             $label = null;
 
-            if (isset($h['id']) && !empty($h['id'])) {
+            if ($this->tagExists($h)) {
                 $label = $hr->find($h['id']);
             } else {
                 $label = new Label();
@@ -223,7 +223,7 @@ class AlbumRepository extends EntityRepository {
         foreach ($genres as $h) {
             $genre = null;
 
-            if (isset($h['id']) && !empty($h['id'])) {
+            if ($this->tagExists($h)) {
                 $genre = $hr->find($h['id']);
             } else {
                 $genre = new Genre();
@@ -242,5 +242,9 @@ class AlbumRepository extends EntityRepository {
                 $album->removeGenre($h);
             }
         }
+    }
+
+    protected function tagExists($tag) {
+        return !isset($tag['new']) && isset($tag['id']) && !empty($tag['id']);
     }
 }

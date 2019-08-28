@@ -35,6 +35,8 @@
             spellcheck="false"
             display-property="name"
             key-property="id"
+            replace-spaces-with-dashes="false"
+            on-tag-added="markNewTag($tag)"
         >
             <auto-complete source="loadLabels($query)"></auto-complete>
         </tags-input>
@@ -73,6 +75,8 @@
                 spellcheck="false"
                 display-property="name"
                 key-property="id"
+                replace-spaces-with-dashes="false"
+                on-tag-added="markNewTag($tag)"
             >
                 <auto-complete source="loadHerkunft($query)"></auto-complete>
             </tags-input>
@@ -89,6 +93,8 @@
                 spellcheck="false"
                 display-property="name"
                 key-property="id"
+                replace-spaces-with-dashes="false"
+                on-tag-added="markNewTag($tag)"
             >
                 <auto-complete source="loadGenres($query)"></auto-complete>
             </tags-input>
