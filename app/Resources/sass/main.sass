@@ -60,9 +60,6 @@
     th
         white-space: nowrap
 
-    tr
-        display: flex
-
     tr > td > a.icon
         text-decoration: none
         margin-right: .3rem
@@ -121,6 +118,10 @@ table.results
 .playlist
     .playlist-date *:focus
         outline: none
+
+    // Comment line fix
+    tr
+        display: flex
 
     .has-comment
         padding-bottom: 30px
