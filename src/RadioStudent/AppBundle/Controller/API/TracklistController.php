@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use RadioStudent\AppBundle\Entity\Author;
 use RadioStudent\AppBundle\Entity\Tracklist;
@@ -79,22 +80,30 @@ class TracklistController extends FOSRestController
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine.orm.entity_manager');
 
-        $author = $em->getRepository("RadioStudentAppBundle:Author")->findOneBy(["user" => $this->getUser()]);
+        try {
+            $author = $em->getRepository("RadioStudentAppBundle:Author")->findOneBy(["user" => $this->getUser()]);
 
-        // Create author entry if missing
-        if (!$author) {
-            $author = new Author();
-            $author->setUser($this->getUser());
-            $author->setName($this->getUser()->getUsername());
-            $em->persist($author);
-            $em->flush();
+            // Create author entry if missing
+            if (!$author) {
+                $author = new Author();
+                $author->setUser($this->getUser());
+                $author->setName($this->getUser()->getUsername());
+                $em->persist($author);
+                $em->flush();
+            }
+
+            $tracklist = $em->getRepository("RadioStudentAppBundle:Tracklist")->create($author, $request->request);
+
+            $view = $this->view($tracklist->getFlat('long'));
+
+            return $this->handleView($view);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                ["error" => [
+                    "message" => $e->getMessage()
+                ]]
+            ], 422);
         }
-
-        $tracklist = $em->getRepository("RadioStudentAppBundle:Tracklist")->create($author, $request->request);
-
-        $view = $this->view($tracklist->getFlat('long'));
-
-        return $this->handleView($view);
     }
 
     /**
@@ -108,9 +117,17 @@ class TracklistController extends FOSRestController
         /** @var EntityManager $em */
         $em = $this->container->get('doctrine.orm.entity_manager');
 
-        $em->getRepository("RadioStudentAppBundle:Tracklist")->update($tracklist, $request->request);
+        try {
+            $em->getRepository("RadioStudentAppBundle:Tracklist")->update($tracklist, $request->request);
 
-        $view = $this->view($tracklist->getFlat('long'));
-        return $this->handleView($view);
+            $view = $this->view($tracklist->getFlat('long'));
+            return $this->handleView($view);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                ["error" => [
+                    "message" => $e->getMessage()
+                ]]
+            ], 422);
+        }
     }
 }

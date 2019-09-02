@@ -9,7 +9,7 @@
                     <select id="playlist"
                             class="form-control"
                             ng-model="pl.trackList.id"
-                            ng-change="pl.selectTrackList()">
+                            ng-change="pl.loadTrackList()">
                         <option value="-1" ng-bind="'(Create new)'" ng-selected="-1 === pl.trackList.id"></option>
                         <option ng-repeat="trackList in pl.trackLists"
                                 value="{{trackList.id}}"

@@ -14,6 +14,7 @@
   "dependencies": {
     "angular": "^1.4.7",
     "angular-bootstrap-npm": "0.14.2",
+    "angular-location-update": "0.0.2",
     "angular-mocks": "^1.4.7",
     "angular-resource": "^1.4.7",
     "angular-route": "^1.4.7",

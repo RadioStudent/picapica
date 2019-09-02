@@ -34,14 +34,10 @@ module.exports = ($rootScope, $q, _, TrackList) ->
             _.assign @, emptyTrackList
 
         save: ->
-            fetching = $q.defer()
-
             if @id is '-1'
-                TrackList.save {}, @, (response) =>
-                    @id = response.id
-                    fetching.resolve()
+                return TrackList.save {}, @, @handleSuccess
             else
-                TrackList.update {id: @id}, @, =>
-                    fetching.resolve()
+                return TrackList.update {id: @id}, @, @handleSuccess
 
-            fetching.promise
+        handleSuccess: (resource) =>
+            @id = resource.id

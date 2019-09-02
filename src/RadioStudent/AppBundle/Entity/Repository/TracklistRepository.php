@@ -135,6 +135,25 @@ class TracklistRepository extends EntityRepository
 
     protected function setMp3Data(Track $track, array $trackData)
     {
+        if (!isset($trackData['fid']) || !$trackData['fid']) {
+            throw new \Exception('Vsak mp3 potrebuje filename');
+        }
+        if (!isset($trackData['albumName']) || !$trackData['albumName']) {
+            throw new \Exception('Vsak mp3 potrebuje album');
+        }
+        if (!isset($trackData['artistName']) || !$trackData['artistName']) {
+            throw new \Exception('Vsak mp3 potrebuje artista');
+        }
+        if (!isset($trackData['name']) || !$trackData['name']) {
+            throw new \Exception('Vsak mp3 potrebuje naslov');
+        }
+        if (!isset($trackData['year']) || !$trackData['year']) {
+            throw new \Exception('Vsak mp3 potrebuje leto');
+        }
+        if (!isset($trackData['duration']) || !$trackData['duration']) {
+            throw new \Exception('Vsak mp3 potrebuje trajanje');
+        }
+
         $track->setFid($trackData['fid']);
         $track->setTrackNum($trackData['fid']);
         $track->setName($trackData['name']);

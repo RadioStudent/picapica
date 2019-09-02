@@ -1,4 +1,4 @@
-module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter, $routeParams, $scope, Authorization) ->
+module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter, $routeParams, $scope, Authorization, $location) ->
 
     new class PlaylistController
         constructor: ->
@@ -6,6 +6,7 @@ module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter
             @trackLists = TrackList.query()
             @loaders = { save: off }
             @RTerms = Terms
+            @$location = $location
 
             @printMetadata = {
                 author: '',
@@ -25,7 +26,7 @@ module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter
 
             if $routeParams.tracklistId
                 @trackList.id = $routeParams.tracklistId
-                @selectTrackList()
+                @loadTrackList()
 
 
             $scope.haveRole = Authorization.haveRole
@@ -41,28 +42,41 @@ module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter
 
             return dateString
 
-        selectTrackList: () ->
-            console.log "selecting tracklist", @trackList
+        loadTrackList: () ->
             if @trackList.id is '-1'
                 @trackList.reset()
                 @refresh()
             else
+                return unless @trackList.id
                 TrackList.get {id: @trackList.id}, (newTrackList) =>
                     _.assign @trackList, newTrackList
-                    window.location.replace('#!/playlist/' + newTrackList.id)
+                    @$location.update_path('/playlist/' + newTrackList.id, true)
                     @refresh()
 
         save: () ->
             @loaders.save = on
-            @trackList.save().then () =>
-                @refresh()
-                @trackLists = TrackList.query () => @loaders.save = off
+            @trackList.save().$promise.then(@handleSuccess, @handleError)
+
+        handleSuccess: () =>
+            @loaders.save = off
+            @refresh()
+            #@trackLists = TrackList.query () => @loaders.save = off
+
+        handleError: (resp) =>
+            @loaders.save = off
+            if resp.data[0]
+                alert 'Napaka pri shranjevanju: ' + resp.data[0].error.message
+            else if resp.data.error
+                alert 'Napaka pri shranjevanju: ' + resp.data.error.message
+            else
+                alert 'Napaka pri shranjevanju'
 
         refresh: () =>
             # Refresh duration meter at the bottom
             @totalDuration = _.map(@trackList.tracks, 'duration').filter(Number).reduce ((a, b) -> a + b), 0
+            Terms.$promise.then () => @resetMetadata()
 
-            # Refresh hidden metadata for printing
+        resetMetadata: () =>
             term = _.find(Terms, {id: @trackList.termId})
             @printMetadata = {
                 author: @trackList.authorName,

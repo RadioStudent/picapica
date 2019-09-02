@@ -124,7 +124,7 @@ class TracklistTrack
      */
     public function getComment()
     {
-        return $this->comment;
+        return !empty($this->comment) ? $this->comment : null;
     }
 
     /**

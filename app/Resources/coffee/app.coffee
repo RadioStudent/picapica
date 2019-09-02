@@ -7,8 +7,9 @@ sanitize  = require 'angular-sanitize'
 bootstrap = require 'angular-bootstrap-npm/dist/angular-bootstrap-tpls'
 require 'angular-ui-sortable'
 require 'ng-tags-input'
+require 'angular-location-update'
 
-angular.module 'picapicaApp', [route, sanitize, resource, bootstrap, 'ui.sortable', 'ngTagsInput']
+angular.module 'picapicaApp', [route, sanitize, resource, bootstrap, 'ui.sortable', 'ngTagsInput', 'ngLocationUpdate']
     .config [
         '$routeProvider'
         ($routeProvider) ->
