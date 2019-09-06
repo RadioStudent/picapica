@@ -87,3 +87,25 @@ module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter
 
         addMp3Track: () =>
             @trackList.tracks.push mp3: true, duration: 0
+
+        # Copy playlist text to clipboard
+        copyClipboard: () =>
+            reduceTrack = (longText, track, idx) =>
+                data = [idx+1 + " " + track.fid, track.artistName, track.name, track.albumName, track.year, $filter('duration')(track.duration)].map (val) => if val then val else "/"
+
+                trackTxt = data.join "\t"
+
+                if track.comment
+                    trackTxt += "\n\t" + track.comment
+
+                longText + trackTxt + "\n"
+
+            text = @trackList.tracks.reduce reduceTrack, ""
+            text = ['# FID', 'ARTIST', 'TITLE', 'ALBUM', 'YEAR', 'LENGTH'].join("\t") + "\n" + text
+
+            clipboard = document.getElementById 'clipboard-container'
+            clipboard.innerHTML = text
+
+            clipboard.select()
+            clipboard.focus()
+            document.execCommand("copy")

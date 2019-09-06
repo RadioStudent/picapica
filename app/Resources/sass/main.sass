@@ -138,6 +138,7 @@ table.results
         height: 36px
         input
             width: 100%
+            padding: 0 .5rem
 
     .action-buttons
         padding-bottom: 20px
@@ -233,10 +234,21 @@ tags-input.form-control
 #album-fid
     width: 50%
 
+#clipboard-container
+    position: absolute
+    overflow: hidden
+    width: 10px
+    opacity: 0
+    z-index: -1
+
 @keyframes spin
     from
         transform: rotate(0deg)
     to
         transform: rotate(360deg)
+
+// Helper classes
+.mr-1
+    margin-right: 1rem
 
 @import print

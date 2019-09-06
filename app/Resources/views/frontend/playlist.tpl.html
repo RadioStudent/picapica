@@ -136,6 +136,11 @@
                  Save
              </button>
 
+             <button class="btn btn-default btn-lg pull-right mr-1" ng-click="pl.copyClipboard()">
+                 <span class="glyphicon glyphicon-copy"></span>
+                 <textarea id="clipboard-container"></textarea>
+             </button>
+
              <span ng-show="pl.loaders.save" class="glyphicon glyphicon-refresh loader pull-right"></span>
         </div>
     </div>
