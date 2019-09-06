@@ -109,3 +109,5 @@ module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter
             clipboard.select()
             clipboard.focus()
             document.execCommand("copy")
+
+        triggerPrint: () -> window.print()
