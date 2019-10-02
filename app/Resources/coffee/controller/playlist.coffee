@@ -115,8 +115,6 @@ module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter
         triggerPrint: () -> window.print()
 
         syncToWebsite: () ->
-            #console.log $uibModal
-            #$('#syncModal').show()
             trackList = @trackList
             $uibModal.open
                 animation: true

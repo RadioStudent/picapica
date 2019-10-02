@@ -1,0 +1,55 @@
+
+// Playlist page
+.playlist
+    .playlist-date *:focus
+        outline: none
+
+    // Comment line fix
+    tr
+        display: flex
+
+    .has-comment
+        padding-bottom: 30px
+        position: relative
+        .fake-comment-row
+            display: block
+
+    .fake-comment-row
+        position: absolute
+        display: none
+        left: 0
+        right: 0
+        bottom: 0
+        height: 36px
+        input
+            width: 100%
+            padding: 0 .5rem
+
+    .action-buttons
+        padding-bottom: 20px
+
+        > .loader
+          margin-right: 2rem
+          font-size: 2rem
+          margin-top: 1rem
+
+    .loader
+        animation: spin 1s infinite linear
+          margin-left: 10px
+          vertical-align: middle
+
+.printable-metadata
+    display: none
+
+#clipboard-container
+    position: absolute
+    overflow: hidden
+    width: 10px
+    opacity: 0
+    z-index: -1
+
+@keyframes spin
+    from
+        transform: rotate(0deg)
+    to
+        transform: rotate(360deg)

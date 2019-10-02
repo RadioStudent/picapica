@@ -1,0 +1,49 @@
+// Search page
+.search
+    .dropdown-suggestion-text
+        .glyphicon
+            padding-right: 5px
+        span span
+            vertical-align: middle
+        em
+            font-style: normal
+            font-weight: bold
+
+    .precomputed-suggestion
+        background-color: #eee
+        strong
+            text-transform: uppercase
+
+    .filter
+        &-wrapper
+            position: relative
+        &-label
+            font-size: 16px
+            margin: 0 0 0 20px
+            text-transform: uppercase
+            .glyphicon
+                padding-right: 5px
+        &-type
+            float: right
+            cursor: pointer
+            font-weight: normal
+            margin: 0 10px 0 0
+            &:first-child
+                margin-right: 0
+            input
+                cursor: inherit
+        &-remove-icon
+            cursor: pointer
+            margin-top: -7px
+            position: absolute
+            left: 6px
+            top: 50%
+
+    .form-control.search-bar
+        height: 36.5px
+        text-transform: uppercase
+
+
+// Search results table
+table.results
+    margin-bottom: 20rem

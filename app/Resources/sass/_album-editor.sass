@@ -1,0 +1,79 @@
+// Album editor page
+.album-editor
+    .album input
+        padding: 7px 7px
+    .track
+        margin-bottom: 8px
+
+        > .column-fid > div > input
+            display: inline-block
+
+            &:first-child
+                width: 70%
+                text-align: right
+            &:last-child
+                width: 30%
+
+        .input-sm
+            padding: 4px 4px
+
+    .dropdown-suggestion-text em
+        font-style: normal
+        font-weight: bold
+
+#album-fid-prepend
+    width: 9rem
+
+#album-fid
+    width: 50%
+
+// Tags input
+tags-input.form-control
+    padding: 0 !important
+    min-height: 38px
+    height: auto
+
+    .tags
+        padding: 4px 0 2px 0
+        border: none !important
+        box-shadow: none !important
+
+        &.focused
+            box-shadow: inset 0 2px 0 #e7e7e7, 0 0 3px #fff200 !important
+
+        ul
+            margin-bottom: 0
+            padding-left: 0
+        li
+            display: inline-block
+            float: left
+            background-color: #28B62C !important
+            border-color: #23a127 !important
+
+            .remove-button
+                color: white
+                cursor: pointer
+
+        .tag-item
+            padding: 4px
+            margin: 0 0 2px 3px
+            border-radius: 3px
+
+        > input
+            padding: 4px !important
+            margin-left: 3px
+            width: 56px !important
+            border-radius: 3px
+            border: 1px solid #cfcfcf
+
+    .suggestion-list
+        padding-left: 0
+        margin-bottom: 0
+
+        li
+            list-style: none
+            padding: 3px 10px
+            cursor: pointer
+
+        em
+            font-weight: bold
