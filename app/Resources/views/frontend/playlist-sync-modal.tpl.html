@@ -6,7 +6,7 @@
 </div>
 
 <div class="modal-body">
-    <div class="tracklist-sync">
+    <div class="tracklist-sync" id="tracklist-sync">
         <div class="track" ng-repeat="track in trackList.tracks">
             <div class="track-num">
                 {{ $index + 1 }}. &nbsp;
@@ -41,5 +41,5 @@
 
 <div class="modal-footer">
     <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$close()">Close</button>
-    <button type="button" class="btn btn-primary">Sync playlist</button>
+    <button type="button" class="btn btn-primary" ng-click="syncPlaylist()">Sync playlist</button>
 </div>

@@ -1,4 +1,4 @@
-module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter, $routeParams, $scope, Authorization, $location, $uibModal) ->
+module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, TrackListSync, Terms, $filter, $routeParams, $scope, Authorization, $location, $uibModal) ->
 
     new class PlaylistController
         constructor: ->
@@ -116,14 +116,24 @@ module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter
 
         syncToWebsite: () ->
             trackList = @trackList
+            closeSync = @closeSync
+
             $uibModal.open
                 animation: true
                 size: 'lg'
-                templateUrl: 'partials/album-sync-modal.tpl.html'
+                templateUrl: 'partials/playlist-sync-modal.tpl.html'
                 controller: ($scope) ->
                     $scope.trackList = trackList
                     $scope.duration = $filter('duration')
-                    console.log $scope
+
+                    $scope.syncPlaylist = () =>
+                        sync = new TrackListSync
+                            id: trackList.id
+                            body: document.getElementById('tracklist-sync').innerHTML
+
+                        syncError = () -> alert 'There was an error syncing to website'
+
+                        sync.$save @closeSync, syncError
 
         closeSync: () ->
             $('#syncModal').hide()

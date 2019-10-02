@@ -135,27 +135,40 @@ class TracklistController extends FOSRestController
     /**
      * Shrani playlisto na drupal sajt
      *
-     * @TODO spremeni v POST ko nehas testirat
-     * @REST\Get("/tracklists/sync/{tracklist}")
+     * @REST\Put("/tracklists/{tracklist}/sync")
      */
-    public function postSyncAction(Tracklist $tracklist, Request $request)
+    public function putSyncAction(Tracklist $tracklist, Request $request)
     {
-        $client = new Client();
-        $res = $client->request('POST', 'https://radiostudent.si/pica/oprema', [
-            'json' => [
-                'title' => 'huehue',
-                'datetime' => 'huehackckf'
-            ]
-        ]);
+        try {
+            $data = json_decode($request->getContent(), true);
+
+            $payload = [
+                // TODO proper avtorji, ko bomo imeli ldap
+                'author' => $tracklist->getName(),
+                'datetime' => $tracklist->getDate()->format('Y-m-d h:i'),
+                'tracks' => $data['body']
+            ];
+
+            $client = new Client();
+            $res = $client->request('POST', 'https://radiostudent.si/pica/oprema', [
+                'json' => $payload
+            ]);
 
 
-        var_dump($res->getStatusCode());
-        var_dump($res->getBody());
-        die;
+            var_dump($res->getStatusCode());
+            var_dump($res->getBody()->getContents());
+            die;
 
-        $create_resp = $res->getBody();
-        var_dump($create_resp);
-        return new JsonResponse($create_resp);
+            $create_resp = $res->getBody();
+            var_dump($create_resp);
+            return new JsonResponse($create_resp);
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                ["error" => [
+                    "message" => $e->getMessage()
+                ]]
+            ], 422);
+        }
     }
 
 }
