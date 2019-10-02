@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use GuzzleHttp\Client;
 
 use RadioStudent\AppBundle\Entity\Author;
 use RadioStudent\AppBundle\Entity\Tracklist;
@@ -130,4 +131,31 @@ class TracklistController extends FOSRestController
             ], 422);
         }
     }
+
+    /**
+     * Shrani playlisto na drupal sajt
+     *
+     * @TODO spremeni v POST ko nehas testirat
+     * @REST\Get("/tracklists/sync/{tracklist}")
+     */
+    public function postSyncAction(Tracklist $tracklist, Request $request)
+    {
+        $client = new Client();
+        $res = $client->request('POST', 'https://radiostudent.si/pica/oprema', [
+            'json' => [
+                'title' => 'huehue',
+                'datetime' => 'huehackckf'
+            ]
+        ]);
+
+
+        var_dump($res->getStatusCode());
+        var_dump($res->getBody());
+        die;
+
+        $create_resp = $res->getBody();
+        var_dump($create_resp);
+        return new JsonResponse($create_resp);
+    }
+
 }

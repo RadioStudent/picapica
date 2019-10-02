@@ -1,4 +1,4 @@
-module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter, $routeParams, $scope, Authorization, $location) ->
+module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter, $routeParams, $scope, Authorization, $location, $uibModal) ->
 
     new class PlaylistController
         constructor: ->
@@ -76,13 +76,15 @@ module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter
             @totalDuration = _.map(@trackList.tracks, 'duration').filter(Number).reduce ((a, b) -> a + b), 0
             Terms.$promise.then () => @resetMetadata()
 
+        getTotalDuration: () => _.map(@trackList.tracks, 'duration').filter(Number).reduce ((a, b) -> a + b), 0
+
         resetMetadata: () =>
             term = _.find(Terms, {id: @trackList.termId})
             @printMetadata = {
                 author: @trackList.authorName,
                 date: @formatDate(@trackList.date),
                 term: term.time + ' (' + term.name + ')'
-                duration: $filter('duration')(@totalDuration)
+                duration: $filter('duration')(@getTotalDuration())
             }
 
         addMp3Track: () =>
@@ -111,3 +113,19 @@ module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, Terms, $filter
             document.execCommand("copy")
 
         triggerPrint: () -> window.print()
+
+        syncToWebsite: () ->
+            #console.log $uibModal
+            #$('#syncModal').show()
+            trackList = @trackList
+            $uibModal.open
+                animation: true
+                size: 'lg'
+                templateUrl: 'partials/album-sync-modal.tpl.html'
+                controller: ($scope) ->
+                    $scope.trackList = trackList
+                    $scope.duration = $filter('duration')
+                    console.log $scope
+
+        closeSync: () ->
+            $('#syncModal').hide()

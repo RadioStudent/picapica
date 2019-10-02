@@ -34,7 +34,8 @@
         "doctrine/doctrine-fixtures-bundle": "^2.2",
         "doctrine/doctrine-migrations-bundle": "^1.0",
         "james-heinrich/getid3": "^1.9",
-        "fr3d/ldap-bundle": "^4.0"
+        "fr3d/ldap-bundle": "^4.0",
+        "guzzlehttp/guzzle": "^6.3"
     },
     "scripts": {
         "post-root-package-install": [
