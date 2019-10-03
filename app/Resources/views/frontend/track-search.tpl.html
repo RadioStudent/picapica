@@ -48,12 +48,21 @@
                 <td class="column-artist">
                     {{track.artistName}}&nbsp;<span ng-if="track.artistMistake" uib-tooltip="{{track.artistMistake}}" class="glyphicon glyphicon-ok-sign"></span>
                 </td>
-                <td ng-bind="track.name" class="column-title"></td>
+                <td class="column-title">
+                    <span ng-bind="track.name"></span>
+
+                    <span class="badge pull-right" uib-tooltip-html="'{{getTrackInfo(track)}}'" ng-if="track.genres.length + track.herkunft.length">
+                        <span class="glyphicon glyphicon-music"></span>
+                    </span>
+                </td>
                 <td class="column-album">
                     <a ng-href="#!/album-editor/{{track.albumId}}" ng-show="haveRole('ROLE_EDITOR')" class="icon">
                         <span class="glyphicon glyphicon-pencil"></span>
                     </a>
                     <span ng-bind="track.albumName"></span>
+                </td>
+                <td class="column-label">
+                    {{ getJoined(track.labels) }}
                 </td>
                 <td ng-bind="track.year" class="column-year"></td>
                 <td ng-bind="track.duration | duration" class="column-length"></td>

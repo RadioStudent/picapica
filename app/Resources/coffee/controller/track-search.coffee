@@ -8,6 +8,19 @@ class TrackSearchController
         @trackList  = CurrentTrackList
 
         $scope.haveRole = Authorization.haveRole
+        $scope.getJoined = (prop) => prop.map((label) => label.name ).join(', ')
+        $scope.getTrackInfo = (track) =>
+            genres = $scope.getJoined(track.genres)
+            herkunft = $scope.getJoined(track.herkunft)
+
+            out = []
+            if genres
+                out.push "Zvrsti: " + genres
+            if herkunft
+                out.push "Izvor: " + herkunft
+
+            if out
+                return $sce.trustAsHtml('<div>' + out.join('<br>') + '</div>')
 
         @offset     = 0
 

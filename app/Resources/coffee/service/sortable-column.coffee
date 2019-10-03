@@ -28,6 +28,7 @@ SortableColumn = ($rootScope) ->
             { name: 'artistName', label: 'Artist' }
             { name: 'name'      , label: 'Title' }
             { name: 'album'     , label: 'Album' }
+            { name: 'label'     , label: 'Label' }
             { name: 'date'      , label: 'Year' }
             { name: 'duration'  , label: 'Length' }
         ]
