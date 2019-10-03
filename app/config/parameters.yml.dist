@@ -17,6 +17,7 @@ parameters:
 
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
+    rs_secret:         someOtherSecretKey
 
     debug_toolbar:          true
     debug_redirects:        false

@@ -132,6 +132,10 @@ module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, TrackListSync,
 
                         syncError = () -> alert 'There was an error syncing to website'
                         syncSuccess = (resp) ->
+                            if not resp.success
+                                alert 'There was an error syncing to website'
+                                return
+
                             trackList.syncNodeId = parseInt resp.nid
                             $scope.hideIntro = true
 

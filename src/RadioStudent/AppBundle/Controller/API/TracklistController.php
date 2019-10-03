@@ -149,7 +149,8 @@ class TracklistController extends FOSRestController
                 // TODO proper avtorji, ko bomo imeli ldap
                 'author' => $tracklist->getName(),
                 'datetime' => "$date $time",
-                'tracks' => $data['body']
+                'tracks' => $data['body'],
+                'secret' => $this->container->getParameter('rs_secret')
             ];
 
             if ($tracklist->getSyncNodeId()) {
