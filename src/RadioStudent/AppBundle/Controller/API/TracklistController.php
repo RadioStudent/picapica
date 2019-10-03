@@ -142,26 +142,36 @@ class TracklistController extends FOSRestController
         try {
             $data = json_decode($request->getContent(), true);
 
+            $date = $tracklist->getDate()->format('Y-m-d');
+            $time = $tracklist->getTerm()->getTime()->format('H:i:s');
+
             $payload = [
                 // TODO proper avtorji, ko bomo imeli ldap
                 'author' => $tracklist->getName(),
-                'datetime' => $tracklist->getDate()->format('Y-m-d h:i'),
+                'datetime' => "$date $time",
                 'tracks' => $data['body']
             ];
 
+            if ($tracklist->getSyncNodeId()) {
+                $payload['nid'] = $tracklist->getSyncNodeId();
+            }
+
             $client = new Client();
-            $res = $client->request('POST', 'https://radiostudent.si/pica/oprema', [
+            $req = $client->request('POST', 'https://radiostudent.si/pica/oprema', [
                 'json' => $payload
             ]);
 
+            $resp = json_decode($req->getBody(), true);
 
-            var_dump($res->getStatusCode());
-            var_dump($res->getBody()->getContents());
-            die;
+            if ($resp['success']) {
+                $tracklist->setSyncNodeId(intval($resp['nid']));
 
-            $create_resp = $res->getBody();
-            var_dump($create_resp);
-            return new JsonResponse($create_resp);
+                $em = $this->container->get('doctrine.orm.entity_manager');
+                $em->flush();
+            }
+
+            return new JsonResponse($resp);
+
         } catch (\Exception $e) {
             return new JsonResponse([
                 ["error" => [

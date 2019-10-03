@@ -116,24 +116,31 @@ module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, TrackListSync,
 
         syncToWebsite: () ->
             trackList = @trackList
-            closeSync = @closeSync
 
             $uibModal.open
                 animation: true
-                size: 'lg'
+                size: 'md'
                 templateUrl: 'partials/playlist-sync-modal.tpl.html'
                 controller: ($scope) ->
                     $scope.trackList = trackList
                     $scope.duration = $filter('duration')
 
-                    $scope.syncPlaylist = () =>
+                    $scope.syncPlaylist = () ->
                         sync = new TrackListSync
                             id: trackList.id
-                            body: document.getElementById('tracklist-sync').innerHTML
+                            body: document.getElementById('tracklist-sync').outerHTML
 
                         syncError = () -> alert 'There was an error syncing to website'
+                        syncSuccess = (resp) ->
+                            trackList.syncNodeId = parseInt resp.nid
+                            $scope.hideIntro = true
 
-                        sync.$save @closeSync, syncError
+                            link = 'Prispevek na sajtu uspešno ustvarjen. Obiščeš ga lahko <a href="https://radiostudent.si/node/' + resp.nid + '" target="_blank">tukaj</a>.'
 
-        closeSync: () ->
-            $('#syncModal').hide()
+                            document.getElementById('tracklist-sync').outerHTML = link
+
+                        if trackList.syncNodeId
+                            if (confirm 'Prispevek na spletni strani že obstaja. Ga želiš prepisati?')
+                                sync.$save syncSuccess, syncError
+                        else
+                            sync.$save syncSuccess, syncError
