@@ -425,6 +425,7 @@ class Track extends BaseEntity
             'herkunft'          => $this->album->getHerkunftFlat(),
             //'genres'            => $this->genres,
             'genres'            => $this->album->getGenresFlat(),
+            'labels'            => $this->album->getLabelsFlat(),
             'mp3'               => $this->mp3
         ];
 
@@ -450,7 +451,7 @@ class Track extends BaseEntity
                 'albumName'  => 'album.name.order',
                 'albumId'    => 'album.id',
                 'name'       => 'name.order',
-                'album'      => 'album.name.order',
+                'album'      => 'album.name.order'
             ],
         ];
 

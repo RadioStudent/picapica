@@ -68,6 +68,13 @@ class Tracklist
     private $term;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="SYNC_NODE_ID", type="integer", nullable=true)
+     */
+    private $syncNodeId = null;
+
+    /**
      * @param                        $name
      * @param                        $date
      * @param Term                   $term
@@ -218,6 +225,17 @@ class Tracklist
         }
     }
 
+    public function getSyncNodeId()
+    {
+        return $this->syncNodeId;
+    }
+
+    public function setSyncNodeId($id)
+    {
+        $this->syncNodeId = $id;
+        return $this;
+    }
+
     public function getFlat($preset = 'short')
     {
         $result = [
@@ -227,6 +245,7 @@ class Tracklist
             'termId'         => $this->term->getId(),
             'authorId'       => $this->author->getId(),
             'authorName'     => $this->author->getName(),
+            'syncNodeId'     => $this->syncNodeId
         ];
 
         if ($preset == 'short') {
@@ -260,11 +279,24 @@ class Tracklist
                 'albumName'         => $track->getAlbum()->getName(),
                 'albumArtistName'   => $track->getAlbum()->getAlbumArtistName(),
                 'albumId'           => $track->getAlbum()->getId(),
+                'labelName'         => implode(',', $track->getAlbum()->getLabels()->map(
+                    function ($label) { return $label->getName(); })->toArray()),
                 'artistName'        => $track->getArtist()->getCorrectName(),
                 'artistId'          => $track->getArtist()->getId()
             ]);
         }
 
         return $result;
+    }
+
+    public function getSyncPayload()
+    {
+        $datetime = $this->date->format('Y-m-d ') + $this->term->getTime()->format('H:i');
+
+        return [
+            'author'   => $this->name,
+            'datetime' => $datetime,
+            'tracks'   => array_map(function ($t) { return $t->getSyncPayload(); }, $this->tracklistTracks)
+        ];
     }
 }

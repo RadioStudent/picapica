@@ -32,6 +32,7 @@
                         is-open="pl.datepicker.opened"
                         uib-datepicker-popup="{{pl.datepicker.format}}"
                         uib-datepicker-options="pl.datepicker.options"
+                        show-weeks="false"
                         close-text="Close" />
                 </div>
             </div>
@@ -47,7 +48,7 @@
             </div>
             <div class="col-sm-4">
                 <div class="form-group playlist-name">
-                    <label class="control-label" for="playlist-name">Name</label>
+                    <label class="control-label" for="playlist-name">Author (User na sajtu!)</label>
                     <input id="playlist-name"
                         type="text"
                         class="form-control"
@@ -110,7 +111,7 @@
                 </td>
                 <td ng-if="!track.mp3" ng-bind="track.duration | duration" class="column-length"></td>
                 <td ng-if="track.mp3" class="column-length">
-                    <input ng-model="track.duration" duration-input placeholder="0:00" type="text" class="form-control input-sm" style="text-align: right">
+                    <input ng-model="track.duration" duration-input placeholder="0:00" type="text" class="form-control input-sm" style="text-align: right" ng-change="pl.refresh()">
                 </td>
                 <td class="column-buttons">
                     <span ng-show="!(track|hasComment)" ng-click="pl.trackList.addCommentToTrack(track)" class="glyphicon glyphicon-pencil"></span>
@@ -134,6 +135,19 @@
             <button class="save-button btn btn-success btn-lg pull-right"
                  ng-click="pl.save()" ng-disabled="pl.totalDuration == 0">
                  Save
+             </button>
+
+             <button class="btn btn-default btn-lg pull-right mr-1" ng-click="pl.triggerPrint()">
+                 <span class="glyphicon glyphicon-print"></span>
+             </button>
+
+             <button class="btn btn-default btn-lg pull-right mr-1" ng-click="pl.copyClipboard()">
+                 <span class="glyphicon glyphicon-copy"></span>
+                 <textarea id="clipboard-container"></textarea>
+             </button>
+
+             <button class="btn btn-primary btn-lg pull-right mr-1" ng-click="pl.syncToWebsite()" data-toggle="modal" data-target="#syncModal">
+                 <span class="glyphicon glyphicon-refresh"></span>
              </button>
 
              <span ng-show="pl.loaders.save" class="glyphicon glyphicon-refresh loader pull-right"></span>

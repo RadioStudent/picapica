@@ -57,10 +57,10 @@ module.exports = (grunt) ->
                 tasks: ['sass']
             js:
                 files: ['<%= resourcesPath %>/coffee/**/*.coffee']
-                tasks: ['browserify']
+                tasks: ['browserify', 'notify:js']
             angularTemplates:
                 files: ['<%= resourcesPath %>/views/frontend/**/*.html']
-                tasks: ['copy:appTemplates']
+                tasks: ['copy:appTemplates', 'notify:templates']
             svgSprite:
                 files: ['<%= resourcesPath %>/images/icons/*.svg']
                 tasks: ['svgstore']
@@ -108,6 +108,15 @@ module.exports = (grunt) ->
                 autoWatch: yes
             once:
                 singleRun: yes
+        notify:
+            js:
+                options:
+                    title: 'picapica build'
+                    message: 'JS successfully built'
+            templates:
+                options:
+                    title: 'picapica build'
+                    message: 'templates successfully built'
 
     grunt.loadNpmTasks 'grunt-contrib-clean'
     grunt.loadNpmTasks 'grunt-contrib-copy'
@@ -117,6 +126,7 @@ module.exports = (grunt) ->
     grunt.loadNpmTasks 'grunt-svgstore'
     grunt.loadNpmTasks 'grunt-browserify'
     grunt.loadNpmTasks 'grunt-karma'
+    grunt.loadNpmTasks 'grunt-notify'
 
     grunt.registerTask 'live', ['browserSync', 'watch']
     grunt.registerTask 'test', ['karma:once']

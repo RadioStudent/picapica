@@ -8,6 +8,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use GuzzleHttp\Client;
 
 use RadioStudent\AppBundle\Entity\Author;
 use RadioStudent\AppBundle\Entity\Tracklist;
@@ -130,4 +131,54 @@ class TracklistController extends FOSRestController
             ], 422);
         }
     }
+
+    /**
+     * Shrani playlisto na drupal sajt
+     *
+     * @REST\Put("/tracklists/{tracklist}/sync")
+     */
+    public function putSyncAction(Tracklist $tracklist, Request $request)
+    {
+        try {
+            $data = json_decode($request->getContent(), true);
+
+            $date = $tracklist->getDate()->format('Y-m-d');
+            $time = $tracklist->getTerm()->getTime()->format('H:i:s');
+
+            $payload = [
+                // TODO proper avtorji, ko bomo imeli ldap
+                'author' => $tracklist->getName(),
+                'datetime' => "$date $time",
+                'tracks' => $data['body']
+            ];
+
+            if ($tracklist->getSyncNodeId()) {
+                $payload['nid'] = $tracklist->getSyncNodeId();
+            }
+
+            $client = new Client();
+            $req = $client->request('POST', 'https://radiostudent.si/pica/oprema', [
+                'json' => $payload
+            ]);
+
+            $resp = json_decode($req->getBody(), true);
+
+            if ($resp['success']) {
+                $tracklist->setSyncNodeId(intval($resp['nid']));
+
+                $em = $this->container->get('doctrine.orm.entity_manager');
+                $em->flush();
+            }
+
+            return new JsonResponse($resp);
+
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                ["error" => [
+                    "message" => $e->getMessage()
+                ]]
+            ], 422);
+        }
+    }
+
 }

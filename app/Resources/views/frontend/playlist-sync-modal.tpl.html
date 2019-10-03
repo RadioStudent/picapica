@@ -1,0 +1,43 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="$close()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" id="syncModalLabel">Sync to website - preview</h4>
+</div>
+
+<div class="modal-body">
+    <div ng-if="trackList.syncNodeId && !hideIntro">
+        Prispevek je že na spletni strani. Najdeš ga <a href="https://radiostudent.si/node/{{trackList.syncNodeId}}" target="_blank">tukaj</a>.
+        <br>
+        <br>
+    </div>
+
+    <div class="tracklist-sync" id="tracklist-sync">
+        <div class="track" ng-repeat="track in trackList.tracks">
+            <div class="track-title">
+                {{ track.name }} &nbsp;
+            </div>
+
+            <div class="track-artist">
+                {{ track.artistName }} &nbsp;
+            </div>
+
+            <div class="track-album">
+                {{ track.albumName }} &nbsp;
+            </div>
+
+            <div class="track-label">
+                {{ track.labelName }} &nbsp;
+            </div>
+
+            <div class="track-duration">
+                {{ track.duration | duration }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$close()">Close</button>
+    <button type="button" class="btn btn-primary" ng-click="syncPlaylist()">Sync playlist</button>
+</div>
