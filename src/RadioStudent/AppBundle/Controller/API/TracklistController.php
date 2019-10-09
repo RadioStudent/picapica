@@ -163,7 +163,6 @@ class TracklistController extends FOSRestController
             ]);
 
             $resp = json_decode($req->getBody(), true);
-
             if ($resp['success']) {
                 $tracklist->setSyncNodeId(intval($resp['nid']));
 

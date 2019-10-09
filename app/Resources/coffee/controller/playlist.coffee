@@ -126,9 +126,12 @@ module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, TrackListSync,
                     $scope.duration = $filter('duration')
 
                     $scope.syncPlaylist = () ->
+                        payload = document.getElementById('tracklist-sync').outerHTML
+                        payload += "<p>\n<br>\n</p>"
+
                         sync = new TrackListSync
                             id: trackList.id
-                            body: document.getElementById('tracklist-sync').outerHTML
+                            body: payload
 
                         syncError = () -> alert 'There was an error syncing to website'
                         syncSuccess = (resp) ->

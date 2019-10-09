@@ -21,7 +21,7 @@ bower_components
 npm-debug.log*
 /web/css
 /web/images/sprite.svg
-/web/js
+/web/js/app.js
 /web/partials
 /web/fonts
 npm-debug.log

@@ -13,27 +13,10 @@
     </div>
 
     <div class="tracklist-sync" id="tracklist-sync">
-        <div class="track" ng-repeat="track in trackList.tracks">
-            <div class="track-title">
-                {{ track.name }} &nbsp;
-            </div>
-
-            <div class="track-artist">
-                {{ track.artistName }} &nbsp;
-            </div>
-
-            <div class="track-album">
-                {{ track.albumName }} &nbsp;
-            </div>
-
-            <div class="track-label">
-                {{ track.labelName }} &nbsp;
-            </div>
-
-            <div class="track-duration">
-                {{ track.duration | duration }}
-            </div>
-        </div>
+        <p class="track" ng-repeat="track in trackList.tracks">
+            {{ $index + 1 }}. {{ track.artistName }} - {{ track.name }} - {{ track.albumName }} - {{ track.labelName ? track.labelName : '/' }} - {{ track.duration | duration }} <br>
+            <span ng-if="track.comment" class="track-comment">{{ track.comment }}<br></span>
+        </p>
     </div>
 </div>
 
