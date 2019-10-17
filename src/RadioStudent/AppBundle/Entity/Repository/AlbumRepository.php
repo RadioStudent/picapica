@@ -52,9 +52,16 @@ class AlbumRepository extends EntityRepository {
         }
 
         $this->parseTrackData($data['tracks'], $album, $albumArtist, $artistList, $em);
-        $this->parseHerkunft($data['herkunft'], $album, $em);
-        $this->parseLabels($data['labels'], $album, $em);
-        $this->parseGenres($data['genres'], $album, $em);
+
+        if (isset($data['herkunft'])) {
+            $this->parseHerkunft($data['herkunft'], $album, $em);
+        }
+        if (isset($data['labels'])) {
+            $this->parseLabels($data['labels'], $album, $em);
+        }
+        if (isset($data['genres'])) {
+            $this->parseGenres($data['genres'], $album, $em);
+        }
     }
 
     public function create($data)
@@ -136,7 +143,7 @@ class AlbumRepository extends EntityRepository {
             $track->setArtist($artist);
             $album->addArtist($artist);
 
-            $track->setDate($album->getDate());
+            $track->setDate(new \DateTime());
             $track->setStrDate($album->getStrDate());
 
             if (!$komad['length']) {

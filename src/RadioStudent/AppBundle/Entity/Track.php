@@ -415,21 +415,21 @@ class Track extends BaseEntity
             'fid'               => $this->fid,
             'trackNum'          => $this->trackNum,
             'name'              => $this->name,
-            'year'              => $this->date? $this->date->format('Y'): null,
-            'artistName'        => $this->artist->getCorrectName(),
-            'artistId'          => $this->artist->getId(),
-            'albumName'         => $this->album->getName(),
-            'albumArtistName'   => $this->album->getAlbumArtistName(),
-            'albumId'           => $this->album->getId(),
+            'year'              => $this->strDate,
+            'artistName'        => $this->artist ? $this->artist->getCorrectName() : null,
+            'artistId'          => $this->artist ? $this->artist->getId() : null,
+            'albumName'         => $this->album ? $this->album->getName() : null,
+            'albumArtistName'   => $this->album ? $this->album->getAlbumArtistName() : null,
+            'albumId'           => $this->album ? $this->album->getId() : null,
             'duration'          => $this->duration,
-            'herkunft'          => $this->album->getHerkunftFlat(),
+            'herkunft'          => $this->album ? $this->album->getHerkunftFlat() : null,
             //'genres'            => $this->genres,
-            'genres'            => $this->album->getGenresFlat(),
-            'labels'            => $this->album->getLabelsFlat(),
+            'genres'            => $this->album ? $this->album->getGenresFlat() : null,
+            'labels'            => $this->album ? $this->album->getLabelsFlat() : null,
             'mp3'               => $this->mp3
         ];
 
-        if ($result['artistName'] != $this->artist->getName()) {
+        if ($this->artist && ($result['artistName'] != $this->artist->getName())) {
             $result['artistMistake'] = $this->artist->getName();
         }
 
