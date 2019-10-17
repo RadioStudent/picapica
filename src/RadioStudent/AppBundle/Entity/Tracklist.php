@@ -265,9 +265,7 @@ class Tracklist
                 'trackNum'          => $track->getTrackNum(),
                 'name'              => $track->getName(),
                 'year'              => $track->getStrDate(),
-                'duration'          => $track->getDuration(),
-                'languages'         => $track->getLanguages(),
-                'genres'            => $track->getGenres()
+                'duration'          => $track->getDuration()
             ], $track->getMp3() ? [
                 'artistName'        => $track->getMp3ArtistName(),
                 'albumArtistName'   => $track->getMp3ArtistName(),
@@ -282,7 +280,8 @@ class Tracklist
                 'labelName'         => implode(',', $track->getAlbum()->getLabels()->map(
                     function ($label) { return $label->getName(); })->toArray()),
                 'artistName'        => $track->getArtist()->getCorrectName(),
-                'artistId'          => $track->getArtist()->getId()
+                'artistId'          => $track->getArtist()->getId(),
+                'herkunft'          => $track->getAlbum()->getHerkunftFlat()
             ]);
         }
 

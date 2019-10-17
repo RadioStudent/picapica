@@ -88,7 +88,11 @@
                 <td ng-if="track.mp3" class="column-fid">
                     <input ng-model="track.fid" placeholder="Filename" type="text" class="form-control input-sm">
                 </td>
-                <td ng-if="!track.mp3" ng-bind="track.artistName" class="column-artist"></td>
+                <td ng-if="!track.mp3" class="column-artist">
+                    <span ng-bind="track.artistName"></span> <i ng-if="track.herkunft.length > 0">({{ getJoined(track.herkunft) }})</i>
+                </td>
+
+                </td>
                 <td ng-if="track.mp3" class="column-artist">
                     <input ng-model="track.artistName" placeholder="Artist" type="text" class="form-control input-sm">
                 </td>

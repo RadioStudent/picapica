@@ -31,6 +31,8 @@ module.exports = ($rootScope, $q, _, CurrentTrackList, TrackList, TrackListSync,
 
             $scope.haveRole = Authorization.haveRole
 
+            $scope.getJoined = (prop) => prop.map((label) => label.name ).join(', ')
+
             return
 
         formatDate: (isoString) ->
