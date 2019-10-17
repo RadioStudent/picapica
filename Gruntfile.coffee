@@ -54,7 +54,7 @@ module.exports = (grunt) ->
         watch:
             sass:
                 files: ['<%= resourcesPath %>/sass/**/*.{sass,scss}']
-                tasks: ['sass']
+                tasks: ['sass', 'notify:sass']
             js:
                 files: ['<%= resourcesPath %>/coffee/**/*.coffee']
                 tasks: ['browserify', 'notify:js']
@@ -117,6 +117,10 @@ module.exports = (grunt) ->
                 options:
                     title: 'picapica build'
                     message: 'templates successfully built'
+            sass:
+                options:
+                    title: 'picapica build'
+                    message: 'styles successfully built'
 
     grunt.loadNpmTasks 'grunt-contrib-clean'
     grunt.loadNpmTasks 'grunt-contrib-copy'

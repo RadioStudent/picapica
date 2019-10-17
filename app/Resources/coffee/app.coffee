@@ -20,6 +20,8 @@ angular.module 'picapicaApp', [route, sanitize, resource, bootstrap, 'ui.sortabl
                     templateUrl: 'partials/playlist.tpl.html'
                 .when '/album-editor/:albumId?',
                     templateUrl: 'partials/album-editor.tpl.html'
+                .when '/about',
+                    templateUrl: 'partials/about.tpl.html'
                 .otherwise
                     redirectTo: '/search'
     ]

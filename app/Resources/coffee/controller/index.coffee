@@ -1,5 +1,5 @@
 require 'angular'
     .module 'picapicaApp'
         .controller 'TrackSearchController', require './track-search'
-        .controller 'PlaylistController',    require './playlist'
+        .controller 'PlaylistController'   , require './playlist'
         .controller 'AlbumEditorController', require './album-editor'
