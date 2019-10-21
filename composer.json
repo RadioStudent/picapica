@@ -3,7 +3,7 @@
     "license": "AGPL-3.0-or-later",
     "type": "project",
     "description": "Physical music library management and playlist creation tool",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "autoload": {
         "psr-4": {
             "": "src/"
