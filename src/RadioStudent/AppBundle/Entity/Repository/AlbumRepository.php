@@ -91,7 +91,7 @@ class AlbumRepository extends EntityRepository {
         return $album;
     }
 
-    protected function parseTrackData($trackData, $album, $albumArtist, $artistList, $em)
+    protected function parseTrackData($trackData, $album, $albumArtist, &$artistList, $em)
     {
         $artistRepository = $em->getRepository('RadioStudentAppBundle:Artist');
         $trackRepository = $em->getRepository('RadioStudentAppBundle:Track');
@@ -130,10 +130,16 @@ class AlbumRepository extends EntityRepository {
                 $artist = $artistRepository->find($komad['artistModel']['id']);
                 $artistList[$artist->getName()] = $artist;
             } else {
-                $artist = new Artist();
-                $artist->setName($komad['artist']);
-                $em->persist($artist);
-                $artistList[$artist->getName()] = $artist;
+                $existing = $artistRepository->findOneBy(['name' => $komad['artist']]);
+
+                if ($existing) {
+                    $artist = $existing;
+                } else {
+                    $artist = new Artist();
+                    $artist->setName($komad['artist']);
+                    $em->persist($artist);
+                    $artistList[$artist->getName()] = $artist;
+                }
             }
 
             if (!$artist || !$artist->getName()) {
