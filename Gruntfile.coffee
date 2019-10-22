@@ -32,6 +32,16 @@ module.exports = (grunt) ->
                 cwd: '<%= npmPath %>/ng-tags-input/build/'
                 src: 'ng-tags-input.bootstrap.min.css'
                 dest: '<%= assetsPath %>/css'
+            jQuery:
+                expand: true
+                cwd: '<%= npmPath %>/jquery/dist/'
+                src: 'jquery.min.js'
+                dest: '<%= assetsPath %>/js'
+            jQueryUi:
+                expand: true
+                cwd: '<%= npmPath %>/jquery-ui-dist/'
+                src: 'jquery-ui.min.js'
+                dest: '<%= assetsPath %>/js'
         # Compiles JS from coffee, enables Node.js module support
         browserify:
             main:

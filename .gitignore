@@ -22,6 +22,8 @@ npm-debug.log*
 /web/css
 /web/images/sprite.svg
 /web/js/app.js
+/web/js/jquery.min.js
+/web/js/jquery-ui.min.js
 /web/partials
 /web/fonts
 npm-debug.log
