@@ -138,18 +138,18 @@ class TracklistRepository extends EntityRepository
         if (!isset($trackData['fid']) || !$trackData['fid']) {
             throw new \Exception('Vsak mp3 potrebuje filename');
         }
-        if (!isset($trackData['albumName']) || !$trackData['albumName']) {
-            throw new \Exception('Vsak mp3 potrebuje album');
-        }
+        #if (!isset($trackData['albumName']) || !$trackData['albumName']) {
+        #    throw new \Exception('Vsak mp3 potrebuje album');
+        #}
         if (!isset($trackData['artistName']) || !$trackData['artistName']) {
             throw new \Exception('Vsak mp3 potrebuje artista');
         }
         if (!isset($trackData['name']) || !$trackData['name']) {
             throw new \Exception('Vsak mp3 potrebuje naslov');
         }
-        if (!isset($trackData['year']) || !$trackData['year']) {
-            throw new \Exception('Vsak mp3 potrebuje leto');
-        }
+        #if (!isset($trackData['year']) || !$trackData['year']) {
+        #    throw new \Exception('Vsak mp3 potrebuje leto');
+        #}
         if (!isset($trackData['duration']) || !$trackData['duration']) {
             throw new \Exception('Vsak mp3 potrebuje trajanje');
         }
@@ -158,9 +158,13 @@ class TracklistRepository extends EntityRepository
         $track->setTrackNum($trackData['fid']);
         $track->setName($trackData['name']);
         $track->setMp3ArtistName($trackData['artistName']);
-        $track->setMp3AlbumName($trackData['albumName']);
-        $track->setDate(new \DateTime());
-        $track->setStrDate($trackData['year']);
+        if (isset($trackData['albumName'])) {
+            $track->setMp3AlbumName($trackData['albumName']);
+        }
+        if (isset($trackData['year'])) {
+            $track->setStrDate($trackData['year']);
+        }
         $track->setDuration($trackData['duration']);
+        $track->setDate(new \DateTime());
     }
 }
