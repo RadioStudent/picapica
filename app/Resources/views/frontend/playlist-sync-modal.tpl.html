@@ -14,7 +14,7 @@
 
     <div class="tracklist-sync" id="tracklist-sync">
         <p class="track" ng-repeat="track in trackList.tracks">
-            {{ $index + 1 }}. {{ track.artistName }} - {{ track.name }}{{ track.albumName ? (track.albumName + ' - ') : '' }}{{ track.labelName ? (track.labelName + ' - ') : '' }} - {{ track.duration | duration }} <br>
+            {{ $index + 1 }}. {{ track.artistName }} - {{ track.name }}{{ track.albumName ? (' - ' + track.albumName) : '' }}{{ track.labelName ? (' - ' + track.labelName) : '' }} - {{ track.duration | duration }} <br>
             <span ng-if="track.comment" class="track-comment">{{ track.comment }}<br></span>
         </p>
     </div>
