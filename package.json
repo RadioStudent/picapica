@@ -12,7 +12,7 @@
     "url": "https://github.com/RadioStudent/picapica/issues"
   },
   "dependencies": {
-    "angular": "^1.4.7",
+    "angular": "^1.7.9",
     "angular-bootstrap-npm": "0.14.2",
     "angular-location-update": "0.0.2",
     "angular-mocks": "^1.4.7",
