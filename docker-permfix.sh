@@ -1,4 +1,9 @@
-# Add write permission to all users for app/cache and app/logs, so that docker can write to them
-chmod -R a+w app/cache
-chmod -R a+w app/logs
-chmod -R a+w web/bundles
+#!/bin/bash
+
+# Fix owner of cache and logs and bundles, so that docker can use them properly
+files=(app vendor bin composer.lock web)
+
+for i in ${files[@]}; do
+    chgrp -R 33 $i
+    chmod -R g+w $i
+done

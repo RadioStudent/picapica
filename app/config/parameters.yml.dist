@@ -12,15 +12,16 @@ parameters:
     mailer_host:        127.0.0.1
     mailer_user:        ~
     mailer_password:    ~
-    mailer_address:     ~
-    mailer_sender_name: ~
+    mailer_address:     test@localhost
+    mailer_sender_name: local test
 
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
     rs_secret:         someOtherSecretKey
 
-    debug_toolbar:          true
+    debug_toolbar:          false
     debug_redirects:        false
     use_assetic_controller: true
     log_level:              info
     elasticsearch_host:     elasticsearch
+

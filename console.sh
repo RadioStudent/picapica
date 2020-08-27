@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker exec -ti -u $(id -u):$(id -g) picapica_php_1 bash -c "cd /var/www/pica && /usr/local/bin/php app/console $@"
+docker exec -ti -u 33:33 picapica_php_1 bash -c "cd /var/www/pica && /usr/local/bin/php app/console $@"
