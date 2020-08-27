@@ -28,7 +28,7 @@
     "ng-tags-input": "^3.2.0"
   },
   "devDependencies": {
-    "acorn": "^6.2.1",
+    "acorn": "^6.4.1",
     "audit": "0.0.6",
     "coffeeify": "^3.0.0",
     "coffeescript": "^2.4.0",
