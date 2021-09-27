@@ -66,12 +66,22 @@ class ExportCommand extends ContainerAwareCommand
                 if (!isset($results[$cat])) {
                     $results[$cat] = [];
                 }
+
+		$izvori = array_map(function ($kos) {
+		    return $kos->getName();
+		}, $album->getHerkunft()->toArray());
+
+		$zvrsti = array_map(function ($kos) {
+		    return $kos->getName();
+		}, $album->getGenres()->toArray());
                 
                 $results[$cat][] = [
                     $fid,
                     $album->getName(),
                     $album->getAlbumArtistName(),
-                    $album->getStrDate()
+		    $album->getStrDate(),
+		    implode(',', $izvori),
+		    implode(',', $zvrsti)
                 ];
             }
         }
