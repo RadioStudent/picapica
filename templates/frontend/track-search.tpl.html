@@ -1,0 +1,85 @@
+<pp-navbar active-item="'search'"></pp-navbar>
+
+<div class="container search" ng-controller="TrackSearchController as ts">
+    <div class="input-group">
+        <input type="text"
+               ng-keyup="ts.addFilterOnEnter($event)"
+               ng-model="ts.searchTerm"
+               placeholder="enter search term"
+               uib-typeahead="artist.name for artist in ts.getSuggestions($viewValue)"
+               typeahead-on-select="ts.selectSuggestion($item, $model, $label)"
+               typeahead-wait-ms="300"
+               typeahead-template-url="/partials/_autocomplete.tpl.html"
+               typeahead-focus-first="false"
+               class="form-control search-bar">
+
+        <span class="input-group-btn">
+            <button class="btn btn-default" ng-click="ts.addTextFilter(true)">Search</button>
+            <button class="btn btn-default" ng-click="ts.addTextFilter()">+</button>
+        </span>
+    </div>
+
+    <br>
+
+    <div class="filters">
+        <div class="well well-sm filter-wrapper" ng-repeat="filter in ts.filters">
+            <label class="filter-type" ng-if="!filter.fromAutocomplete" ng-repeat="type in filter.types" ng-show="type.visible">
+                <input type="checkbox" ng-model="type.active" ng-change="ts.doSearch()"> {{ type.name }}
+            </label>
+            <span ng-click="filter.remove()" class="glyphicon glyphicon-remove filter-remove-icon" aria-hidden="true"></span>
+            <h2 class="filter-label" ng-if="!filter.fromAutocomplete" ng-bind-html="('search'|icon) + '“' + filter.label + '”'"></h2>
+            <h2 class="filter-label" ng-if="filter.fromAutocomplete" ng-bind-html="(filter.getType()|icon) + filter.label"></h2>
+        </div>
+    </div>
+
+    <table class="table table-striped table-condensed table-hover results">
+        <thead>
+            <tr>
+                <th ng-repeat="column in ts.columns" ng-click="ts.sort(column, $index)" class="column-{{column.label|lowercase}}" >{{ column.label }}
+                    <span class="glyphicon glyphicon-triangle-top" ng-show="column.sortOrder === 'asc'"></span>
+                    <span class="glyphicon glyphicon-triangle-bottom" ng-show="column.sortOrder === 'desc'"></span>
+                </th>
+                <th class="column-buttons">PL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="track in ts.tracks" ng-class="ts.trackList.hasTrack(track) ? 'selected' : null">
+                <td ng-bind="track.fid" class="column-fid"></td>
+                <td class="column-artist">
+                    {{track.artistName}}&nbsp;<span ng-if="track.artistMistake" uib-tooltip="{{track.artistMistake}}" class="glyphicon glyphicon-ok-sign"></span>
+                </td>
+                <td class="column-title">
+                    <span ng-bind="track.name"></span>
+
+                    <span class="badge pull-right" uib-tooltip-html="'{{getTrackInfo(track)}}'" ng-if="track.genres.length + track.herkunft.length">
+                        <span class="glyphicon glyphicon-music"></span>
+                    </span>
+                </td>
+                <td class="column-album">
+                    <a ng-href="#!/album-editor/{{track.albumId}}" ng-show="haveRole('ROLE_EDITOR')" class="icon">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </a>
+                    <span ng-bind="track.albumName"></span>
+                </td>
+                <td class="column-label">
+                    {{ getJoined(track.labels) }}
+                </td>
+                <td ng-bind="track.year" class="column-year"></td>
+                <td ng-bind="track.duration | duration" class="column-length"></td>
+                <td class="column-buttons">
+                    <span ng-click="ts.trackList.toggleTrack(track)" ng-show="!ts.trackList.hasTrack(track)" class="glyphicon glyphicon-plus-sign"></span>
+                    <span ng-click="ts.trackList.toggleTrack(track)" ng-show="ts.trackList.hasTrack(track)"  class="glyphicon glyphicon-minus-sign"></span>
+                </td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr ng-show="ts.offset > 0">
+                <td colspan="7" style="width: 100%; text-align: center">
+                    <button type="button" class="btn btn-secondary btn-md" ng-click="ts.loadMore()">
+                        Load more tracks
+                    </button>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

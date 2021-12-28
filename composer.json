@@ -3,40 +3,70 @@
     "license": "AGPL-3.0-or-later",
     "type": "project",
     "description": "Physical music library management and playlist creation tool",
-    "version": "0.4.5",
+    "version": "0.5.0",
     "autoload": {
         "psr-4": {
-            "": "src/"
-        },
-        "files": [
-            "app/AppKernel.php",
-            "app/AppCache.php"
-        ]
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
     },
     "require": {
-        "php": ">=7.1",
-        "symfony/symfony": "~3.4",
-        "doctrine/orm": "~2.2,>=2.2.3",
-        "doctrine/doctrine-bundle": "~1.2",
-        "twig/extensions": "~1.5",
-        "symfony/assetic-bundle": "~2.3",
-        "symfony/swiftmailer-bundle": "~3.2",
-        "symfony/monolog-bundle": "~3.4",
-        "sensio/distribution-bundle": "~5.0",
-        "sensio/framework-extra-bundle": "~5.4",
-        "incenteev/composer-parameter-handler": "~2.0",
-        "friendsofsymfony/elastica-bundle": "~3.2",
-        "friendsofsymfony/rest-bundle": "~2.5",
-        "jms/serializer-bundle": "~2.4.3",
-        "pagerfanta/pagerfanta": "~1.0",
-        "phing/phing": "~2.10",
-        "friendsofsymfony/user-bundle": "~2.0",
-        "doctrine/doctrine-fixtures-bundle": "^2.2",
-        "doctrine/doctrine-migrations-bundle": "^1.0",
-        "james-heinrich/getid3": "^1.9",
-        "fr3d/ldap-bundle": "^4.0",
+        "php": ">=7.4",
+        "box/spout": "^3.1",
+        "composer/package-versions-deprecated": "1.11.99.4",
+        "doctrine/annotations": "^1.0",
+        "doctrine/doctrine-bundle": "^2.5",
+        "doctrine/doctrine-migrations-bundle": "^3.2",
+        "doctrine/orm": "^2.10",
+        "friendsofsymfony/elastica-bundle": "^6.0",
+        "friendsofsymfony/rest-bundle": "^2.5",
         "guzzlehttp/guzzle": "^6.3",
-        "box/spout": "^3.1"
+        "james-heinrich/getid3": "^1.9",
+        "pagerfanta/pagerfanta": "^3.0",
+        "phing/phing": "~2.10",
+        "phpdocumentor/reflection-docblock": "^5.3",
+        "phpstan/phpdoc-parser": "^1.2",
+        "sensio/framework-extra-bundle": "^6.2",
+        "symfony/asset": "^4.4",
+        "symfony/console": "^4.4",
+        "symfony/expression-language": "^4.4",
+        "symfony/flex": "^1.3.1",
+        "symfony/form": "^4.4",
+        "symfony/framework-bundle": "^4.4",
+        "symfony/http-client": "^4.4",
+        "symfony/intl": "^4.4",
+        "symfony/mailer": "^4.4",
+        "symfony/monolog-bundle": "^3.7",
+        "symfony/property-access": "^4.4",
+        "symfony/property-info": "^4.4",
+        "symfony/proxy-manager-bridge": "^4.4",
+        "symfony/runtime": "5.4.1",
+        "symfony/security-bundle": "^4.4",
+        "symfony/serializer": "^4.4",
+        "symfony/translation": "^4.4",
+        "symfony/twig-bundle": "^4.4",
+        "symfony/validator": "^4.4",
+        "symfony/web-link": "^4.4",
+        "symfony/webpack-encore-bundle": "^1.13",
+        "symfony/yaml": "^4.4",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^2.12|^3.0"
+    },
+    "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "phpunit/phpunit": "^9.5",
+        "symfony/browser-kit": "^4.4",
+        "symfony/css-selector": "^4.4",
+        "symfony/debug-bundle": "^4.4",
+        "symfony/dotenv": "^5.0",
+        "symfony/maker-bundle": "^1.36",
+        "symfony/phpunit-bridge": "^6.0",
+        "symfony/stopwatch": "^4.4",
+        "symfony/web-profiler-bundle": "^4.4"
     },
     "scripts": {
         "post-root-package-install": [
@@ -57,10 +87,25 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles"
-        ]
+        ],
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
+        }
     },
     "config": {
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "symfony/flex": true
+        },
+        "preferred-install": {
+            "*": "dist"
+        },
+        "sort-packages": true,
         "bin-dir": "bin"
+    },
+    "conflict": {
+        "symfony/symfony": "*"
     },
     "extra": {
         "symfony-app-dir": "app",

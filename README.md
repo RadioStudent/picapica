@@ -18,7 +18,7 @@ To do the following steps, you need `docker`, `docker-compose` and `npm` (with N
   If there's a problem, rebuild the docker images; `docker-compose down; docker-compose up --build`
 8. install javascript dependencies `npm i`
 9. build js and css with `npm run build`
-10. the app is now accessible at [localhost:8080](http://localhost:8080)
+10. the app is now accessible at [localhost:8086](http://localhost:8086)
 11. login with *fonoteka/fonoteka*
 
 

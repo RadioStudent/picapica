@@ -1,0 +1,26 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_driver: pdo_mysql
+    database_host: database
+    database_port: null
+    database_name: fonoteka_pica
+    database_user: FONOTEKA
+    database_password: huehuehue
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    mailer_address: test@localhost
+    mailer_sender_name: 'local test'
+    locale: en
+    secret: ThisTokenIsNotSoSecretChangeIt
+    rs_secret: someOtherSecretKey
+    debug_toolbar: false
+    debug_redirects: false
+    use_assetic_controller: true
+    log_level: info
+    elasticsearch_host: elasticsearch
+fos_user:
+    from_email:
+        address: test@localhost
+        sender_name: 'local test'

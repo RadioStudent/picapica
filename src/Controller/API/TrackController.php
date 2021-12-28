@@ -1,0 +1,81 @@
+<?php
+
+namespace App\Controller\API;
+
+use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\Annotations as REST;
+use Symfony\Component\HttpFoundation\Request;
+
+use App\Entity\Track;
+
+/**
+ * Class TrackController
+ * @package App\Controller\API
+ *
+ * @REST\Prefix("/api/v1")
+ * @REST\NamePrefix("api_1_")
+ *
+ * @REST\RouteResource("Track")
+ */
+class TrackController extends FOSRestController
+{
+    /**
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function cgetAction(Request $request)
+    {
+        $search = $request->query->get('search', null);
+        $sort   = $request->query->get('sort', null);
+        $from   = $request->query->get('from', 0);
+        $size   = $request->query->get('size', 100);
+
+        if ($search) {
+            $search = Track::fieldsToElastic(json_decode($search, 1));
+        }
+
+        $sort = Track::fieldsToElastic($sort && !empty(json_decode($sort, true)) ? json_decode($sort, true) : $this->getDefaultSort($search), 'sort');
+
+        $repo = $this
+            ->container
+            ->get('search.repository.track');
+
+        $search[] = ['track.deleted' => 0];
+        $data = $repo->search($search, $sort, $from, $size);
+
+        $view = $this->view($data, 200);
+
+        return $this->handleView($view);
+    }
+
+    public function getAction($id)
+    {
+        $repo = $this
+            ->container
+            ->get('doctrine.orm.entity_manager')
+            ->getRepository('App:Track');
+
+        $track = $repo->find($id)->getFlat('long');
+
+        $view = $this->view($track, 200);
+
+        return $this->handleView($view);
+    }
+
+    protected function getDefaultSort($search)
+    {
+        foreach ($search as $filter) {
+            if (isset($filter['artist.id']) || isset($filter['album.id'])) {
+                return [
+                    'fid.raw' => 'asc'
+                ];
+            }
+        }
+
+        return [
+            '_score' => 'desc',
+            'fid.raw'    => 'asc'
+        ];
+    }
+}

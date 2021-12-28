@@ -1,0 +1,168 @@
+<pp-navbar active-item="'playlist'"></pp-navbar>
+
+<div class="container playlist" ng-controller="PlaylistController as pl">
+    <div class="playlist-form">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label class="control-label" for="playlist">Playlist</label>
+                    <select id="playlist"
+                            class="form-control"
+                            ng-model="pl.trackList.id"
+                            ng-change="pl.loadTrackList()">
+                        <option value="-1" ng-bind="'(Create new)'" ng-selected="-1 === pl.trackList.id"></option>
+                        <option ng-repeat="trackList in pl.trackLists"
+                                value="{{trackList.id}}"
+                                ng-bind="trackList.date + ' - ' + trackList.name"
+                                ng-selected="pl.trackList.id === trackList.id"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group playlist-date">
+                    <label class="control-label" for="playlist-date">Date</label>
+                    <input id="playlist-date"
+                        type="text"
+                        class="form-control"
+                        ng-model="pl.trackList.date"
+                        ng-required="true"
+                        ng-focus="pl.datepicker.open()"
+                        is-open="pl.datepicker.opened"
+                        uib-datepicker-popup="{{pl.datepicker.format}}"
+                        uib-datepicker-options="pl.datepicker.options"
+                        show-weeks="false"
+                        close-text="Close" />
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label" for="playlist-term">Time</label>
+                    <select id="playlist-term"
+                            class="form-control"
+                            ng-model="pl.trackList.termId"
+                            ng-options="term.id as (term.name + ' - ' + term.time) group by term.group for term in pl.RTerms">
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group playlist-name">
+                    <label class="control-label" for="playlist-name">Author (User na sajtu!)</label>
+                    <input id="playlist-name"
+                        type="text"
+                        class="form-control"
+                        ng-model="pl.trackList.name"
+                        ng-required="true" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="printable-metadata">
+        <strong>Datum:</strong> {{ pl.printMetadata.date }} <br>
+        <strong>Termin:</strong> {{ pl.printMetadata.term }} <br>
+        <strong>Avtor:</strong> {{ pl.printMetadata.author }} <br>
+        <strong>Trajanje:</strong> {{ pl.printMetadata.duration }} <br>
+    </div>
+
+    <table class="table table-striped table-condensed table-hover">
+        <thead>
+            <tr>
+                <th class="column-number">#</td>
+                <th class="column-fid">FID</td>
+                <th class="column-artist">Artist</th>
+                <th class="column-title">Title</th>
+                <th class="column-album">Album</th>
+                <th class="column-year">Year</th>
+                <th class="column-length">Length</th>
+                <th class="column-buttons">PL</th>
+            </tr>
+        </thead>
+        <tbody ui-sortable ng-model="pl.trackList.tracks">
+            <tr ng-repeat="track in pl.trackList.tracks" ng-class="{ 'has-comment': (track|hasComment), mp3: track.mp3 }">
+                <td class="column-number">
+                    <span>{{$index + 1}}.</span>
+                </td>
+                <td ng-if="!track.mp3" ng-bind="track.fid" class="column-fid"></td>
+                <td ng-if="track.mp3" class="column-fid">
+                    <input ng-model="track.fid" placeholder="Filename" type="text" class="form-control input-sm">
+                </td>
+                <td ng-if="!track.mp3" class="column-artist">
+                    <span ng-bind="track.artistName"></span> <i ng-if="track.herkunft.length > 0">({{ getJoined(track.herkunft) }})</i>
+                </td>
+
+                </td>
+                <td ng-if="track.mp3" class="column-artist">
+                    <input ng-model="track.artistName" placeholder="Artist" type="text" class="form-control input-sm">
+                </td>
+                <td ng-if="!track.mp3" ng-bind="track.name" class="column-title"></td>
+                <td ng-if="track.mp3" class="column-title">
+                    <input ng-model="track.name" placeholder="Title" type="text" class="form-control input-sm">
+                </td>
+                <td ng-if="!track.mp3" class="column-album">
+                    <a ng-href="#!/album-editor/{{track.albumId}}" ng-show="haveRole('ROLE_EDITOR')" class="icon">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </a>
+                    <span ng-bind="track.albumName"></span>
+                </td>
+                <td ng-if="track.mp3" class="column-album">
+                    <input ng-model="track.albumName" placeholder="Album" type="text" class="form-control input-sm">
+                </td>
+                <td ng-if="!track.mp3" ng-bind="track.year" class="column-year"></td>
+                <td ng-if="track.mp3" class="column-year">
+                    <input ng-model="track.year" placeholder="Year" type="text" class="form-control input-sm">
+                </td>
+                <td ng-if="!track.mp3" ng-bind="track.duration | duration" class="column-length"></td>
+                <td ng-if="track.mp3" class="column-length">
+                    <input ng-model="track.duration" duration-input placeholder="0:00" type="text" class="form-control input-sm" style="text-align: right" ng-change="pl.refresh()">
+                </td>
+                <td class="column-buttons">
+                    <span ng-show="!(track|hasComment)" ng-click="pl.trackList.addCommentToTrack(track)" class="glyphicon glyphicon-pencil"></span>
+                    <span ng-show="track|hasComment" ng-click="pl.trackList.removeCommentFromTrack(track)" class="glyphicon glyphicon-trash"></span>
+                    <span ng-click="pl.trackList.toggleTrack(track)" class="glyphicon glyphicon-minus-sign"></span>
+                </td>
+                <td class="fake-comment-row">
+                    <input type="text" ng-model="track.comment">
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="row">
+        <div class="col-sm-12 action-buttons">
+            <div class="btn btn-default btn-lg pull-left"
+                ng-click="pl.addMp3Track()">
+                Add mp3 track
+            </div>
+
+            <button class="save-button btn btn-success btn-lg pull-right"
+                 ng-click="pl.save()" ng-disabled="pl.totalDuration == 0">
+                 Save
+             </button>
+
+             <button class="btn btn-default btn-lg pull-right mr-1" ng-click="pl.triggerPrint()">
+                 <span class="glyphicon glyphicon-print"></span>
+             </button>
+
+             <button class="btn btn-default btn-lg pull-right mr-1" ng-click="pl.copyClipboard()">
+                 <span class="glyphicon glyphicon-copy"></span>
+                 <textarea id="clipboard-container"></textarea>
+             </button>
+
+             <button class="btn btn-primary btn-lg pull-right mr-1" ng-click="pl.syncToWebsite()" data-toggle="modal" data-target="#syncModal">
+                 <span class="glyphicon glyphicon-refresh"></span>
+             </button>
+
+             <span ng-show="pl.loaders.save" class="glyphicon glyphicon-refresh loader pull-right"></span>
+        </div>
+    </div>
+
+    <uib-progressbar
+        max="3600 * 4"
+        value="pl.totalDuration"
+        min="1000"
+        ng-show="pl.totalDuration > 0">
+        {{pl.totalDuration | duration}}
+    </uib-progressbar>
+</div>

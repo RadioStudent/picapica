@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html ng-app="picapicaApp">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>picapica</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% block stylesheets %}
+      {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+    <!--link rel="stylesheet" href="{{ asset('/css/main.css')}}">
+    <link rel="stylesheet" href="/css/ng-tags-input.bootstrap.min.css"-->
+
+    {% block javascripts %}
+      {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+    <!--script src="js/jquery.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="{{ asset('/js/app.js') }}"></script-->
+</head>
+<body>
+    {% block body %}{% endblock %}
+</body>
+</html>

@@ -76,7 +76,7 @@
         <SymfonyConsole command="doctrine:fixtures:load">
             <arg name="env" value="${env}" />
             <arg value="--fixtures"/>
-            <arg value="src/RadioStudent/AppBundle/DataFixtures/ORM/Seeds"/>
+            <arg value="src/DataFixtures/ORM/Seeds"/>
             <arg value="--append"/>
         </SymfonyConsole>
     </target>

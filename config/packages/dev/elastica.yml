@@ -1,0 +1,271 @@
+fos_elastica:
+  clients:
+    default: { host: '%elasticsearch_host%', port: 9200 }
+
+  indexes:
+    picapica:
+      settings:
+        index:
+          analysis:
+
+            filter:
+              edgeNGram_filter:
+                type: edgeNGram
+                min_gram: 2
+                max_gram: 20
+                side: front
+
+            analyzer:
+
+              edge_NGram_analyzer:
+                type: custom
+                tokenizer: edge_ngram_tokenizer
+                filter:
+                   - lowercase
+                   - asciifolding
+
+              edge_NGram_analyzer_fid:
+                type: custom
+                tokenizer: edge_ngram_tokenizer_fid
+                filter:
+                   - lowercase
+                   - asciifolding
+
+              whitespace_analyzer:
+                type: custom
+                tokenizer: whitespace
+                filter:
+                  - lowercase
+                  - asciifolding
+
+              keyword_analyzer:
+                type: custom
+                tokenizer: keyword
+                filter:
+                  - lowercase
+                  - asciifolding
+
+            tokenizer:
+              edge_ngram_tokenizer:
+                  type: edgeNGram
+                  min_gram: 2
+                  max_gram: 20
+                  token_chars:
+                    - letter
+                    - digit
+
+              edge_ngram_tokenizer_fid:
+                  type: edgeNGram
+                  min_gram: 2
+                  max_gram: 20
+
+        artist:
+          _all:
+            index_analyzer: edge_NGram_analyzer
+            search_analyzer: whitespace_analyzer
+
+          mappings:
+            id:
+              type: integer
+              include_in_all: false
+
+            name:
+              type: string
+              index_analyzer: whitespace_analyzer
+              search_analyzer: whitespace_analyzer
+              fields:
+                autocomplete:
+                  type: string
+                  index_analyzer: edge_NGram_analyzer
+                  search_analyzer: whitespace_analyzer
+
+            autocompleteName:
+              type: string
+              include_in_all: false
+              index: not_analyzed
+              fields:
+                autocomplete:
+                  type: string
+                  index_analyzer: edge_NGram_analyzer
+                  search_analyzer: whitespace_analyzer
+
+          persistence:
+            driver: orm
+            model: App\Entity\Artist
+            provider: ~
+            listener:
+              immediate: ~
+            finder: ~
+            model_to_elastica_transformer:
+              service: search.transformer.model.artist
+
+
+
+        album:
+          _all:
+            index_analyzer: edge_NGram_analyzer
+            search_analyzer: whitespace_analyzer
+
+          mappings:
+            id:
+              type: integer
+              include_in_all: false
+
+            fid:
+              type: string
+              include_in_all: false
+              index: not_analyzed
+              fields:
+                autocomplete:
+                  type: string
+                  index_analyzer: edge_NGram_analyzer_fid
+                  search_analyzer: keyword_analyzer
+                numeric:
+                  type: string
+                  index_analyzer: whitespace
+                  search_analyzer: whitespace
+
+            name:
+              type: string
+              index_analyzer: whitespace_analyzer
+              search_analyzer: whitespace_analyzer
+              fields:
+                autocomplete:
+                  type: string
+                  index_analyzer: edge_NGram_analyzer
+                  search_analyzer: whitespace_analyzer
+
+          persistence:
+            driver: orm
+            model: App\Entity\Album
+            provider: ~
+            listener:
+              immediate: ~
+            finder: ~
+
+
+
+        track:
+          _all:
+            index_analyzer: edge_NGram_analyzer
+            search_analyzer: whitespace_analyzer
+
+          mappings:
+            id:
+              type: integer
+              include_in_all: false
+
+            deleted:
+              type: boolean
+              include_in_all: false
+
+            fid:
+              type: string
+              include_in_all: true
+              index_analyzer: edge_NGram_analyzer
+              search_analyzer: whitespace_analyzer
+              fields:
+                autocomplete:
+                  type: string
+                  index_analyzer: edge_NGram_analyzer_fid
+                  search_analyzer: keyword_analyzer
+                numeric:
+                  type: string
+                  index_analyzer: whitespace
+                  search_analyzer: whitespace
+                order:
+                  type: string
+                  analyzer: keyword_analyzer
+                raw:
+                  type: string
+                  analyzer: keyword_analyzer
+
+            trackNum:
+              include_in_all: false
+              index: not_analyzed
+              fields:
+                raw:
+                  type: string
+                  index: not_analyzed
+                order:
+                  type: string
+                  analyzer: keyword_analyzer
+
+            name:
+              include_in_all: true
+              index_analyzer: edge_NGram_analyzer
+              search_analyzer: whitespace_analyzer
+              fields:
+                autocomplete:
+                  type: string
+                  index_analyzer: edge_NGram_analyzer
+                  search_analyzer: whitespace_analyzer
+                order:
+                  type: string
+                  analyzer: keyword_analyzer
+
+            duration:
+              type: integer
+              include_in_all: false
+              fields:
+                order:
+                  type: integer
+
+            date:
+              type: date
+              include_in_all: false
+              format: date_time_no_millis
+              fields:
+                order:
+                  type: date
+
+            artist:
+              type: object
+              properties:
+#                id:
+#                  type: integer
+#                  include_in_all: false
+#                  index_name: track_artist_id
+                allRelatedArtistIds:
+                  index_name: id
+                  include_in_all: false
+                name:
+                  include_in_all: true
+                  index_name: track_artist_name
+                  index_analyzer: edge_NGram_analyzer
+                  search_analyzer: whitespace_analyzer
+                  fields:
+                    order:
+                      type: string
+                      analyzer: keyword_analyzer
+
+            album:
+              type: object
+              properties:
+                id:
+                  index_name: track_album_id
+                  type: integer
+                  include_in_all: false
+                fid:
+                  index_name: track_album_fid
+                  include_in_all: false
+                  index: not_analyzed
+                name:
+                  index_name: track_album_name
+                  include_in_all: true
+                  index_analyzer: edge_NGram_analyzer
+                  search_analyzer: whitespace_analyzer
+                  fields:
+                    order:
+                      type: string
+                      analyzer: keyword_analyzer
+
+
+          persistence:
+            driver: orm
+            model: App\Entity\Track
+            provider:
+              batch_size: 1000
+            listener:
+              immediate: ~
+            finder: ~
