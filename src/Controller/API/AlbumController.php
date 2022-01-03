@@ -2,22 +2,23 @@
 
 namespace App\Controller\API;
 
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
-use RadioStudent\AppBundle\Entity\Album;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
+use App\Entity\Album;
+
 /**
  * Class AlbumController
- * @package RadioStudent\AppBundle\Controller\API
+ * @package App\Controller\API
  *
  * @REST\Prefix("/api/v1")
  * @REST\NamePrefix("api_1_")
  *
  * @REST\RouteResource("Album")
  */
-class AlbumController extends FOSRestController
+class AlbumController extends AbstractFOSRestController
 {
     /**
      * @param Request $request
@@ -53,7 +54,7 @@ class AlbumController extends FOSRestController
         $repo = $this
             ->container
             ->get('doctrine.orm.entity_manager')
-            ->getRepository('RadioStudentAppBundle:Album');
+            ->getRepository('App:Album');
 
         $album = $repo->find($id);
 
@@ -79,9 +80,9 @@ class AlbumController extends FOSRestController
 
             $album = null;
             if ($data['id']) {
-                $album = $em->getRepository("RadioStudentAppBundle:Album")->update($data);
+                $album = $em->getRepository("App:Album")->update($data);
             } else {
-                $album = $em->getRepository("RadioStudentAppBundle:Album")->create($data);
+                $album = $em->getRepository("App:Album")->create($data);
             }
 
             $em->flush();

@@ -1,16 +1,23 @@
 <?php
 
-namespace RadioStudent\AppBundle\Entity\Repository;
+namespace App\Repository;
 
-use Doctrine\ORM\EntityRepository;
-use RadioStudent\AppBundle\Entity\Album;
-use RadioStudent\AppBundle\Entity\Artist;
-use RadioStudent\AppBundle\Entity\Track;
-use RadioStudent\AppBundle\Entity\Herkunft;
-use RadioStudent\AppBundle\Entity\Label;
-use RadioStudent\AppBundle\Entity\Genre;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class AlbumRepository extends EntityRepository {
+use App\Entity\Album;
+use App\Entity\Artist;
+use App\Entity\Track;
+use App\Entity\Herkunft;
+use App\Entity\Label;
+use App\Entity\Genre;
+
+class AlbumRepository extends ServiceEntityRepository {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Album::class);
+    }
+
     protected function setData($album, $data)
     {
         $em = $this->getEntityManager();
@@ -27,7 +34,7 @@ class AlbumRepository extends EntityRepository {
 
         $albumArtist = null;
         if ($data['albumArtistModel'] && $data['albumArtistModel']['id'] && $data['albumArtist'] === $data['albumArtistModel']['name']) {
-            $artistRepo = $em->getRepository('RadioStudentAppBundle:Artist');
+            $artistRepo = $em->getRepository('App:Artist');
             $albumArtist = $artistRepo->find($data['albumArtistModel']['id']);
         } else {
             $albumArtist = new Artist();
@@ -83,7 +90,7 @@ class AlbumRepository extends EntityRepository {
         }
 
         $em = $this->getEntityManager();
-        $album = $em->getRepository('RadioStudentAppBundle:Album')->find($data['id']);
+        $album = $em->getRepository('App:Album')->find($data['id']);
         $this->setData($album, $data);
 
         $em->persist($album);
@@ -93,8 +100,8 @@ class AlbumRepository extends EntityRepository {
 
     protected function parseTrackData($trackData, $album, $albumArtist, &$artistList, $em)
     {
-        $artistRepository = $em->getRepository('RadioStudentAppBundle:Artist');
-        $trackRepository = $em->getRepository('RadioStudentAppBundle:Track');
+        $artistRepository = $em->getRepository('App:Artist');
+        $trackRepository = $em->getRepository('App:Track');
 
         $albumTracks = [];
         foreach ($trackData as $komad) {
@@ -172,7 +179,7 @@ class AlbumRepository extends EntityRepository {
 
     protected function parseHerkunft($herkunft, $album, $em)
     {
-        $hr = $em->getRepository('RadioStudentAppBundle:Herkunft');
+        $hr = $em->getRepository('App:Herkunft');
 
         $albumHerkunft = [];
         foreach ($herkunft as $h) {
@@ -201,7 +208,7 @@ class AlbumRepository extends EntityRepository {
 
     protected function parseLabels($labels, $album, $em)
     {
-        $hr = $em->getRepository('RadioStudentAppBundle:Label');
+        $hr = $em->getRepository('App:Label');
 
         $albumLabels = [];
         foreach ($labels as $h) {
@@ -230,7 +237,7 @@ class AlbumRepository extends EntityRepository {
 
     protected function parseGenres($genres, $album, $em)
     {
-        $hr = $em->getRepository('RadioStudentAppBundle:Genre');
+        $hr = $em->getRepository('App:Genre');
 
         $albumGenres = [];
         foreach ($genres as $h) {

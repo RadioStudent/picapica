@@ -1,6 +1,6 @@
 <?php
 
-namespace RadioStudent\AppBundle\Entity;
+namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table("data_tracks")
  * @ORM\Entity
  *
- * @ORM\Entity(repositoryClass="RadioStudent\AppBundle\Entity\Repository\TrackRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\TrackRepository")
  */
 class Track extends BaseEntity
 {

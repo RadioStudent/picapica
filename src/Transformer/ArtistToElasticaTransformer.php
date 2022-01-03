@@ -18,7 +18,7 @@ class ArtistToElasticaTransformer implements ModelToElasticaTransformerInterface
      *
      * @return \Elastica\Document
      **/
-    public function transform(object $object, array $fields): Document
+    public function transform($object, array $fields): Document
     {
         /** @var Artist $artist */
         $artist = $object;

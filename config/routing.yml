@@ -2,51 +2,47 @@ fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
 
 radio_student_app:
-    resource: "@RadioStudentAppBundle/Controller/"
+    resource: "App/Controller/"
     type:     annotation
     prefix:   /
 
 API_artists:
-    type: rest
-    resource: "@RadioStudentAppBundle/Controller/API/ArtistController.php"
+    type: annotation
+    resource: "App/Controller/API/ArtistController.php"
 
 API_albums:
-    type: rest
-    resource: "@RadioStudentAppBundle/Controller/API/AlbumController.php"
+    type: annotation
+    resource: "App/Controller/API/AlbumController.php"
 
 API_tracks:
-    type: rest
-    resource: "@RadioStudentAppBundle/Controller/API/TrackController.php"
+    type: annotation
+    resource: "App/Controller/API/TrackController.php"
 
 API_tracklists:
-    type: rest
-    resource: "@RadioStudentAppBundle/Controller/API/TracklistController.php"
+    type: annotation
+    resource: "App/Controller/API/TracklistController.php"
 
 API_terms:
-    type: rest
-    resource: "@RadioStudentAppBundle/Controller/API/TermController.php"
+    type: annotation
+    resource: "App/Controller/API/TermController.php"
 
 API_authors:
     type: rest
-    resource: "@RadioStudentAppBundle/Controller/API/AuthorController.php"
+    resource: "App/Controller/API/AuthorController.php"
 
 API_autocomplete:
-    type: rest
-    resource: "@RadioStudentAppBundle/Controller/API/AutoCompleteController.php"
+    type: annotation
+    resource: "App/Controller/API/AutoCompleteController.php"
 
 API_herkunft:
-    type: rest
-    resource: "@RadioStudentAppBundle/Controller/API/HerkunftController.php"
+    type: annotation
+    resource: "App/Controller/API/HerkunftController.php"
 
 API_label:
-    type: rest
-    resource: "@RadioStudentAppBundle/Controller/API/LabelController.php"
+    type: annotation
+    resource: "App/Controller/API/LabelController.php"
 
 API_genre:
-    type: rest
-    resource: "@RadioStudentAppBundle/Controller/API/GenreController.php"
+    type: annotation
+    resource: "App/Controller/API/GenreController.php"
 
-#radio_student_API:
-#  type: rest
-#  prefix: /api
-#  resource: "routing_api.yml"

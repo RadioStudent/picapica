@@ -1,17 +1,24 @@
 <?php
 
-namespace RadioStudent\AppBundle\Entity\Repository;
+namespace App\Repository;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
-use RadioStudent\AppBundle\Entity\Author;
-use RadioStudent\AppBundle\Entity\Track;
-use RadioStudent\AppBundle\Entity\Tracklist;
-use RadioStudent\AppBundle\Entity\TracklistTrack;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-class TracklistRepository extends EntityRepository
+use App\Entity\Author;
+use App\Entity\Track;
+use App\Entity\Tracklist;
+use App\Entity\TracklistTrack;
+
+class TracklistRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Tracklist::class);
+    }
+
     /**
      * @param Author       $author
      * @param ParameterBag $tracklistData
@@ -26,7 +33,7 @@ class TracklistRepository extends EntityRepository
         $tracklist = new Tracklist(
             $tracklistData->get("name"),
             new \DateTime($tracklistData->get("date")),
-            $em->getRepository('RadioStudentAppBundle:Term')->find($tracklistData->get("termId")),
+            $em->getRepository('App:Term')->find($tracklistData->get("termId")),
             $author
         );
         $em->persist($tracklist);
@@ -48,7 +55,7 @@ class TracklistRepository extends EntityRepository
         $tracklist
             ->setName($tracklistData->get("name"))
             ->setDate(new \DateTime($tracklistData->get("date")))
-            ->setTerm($em->getRepository('RadioStudentAppBundle:Term')->find($tracklistData->get("termId")));
+            ->setTerm($em->getRepository('App:Term')->find($tracklistData->get("termId")));
 
         $tracklistTracksData = $tracklistData->get("tracks");
 
@@ -88,8 +95,8 @@ class TracklistRepository extends EntityRepository
             }
         }
 
-        $tracklistTrackRepo = $em->getRepository('RadioStudentAppBundle:TracklistTrack');
-        $trackRepo = $em->getRepository('RadioStudentAppBundle:Track');
+        $tracklistTrackRepo = $em->getRepository('App:TracklistTrack');
+        $trackRepo = $em->getRepository('App:Track');
         foreach ($tracklistTracksData as $trackNum=>$newTracklistTrackData) {
             if (isset($newTracklistTrackData["tracklistTrackId"])) {
                 $id = $newTracklistTrackData["tracklistTrackId"];

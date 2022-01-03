@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table("tracklists")
  *
- * @ORM\Entity(repositoryClass="App\Entity\Repository\TracklistRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\TracklistRepository")
  */
 class Tracklist
 {

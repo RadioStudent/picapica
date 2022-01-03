@@ -42,3 +42,18 @@ The following helper scripts are available for your convenience:
 8. index the database with elasticsearch "php app/console fos:elastica:populate"
 9. install javascript dependencies "npm i"
 10. js and css can always be built with "npm run build"
+
+## Elasticsearch docker
+
+Needs a high enough vm.max\_map\_count value:
+```
+sysctl -w vm.max_map_count=262144
+```
+
+You can permanently set it at `/etc/sysctl.conf`:
+```
+# Za elasticsearch docker
+vm.max_map_count=262144
+```
+
+

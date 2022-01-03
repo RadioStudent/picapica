@@ -1,12 +1,19 @@
 <?php
 
-namespace RadioStudent\AppBundle\Entity\Repository;
+namespace App\Repository;
 
-use Doctrine\ORM\EntityRepository;
-use RadioStudent\AppBundle\Entity\Track;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class TrackRepository extends EntityRepository
+use App\Entity\Track;
+
+class TrackRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Track::class);
+    }
+
     /**
      * @return Track
      */
@@ -16,13 +23,13 @@ class TrackRepository extends EntityRepository
 
         $count = $em->createQueryBuilder()
             ->select("count(track.id)")
-            ->from("RadioStudentAppBundle:Track", "track")
+            ->from("App:Track", "track")
             ->getQuery()
             ->getSingleScalarResult();
 
         $track = $em->createQueryBuilder()
             ->select("track")
-            ->from("RadioStudentAppBundle:Track", "track")
+            ->from("App:Track", "track")
             ->setFirstResult(mt_rand(0, $count-1))
             ->setMaxResults(1)
             ->getQuery()

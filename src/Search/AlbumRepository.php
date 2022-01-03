@@ -1,6 +1,6 @@
 <?php
 
-namespace RadioStudent\AppBundle\Search;
+namespace App\Search;
 
 use Elastica\Query;
 use Elastica\Filter;

@@ -1,21 +1,24 @@
 <?php
 
-namespace RadioStudent\AppBundle\Command;
+namespace App\Command;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Driver\Connection;
-use RadioStudent\AppBundle\Entity\Album;
-use RadioStudent\AppBundle\Entity\ArtistRelation;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
+//use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 
 use \GetId3\GetId3Core as GetId3;
 
-class ImportCommand extends ContainerAwareCommand
+use App\Entity\Album;
+use App\Entity\ArtistRelation;
+
+//class ImportCommand extends ContainerAwareCommand
+class ImportCommand extends Command
 {
 
     /**
@@ -381,7 +384,7 @@ class ImportCommand extends ContainerAwareCommand
     private function importAlbums()
     {
         $em = $this->getContainer()->get('doctrine')->getManager();
-        $artistRepo = $em->getRepository('RadioStudentAppBundle:Artist');
+        $artistRepo = $em->getRepository('App:Artist');
 
         $this->out->write("Import albums (1/2)...");
         $this->c->exec("SET SESSION group_concat_max_len = 1000000");

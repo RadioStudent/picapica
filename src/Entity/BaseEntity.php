@@ -1,6 +1,6 @@
 <?php
 
-namespace RadioStudent\AppBundle\Entity;
+namespace App\Entity;
 
 abstract class BaseEntity implements BaseInterface {
 

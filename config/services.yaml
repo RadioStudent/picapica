@@ -12,6 +12,7 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: true
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
@@ -28,6 +29,20 @@ services:
     App\Controller\:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
+
+    # Search service deps
+    App\Search\ArtistRepository:
+        bind:
+            FOS\ElasticaBundle\Finder\TransformedFinder $finder: '@fos_elastica.finder.artist.artist'
+    App\Search\AlbumRepository:
+        bind:
+            FOS\ElasticaBundle\Finder\TransformedFinder $finder: '@fos_elastica.finder.album.album'
+    App\Search\TrackRepository:
+        bind:
+            FOS\ElasticaBundle\Finder\TransformedFinder $finder: '@fos_elastica.finder.track.track'
+
+    search.transformer.model.artist:
+        class: App\Transformer\ArtistToElasticaTransformer
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

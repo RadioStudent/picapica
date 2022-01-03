@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration as Extra;
 use Symfony\Component\HttpFoundation\Request;
 
-class TestController extends Controller
+class TestController extends AbstractController
 {
     /**
      * @Extra\Route("/test")
@@ -14,7 +14,7 @@ class TestController extends Controller
      */
     public function indexAction()
     {
-        $artistsRepo = $this->getDoctrine()->getRepository('RadioStudentAppBundle:Track');
+        $artistsRepo = $this->getDoctrine()->getRepository('App:Track');
         $tracks = $artistsRepo->findBy(['id' => [46, 5]]);
 
         var_dump($tracks[0]->getDuration());

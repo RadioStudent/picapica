@@ -2,7 +2,7 @@
 
 namespace App\Controller\API;
 
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,7 +18,7 @@ use App\Entity\Label;
  *
  * @REST\RouteResource("Label")
  */
-class LabelController extends FOSRestController
+class LabelController extends AbstractFOSRestController
 {
     /**
      * @param Request $request

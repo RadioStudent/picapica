@@ -2,7 +2,7 @@
 
 namespace App\Controller\API;
 
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @REST\RouteResource("Author")
  */
-class AuthorController extends FOSRestController
+class AuthorController extends AbstractFOSRestController
 {
     /**
      * @param Request $request

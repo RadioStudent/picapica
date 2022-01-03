@@ -1,25 +1,37 @@
 <?php
 
-namespace RadioStudent\AppBundle\Command;
+namespace App\Command;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Driver\Connection;
-use RadioStudent\AppBundle\Entity\Album;
-use RadioStudent\AppBundle\Entity\ArtistRelation;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
+#use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
+use Doctrine\ORM\EntityManagerInterface;
 
-class CleanupCommand extends ContainerAwareCommand
+use App\Entity\Album;
+use App\Entity\ArtistRelation;
+
+//class CleanupCommand extends ContainerAwareCommand
+class CleanupCommand extends Command
 {
 
     /**
      * @var OutputInterface
      */
     private $out;
+
+    private $em;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->em = $entityManager;
+        parent::__construct();
+    }
 
     protected function configure()
     {
@@ -33,14 +45,12 @@ class CleanupCommand extends ContainerAwareCommand
     {
         $this->out = $output;
 
-        $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+        $albumRepo = $this->em->getRepository('App:Album');
+        $artistRepo = $this->em->getRepository('App:Artist');
 
-        $albumRepo = $em->getRepository('RadioStudentAppBundle:Album');
-        $artistRepo = $em->getRepository('RadioStudentAppBundle:Artist');
-
-        $qb = $em->createQueryBuilder();
+        $qb = $this->em->createQueryBuilder();
         $q = $qb->select('a')
-           ->from('RadioStudentAppBundle:Album', 'a')
+           ->from('App:Album', 'a')
            ->leftJoin('a.tracks', 't')
            ->groupBy('a')
            ->having('COUNT(t) = 0')
@@ -52,9 +62,9 @@ class CleanupCommand extends ContainerAwareCommand
         }
 
         $this->out->write("\n\nCleaning up empty artists:\n");
-        $qb = $em->createQueryBuilder();
+        $qb = $this->em->createQueryBuilder();
         $q = $qb->select('a')
-           ->from('RadioStudentAppBundle:Artist', 'a')
+           ->from('App:Artist', 'a')
            ->leftJoin('a.albums', 't')
            ->groupBy('a')
            ->having('COUNT(t) = 0')
@@ -64,10 +74,10 @@ class CleanupCommand extends ContainerAwareCommand
             $this->out->write($artist->getName() . "\n");
 
             //foreach ($artist->getArtistRelations() as $artistRelation) {
-                    //$em->remove($artistRelation);
+                    //$this->em->remove($artistRelation);
                     //}
-            $tq = $em->createQueryBuilder()->select('t')
-                ->from('RadioStudentAppBundle:Track', 't')
+            $tq = $this->em->createQueryBuilder()->select('t')
+                ->from('App:Track', 't')
                 ->where('t.artist = :artist')
                 ->setParameter('artist', $artist)
                 ->getQuery();
@@ -76,21 +86,21 @@ class CleanupCommand extends ContainerAwareCommand
                 continue;
             }
 
-            $rq = $em->createQueryBuilder()->select('r')
-                ->from('RadioStudentAppBundle:ArtistRelation', 'r')
+            $rq = $this->em->createQueryBuilder()->select('r')
+                ->from('App:ArtistRelation', 'r')
                 ->where('r.artist = :artist')
                 ->orWhere('r.relatedArtist = :artist')
                 ->setParameter('artist', $artist)
                 ->getQuery();
 
             foreach($rq->getResult() as $relation) {
-                $em->remove($relation);
+                $this->em->remove($relation);
             }
 
-            $em->remove($artist);
+            $this->em->remove($artist);
         }
 
-        $em->flush();
+        $this->em->flush();
     }
 
 }

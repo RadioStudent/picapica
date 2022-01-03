@@ -1,0 +1,26 @@
+# Doctrine Configuration
+doctrine:
+    dbal:
+      default_connection: db1
+      connections:
+        db1:
+          url: '%env(resolve:DATABASE_URL)%'
+          host: database
+          charset: UTF8
+        db2:
+          url: '%env(resolve:DATABASE_URL)%'
+          host: database
+          dbname:   fonoteka_old
+          charset:  UTF8
+
+    orm:
+        default_entity_manager: db1
+        auto_generate_proxy_classes: "%kernel.debug%"
+        auto_mapping: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        mappings:
+          App:
+            is_bundle: false
+            dir: '%kernel.project_dir%/src/Entity'
+            prefix: 'App\Entity'
+            alias: App

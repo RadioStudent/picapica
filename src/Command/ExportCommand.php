@@ -1,23 +1,26 @@
 <?php
 
-namespace RadioStudent\AppBundle\Command;
+namespace App\Command;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Driver\Connection;
-use RadioStudent\AppBundle\Entity\Album;
-use RadioStudent\AppBundle\Entity\ArtistRelation;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
+//use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 
 // Spreadsheet lib!
 use Box\Spout\Writer\Common\Creator\WriterEntityFactory;
 use Box\Spout\Common\Entity\Row;
 
-class ExportCommand extends ContainerAwareCommand
+use App\Entity\Album;
+use App\Entity\ArtistRelation;
+
+//class ExportCommand extends ContainerAwareCommand
+class ExportCommand extends Command
 {
 
     /**
@@ -49,7 +52,7 @@ class ExportCommand extends ContainerAwareCommand
     private function loadAlbums()
     {
         $em = $this->getContainer()->get('doctrine')->getManager();
-        $albumRepo = $em->getRepository('RadioStudentAppBundle:Album');
+        $albumRepo = $em->getRepository('App:Album');
         $allBums = $albumRepo->findBy([], ['fid' => 'ASC']);
 
         $results = [];

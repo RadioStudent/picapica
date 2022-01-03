@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  name="data_albums",
  *  indexes={@ORM\Index(name="name", columns={"name"})}
  * )
- * @ORM\Entity(repositoryClass="App\Entity\Repository\AlbumRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\AlbumRepository")
  */
 class Album extends BaseEntity
 {

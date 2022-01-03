@@ -1,4 +1,4 @@
-const Encore = require('@symfony/webpack-encore');
+const Encore = require('@symfony/webpack-encore')
 
 Encore
     // directory where compiled assets will be stored
@@ -7,7 +7,7 @@ Encore
     .setPublicPath('/build')
 
     .addEntry('app', './assets/js/index.js')
-    //.addEntry('app', './assets/sass/main.sass')
+    .addEntry('style', './assets/sass/main.sass')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 
@@ -19,11 +19,6 @@ Encore
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
-
     .enableSassLoader()
 
-    // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
-;
-
-module.exports = Encore.getWebpackConfig();
+module.exports = Encore.getWebpackConfig()

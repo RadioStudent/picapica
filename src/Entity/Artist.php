@@ -6,6 +6,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use App\Repository\ArtistRepository;
+
 /**
  * Artist
  *
@@ -13,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  name="data_artists",
  *  indexes={@ORM\Index(name="name", columns={"name"})}
  * )
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass=ArtistRepository::class)
  */
 class Artist extends BaseEntity
 {
@@ -258,7 +260,6 @@ class Artist extends BaseEntity
 
     public static function mapFieldsToElastic($type)
     {
-        return [
-        ];
+        return [];
     }
 }

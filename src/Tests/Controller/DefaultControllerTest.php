@@ -1,6 +1,6 @@
 <?php
 
-namespace RadioStudent\AppBundle\Tests\Controller;
+namespace App\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 

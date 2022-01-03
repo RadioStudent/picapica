@@ -1,6 +1,0 @@
-FROM java:openjdk-8-jre-alpine
-
-RUN apk update && apk add curl tar
-RUN curl -s https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-1.7.6.tar.gz | tar xvzf - -C /
-
-ENTRYPOINT /elasticsearch-1.7.6/bin/elasticsearch

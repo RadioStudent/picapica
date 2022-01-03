@@ -1,0 +1,351 @@
+fos_elastica:
+  clients:
+    default: { host: '%env(resolve:ELASTICSEARCH_HOST)%', port: '%env(resolve:ELASTICSEARCH_PORT)%' }
+
+  indexes:
+    artist:
+      settings:
+        index:
+          blocks:
+            read_only_allow_delete: ~
+          analysis:
+            filter:
+              edgeNGram_filter:
+                type: edgeNGram
+                min_gram: 2
+                max_gram: 20
+                side: front
+
+            analyzer:
+
+              edge_NGram_analyzer:
+                type: custom
+                tokenizer: edge_ngram_tokenizer
+                filter:
+                   - lowercase
+                   - asciifolding
+
+              edge_NGram_analyzer_fid:
+                type: custom
+                tokenizer: edge_ngram_tokenizer_fid
+                filter:
+                   - lowercase
+                   - asciifolding
+
+              whitespace_analyzer:
+                type: custom
+                tokenizer: whitespace
+                filter:
+                  - lowercase
+                  - asciifolding
+
+              keyword_analyzer:
+                type: custom
+                tokenizer: keyword
+                filter:
+                  - lowercase
+                  - asciifolding
+
+            tokenizer:
+              edge_ngram_tokenizer:
+                  type: edgeNGram
+                  min_gram: 2
+                  max_gram: 20
+                  token_chars:
+                    - letter
+                    - digit
+
+              edge_ngram_tokenizer_fid:
+                  type: edgeNGram
+                  min_gram: 2
+                  max_gram: 20
+
+      types:
+
+        artist:
+          #_all:
+          #  analyzer: edge_NGram_analyzer
+          #  search_analyzer: whitespace_analyzer
+
+          properties:
+            id:
+              type: integer
+
+            name:
+              analyzer: whitespace_analyzer
+              search_analyzer: whitespace_analyzer
+              fields:
+                autocomplete:
+                  analyzer: edge_NGram_analyzer
+                  search_analyzer: whitespace_analyzer
+
+            autocompleteName:
+              type: text
+              fields:
+                autocomplete:
+                  analyzer: edge_NGram_analyzer
+                  search_analyzer: whitespace_analyzer
+
+          persistence:
+            driver: orm
+            model: App\Entity\Artist
+            provider: ~
+            #listener:
+            #  immediate: ~
+            finder: ~
+            model_to_elastica_transformer:
+              service: search.transformer.model.artist
+
+
+
+    album:
+      settings:
+        index:
+          blocks:
+            read_only_allow_delete: ~
+          analysis:
+            filter:
+              edgeNGram_filter:
+                type: edgeNGram
+                min_gram: 2
+                max_gram: 20
+                side: front
+
+            analyzer:
+
+              edge_NGram_analyzer:
+                type: custom
+                tokenizer: edge_ngram_tokenizer
+                filter:
+                   - lowercase
+                   - asciifolding
+
+              edge_NGram_analyzer_fid:
+                type: custom
+                tokenizer: edge_ngram_tokenizer_fid
+                filter:
+                   - lowercase
+                   - asciifolding
+
+              whitespace_analyzer:
+                type: custom
+                tokenizer: whitespace
+                filter:
+                  - lowercase
+                  - asciifolding
+
+              keyword_analyzer:
+                type: custom
+                tokenizer: keyword
+                filter:
+                  - lowercase
+                  - asciifolding
+
+            tokenizer:
+              edge_ngram_tokenizer:
+                  type: edgeNGram
+                  min_gram: 2
+                  max_gram: 20
+                  token_chars:
+                    - letter
+                    - digit
+
+              edge_ngram_tokenizer_fid:
+                  type: edgeNGram
+                  min_gram: 2
+                  max_gram: 20
+      types:
+        album:
+          #_all:
+          #  analyzer: edge_NGram_analyzer
+          #  search_analyzer: whitespace_analyzer
+
+          properties:
+            id:
+              type: integer
+
+            fid:
+              #index: not_analyzed
+              fields:
+                autocomplete:
+                  analyzer: edge_NGram_analyzer_fid
+                  search_analyzer: keyword_analyzer
+                numeric:
+                  analyzer: whitespace
+                  search_analyzer: whitespace
+
+            name:
+              analyzer: whitespace_analyzer
+              search_analyzer: whitespace_analyzer
+              fields:
+                autocomplete:
+                  analyzer: edge_NGram_analyzer
+                  search_analyzer: whitespace_analyzer
+
+          persistence:
+            driver: orm
+            model: App\Entity\Album
+            provider: ~
+            #listener:
+            #  immediate: ~
+            finder: ~
+
+
+
+    track:
+      settings:
+        index:
+          blocks:
+            read_only_allow_delete: ~
+          analysis:
+            filter:
+              edgeNGram_filter:
+                type: edgeNGram
+                min_gram: 2
+                max_gram: 20
+                side: front
+
+            analyzer:
+
+              edge_NGram_analyzer:
+                type: custom
+                tokenizer: edge_ngram_tokenizer
+                filter:
+                   - lowercase
+                   - asciifolding
+
+              edge_NGram_analyzer_fid:
+                type: custom
+                tokenizer: edge_ngram_tokenizer_fid
+                filter:
+                   - lowercase
+                   - asciifolding
+
+              whitespace_analyzer:
+                type: custom
+                tokenizer: whitespace
+                filter:
+                  - lowercase
+                  - asciifolding
+
+              keyword_analyzer:
+                type: custom
+                tokenizer: keyword
+                filter:
+                  - lowercase
+                  - asciifolding
+
+            tokenizer:
+              edge_ngram_tokenizer:
+                  type: edgeNGram
+                  min_gram: 2
+                  max_gram: 20
+                  token_chars:
+                    - letter
+                    - digit
+
+              edge_ngram_tokenizer_fid:
+                  type: edgeNGram
+                  min_gram: 2
+                  max_gram: 20
+      types:
+        track:
+          #_all:
+          #  analyzer: edge_NGram_analyzer
+          #  search_analyzer: whitespace_analyzer
+
+          properties:
+            id:
+              type: integer
+
+            deleted:
+              type: boolean
+
+            fid:
+              analyzer: edge_NGram_analyzer
+              search_analyzer: whitespace_analyzer
+              fields:
+                autocomplete:
+                  analyzer: edge_NGram_analyzer_fid
+                  search_analyzer: keyword_analyzer
+                numeric:
+                  analyzer: whitespace
+                  search_analyzer: whitespace
+                order:
+                  analyzer: keyword_analyzer
+                raw:
+                  analyzer: keyword_analyzer
+
+            trackNum:
+              #index: not_analyzed
+              fields:
+                #raw:
+                #  index: not_analyzed
+                order:
+                  analyzer: keyword_analyzer
+
+            name:
+              analyzer: edge_NGram_analyzer
+              search_analyzer: whitespace_analyzer
+              fields:
+                autocomplete:
+                  analyzer: edge_NGram_analyzer
+                  search_analyzer: whitespace_analyzer
+                order:
+                  analyzer: keyword_analyzer
+
+            duration:
+              type: integer
+              fields:
+                order:
+                  type: integer
+
+            date:
+              type: date
+              format: date_time_no_millis
+              fields:
+                order:
+                  type: date
+
+            artist:
+              type: object
+              properties:
+#                id:
+#                  type: integer
+#                  index_name: track_artist_id
+#                allRelatedArtistIds:
+#                  index_name: id
+                name:
+#                  index_name: track_artist_name
+                  analyzer: edge_NGram_analyzer
+                  search_analyzer: whitespace_analyzer
+                  fields:
+                    order:
+                      analyzer: keyword_analyzer
+
+            album:
+              type: object
+              properties:
+                id:
+#                  index_name: track_album_id
+                  type: integer
+                fid:
+                  #index_name: track_album_fid
+                  #index: not_analyzed
+                name:
+                  #index_name: track_album_name
+                  analyzer: edge_NGram_analyzer
+                  search_analyzer: whitespace_analyzer
+                  fields:
+                    order:
+                      analyzer: keyword_analyzer
+
+
+          persistence:
+            driver: orm
+            model: App\Entity\Track
+            provider:
+              batch_size: 1000
+            #listener:
+            #  immediate: ~
+            finder: ~

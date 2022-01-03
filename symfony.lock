@@ -158,9 +158,6 @@
     "symfony/css-selector": {
         "version": "v5.4.0"
     },
-    "symfony/debug": {
-        "version": "v4.4.31"
-    },
     "symfony/debug-bundle": {
         "version": "5.1",
         "recipe": {

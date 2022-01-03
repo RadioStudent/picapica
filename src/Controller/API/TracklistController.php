@@ -4,7 +4,7 @@ namespace App\Controller\API;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,7 +22,7 @@ use App\Entity\Tracklist;
  *
  * @REST\RouteResource("Tracklist")
  */
-class TracklistController extends FOSRestController
+class TracklistController extends AbstractFOSRestController
 {
     /**
      * @var EntityManager

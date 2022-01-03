@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Application\Migrations;
+namespace App\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
@@ -8,15 +8,15 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190828122130 extends AbstractMigration
+final class Version20190818234700 extends AbstractMigration
 {
     public function up(Schema $schema) : void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE data_tracks CHANGE mp3_artist_name mp3_artist_name VARCHAR(255) DEFAULT NULL, CHANGE mp3_album_name mp3_album_name VARCHAR(255) DEFAULT NULL');
-        $this->addSql('ALTER TABLE data_albums CHANGE `LABEL` `LABEL` VARCHAR(255) DEFAULT NULL');
+        $this->addSql('CREATE TABLE rel_album2genre (genre_id INT NOT NULL, PRIMARY KEY(genre_id)) DEFAULT CHARACTER SET UTF8 COLLATE UTF8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE data_genre (ID INT AUTO_INCREMENT NOT NULL, NAME VARCHAR(255) NOT NULL, INDEX name (name), PRIMARY KEY(ID)) DEFAULT CHARACTER SET UTF8 COLLATE UTF8_unicode_ci ENGINE = InnoDB');
     }
 
     public function down(Schema $schema) : void
@@ -24,7 +24,7 @@ final class Version20190828122130 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE data_albums CHANGE `LABEL` `LABEL` VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci');
-        $this->addSql('ALTER TABLE data_tracks CHANGE mp3_artist_name mp3_artist_name VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci, CHANGE mp3_album_name mp3_album_name VARCHAR(255) NOT NULL COLLATE utf8_unicode_ci');
+        $this->addSql('DROP TABLE rel_album2genre');
+        $this->addSql('DROP TABLE data_genre');
     }
 }

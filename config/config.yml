@@ -32,33 +32,6 @@ twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
 
-# Doctrine Configuration
-doctrine:
-    dbal:
-      default_connection: db1
-      connections:
-        db1:
-          driver:   "%database_driver%"
-          host:     "%database_host%"
-          port:     "%database_port%"
-          dbname:   "%database_name%"
-          user:     "%database_user%"
-          password: "%database_password%"
-          charset:  UTF8
-        db2:
-          driver:   "%database_driver%"
-          host:     "%database_host%"
-          port:     "%database_port%"
-#          dbname:   fonoteka_old
-          user:     "%database_user%"
-          password: "%database_password%"
-          charset:  UTF8
-
-    orm:
-        auto_generate_proxy_classes: "%kernel.debug%"
-        auto_mapping: true
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
@@ -74,7 +47,7 @@ fos_rest:
 fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
-    user_class: RadioStudent\AppBundle\Entity\User
+    user_class: App\Entity\User
     from_email:
       address: "%mailer_address%"
       sender_name: "%mailer_sender_name%"

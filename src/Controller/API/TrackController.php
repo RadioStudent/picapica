@@ -2,7 +2,7 @@
 
 namespace App\Controller\API;
 
-use FOS\RestBundle\Controller\FOSRestController;
+use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as REST;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,7 +17,7 @@ use App\Entity\Track;
  *
  * @REST\RouteResource("Track")
  */
-class TrackController extends FOSRestController
+class TrackController extends AbstractFOSRestController
 {
     /**
      * @param Request $request
