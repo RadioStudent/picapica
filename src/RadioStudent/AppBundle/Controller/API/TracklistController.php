@@ -156,12 +156,13 @@ class TracklistController extends FOSRestController
             if ($tracklist->getSyncNodeId()) {
                 $payload['nid'] = $tracklist->getSyncNodeId();
             }
-
             $client = new Client();
             $req = $client->request('POST', 'https://radiostudent.si/pica/oprema', [
                 'json' => $payload
             ]);
 
+
+	    //var_dump($req->getBody()->getContents());die;
             $resp = json_decode($req->getBody(), true);
             if ($resp['success']) {
                 $tracklist->setSyncNodeId(intval($resp['nid']));
@@ -173,6 +174,7 @@ class TracklistController extends FOSRestController
             return new JsonResponse($resp);
 
         } catch (\Exception $e) {
+	    //var_dump($e->getMessage());die;
             return new JsonResponse([
                 ["error" => [
                     "message" => $e->getMessage()

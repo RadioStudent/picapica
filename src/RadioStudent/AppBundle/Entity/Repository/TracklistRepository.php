@@ -95,6 +95,11 @@ class TracklistRepository extends EntityRepository
                 $id = $newTracklistTrackData["tracklistTrackId"];
                 $tracklistTrack = $tracklistTrackRepo->find($id);
 
+		/* tukaj se ustavi vcasih..?
+		if (!$tracklistTrack) {
+			continue;
+		}
+ */
                 $tracklistTrack
                     ->setTrackNum($trackNum)
                     ->setComment($newTracklistTrackData["comment"]);
